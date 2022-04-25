@@ -1,0 +1,99 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="io.github.kabirnayeem99.job_spot"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="16"
+9        android:targetSdkVersion="31" />
+10    <!--
+11         Flutter needs it to communicate with the running application
+12         to allow setting breakpoints, to provide hot reload, etc.
+13    -->
+14    <uses-permission android:name="android.permission.INTERNET" />
+14-->/Users/kabir/Side_Projects/job_spot/android/app/src/debug/AndroidManifest.xml:6:5-66
+14-->/Users/kabir/Side_Projects/job_spot/android/app/src/debug/AndroidManifest.xml:6:22-64
+15
+16    <queries>
+16-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:37:5-43:15
+17        <intent>
+17-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:38:9-42:18
+18            <action android:name="android.intent.action.VIEW" />
+18-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:39:13-65
+18-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:39:21-62
+19
+20            <category android:name="android.intent.category.BROWSABLE" />
+20-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:40:13-74
+20-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:40:23-71
+21
+22            <data android:scheme="https" />
+22-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:41:13-44
+22-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:41:19-41
+23        </intent>
+24    </queries>
+25
+26    <application
+27        android:name="android.app.Application"
+28        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+28-->[androidx.core:core:1.6.0] /Users/kabir/.gradle/caches/transforms-2/files-2.1/122df2e57d294d1a53db26bbc3b813c1/core-1.6.0/AndroidManifest.xml:24:18-86
+29        android:debuggable="true"
+30        android:icon="@mipmap/ic_launcher"
+31        android:label="job_spot" >
+32        <activity
+33            android:name="io.github.kabirnayeem99.job_spot.MainActivity"
+34            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+35            android:exported="true"
+36            android:hardwareAccelerated="true"
+37            android:launchMode="singleTop"
+38            android:theme="@style/LaunchTheme"
+39            android:windowSoftInputMode="adjustResize" >
+40
+41            <!--
+42                 Specifies an Android theme to apply to this Activity as soon as
+43                 the Android process has started. This theme is visible to the user
+44                 while the Flutter UI initializes. After that, this theme continues
+45                 to determine the Window background behind the Flutter UI.
+46            -->
+47            <meta-data
+48                android:name="io.flutter.embedding.android.NormalTheme"
+49                android:resource="@style/NormalTheme" />
+50
+51            <intent-filter>
+52                <action android:name="android.intent.action.MAIN" />
+53
+54                <category android:name="android.intent.category.LAUNCHER" />
+55            </intent-filter>
+56        </activity>
+57        <!--
+58             Don't delete the meta-data below.
+59             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+60        -->
+61        <meta-data
+62            android:name="flutterEmbedding"
+63            android:value="2" />
+64
+65        <activity
+65-->[:url_launcher_android] /Users/kabir/Side_Projects/job_spot/build/url_launcher_android/intermediates/library_manifest/debug/AndroidManifest.xml:8:9-11:74
+66            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+66-->[:url_launcher_android] /Users/kabir/Side_Projects/job_spot/build/url_launcher_android/intermediates/library_manifest/debug/AndroidManifest.xml:9:13-74
+67            android:exported="false"
+67-->[:url_launcher_android] /Users/kabir/Side_Projects/job_spot/build/url_launcher_android/intermediates/library_manifest/debug/AndroidManifest.xml:10:13-37
+68            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+68-->[:url_launcher_android] /Users/kabir/Side_Projects/job_spot/build/url_launcher_android/intermediates/library_manifest/debug/AndroidManifest.xml:11:13-71
+69
+70        <uses-library
+70-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
+71            android:name="androidx.window.extensions"
+71-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
+72            android:required="false" />
+72-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
+73        <uses-library
+73-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
+74            android:name="androidx.window.sidecar"
+74-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
+75            android:required="false" />
+75-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
+76    </application>
+77
+78</manifest>

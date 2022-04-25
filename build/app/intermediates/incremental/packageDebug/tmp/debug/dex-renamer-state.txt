@@ -1,0 +1,4 @@
+#Mon Apr 25 15:16:29 BDT 2022
+base.0=/Users/kabir/Side_Projects/job_spot/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

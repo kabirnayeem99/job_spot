@@ -1,0 +1,32 @@
+name: job_spot
+description: Find Your Dream Job Here!
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.16.2 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  flutter_svg: ^1.0.3
+  google_fonts: ^2.1.0
+  sailor: ^0.7.1
+  fluro: ^2.0.3
+  url_launcher: ^6.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^1.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/svgs/
+    - assets/images/pngs/
