@@ -2,7 +2,8 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:job_spot/common/theme/colors.dart';
-import 'package:job_spot/ui/intro/intro_screen.dart';
+
+import '../auth/intro/intro_screen.dart';
 
 const splashScreenNavigationRouteName = "/";
 
@@ -29,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final router = FluroRouter.appRouter;
 
     router.navigateTo(context, introScreenNavigationRouteName,
-        transition: TransitionType.cupertino);
+        transition: TransitionType.nativeModal);
   }
 
   @override
