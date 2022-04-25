@@ -2,6 +2,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:job_spot/common/config/route_handlers.dart';
 import 'package:job_spot/ui/home/home_screen.dart';
+import 'package:job_spot/ui/job_description/job_description_screen.dart';
 import 'package:job_spot/ui/splash/splash_screen.dart';
 
 import '../../ui/auth/forget_password/check_email_screen.dart';
@@ -45,5 +46,6 @@ class Routes {
     );
 
     router.define(homeScreenNavRouteName, handler: homeScreenHandler);
+    router.define(jobDescScreenNavRouteName, handler: jobDescScreenHandler);
   }
 }

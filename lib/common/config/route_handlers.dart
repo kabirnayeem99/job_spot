@@ -1,6 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:job_spot/ui/home/home_screen.dart';
+import 'package:job_spot/ui/job_description/job_description_screen.dart';
 import 'package:job_spot/ui/splash/splash_screen.dart';
 
 import '../../ui/auth/forget_password/check_email_screen.dart';
@@ -42,4 +43,9 @@ var checkEmailScreenHandler = Handler(
 var homeScreenHandler = Handler(
   handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
       const HomeScreen(),
+);
+
+var jobDescScreenHandler = Handler(
+  handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+      const JobDescriptionScreen(),
 );

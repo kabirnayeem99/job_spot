@@ -1,7 +1,9 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:job_spot/common/theme/colors.dart';
 import 'package:job_spot/domain/entity/job_preview.dart';
+import 'package:job_spot/ui/job_description/job_description_screen.dart';
 import 'package:job_spot/ui/widgets/secondary_action_button.dart';
 
 import 'widgets/job_list_item_container.dart';
@@ -16,10 +18,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late FluroRouter router;
+
+  @override
+  void initState() {
+    super.initState();
+    router = FluroRouter.appRouter;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: whiteSnowDrift,
       body: SafeArea(
@@ -230,16 +238,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       shrinkWrap: true,
                       itemCount: 5,
                       itemBuilder: (context, position) {
-                        return JobListItemContainer(
-                          job: JobPreview(
-                            jobCategory: "Senior Dev",
-                            jobPostName: "iOS Developer - ${position + 1}",
-                            monthlySalary: "2${position}${position + 3}K",
-                            companyLogo:
-                                "http://2.bp.blogspot.com/-i4eGD4DSnjQ/T60e7I4WHfI/AAAAAAAACqw/PFbWuA2ONAI/s1600/Apple+Logo+Wallpapers+2.jpg",
-                            companyName: "Apple Inc.",
-                            jobType: "Full-time",
-                            location: "Chittagong, BD",
+                        return GestureDetector(
+                          onTap: () => _navigateToJobDetailsScreen(context),
+                          child: JobListItemContainer(
+                            job: JobPreview(
+                              jobCategory: "Senior Dev",
+                              jobPostName: "iOS Developer - ${position + 1}",
+                              monthlySalary: "2${position}${position + 3}K",
+                              companyLogo:
+                                  "http://2.bp.blogspot.com/-i4eGD4DSnjQ/T60e7I4WHfI/AAAAAAAACqw/PFbWuA2ONAI/s1600/Apple+Logo+Wallpapers+2.jpg",
+                              companyName: "Apple Inc.",
+                              jobType: "Full-time",
+                              location: "Chittagong, BD",
+                            ),
                           ),
                         );
                       },
@@ -253,4 +264,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  void _navigateToJobDetailsScreen(BuildContext context) =>
+      router.navigateTo(context, jobDescScreenNavRouteName,
+          transition: TransitionType.cupertino);
 }
