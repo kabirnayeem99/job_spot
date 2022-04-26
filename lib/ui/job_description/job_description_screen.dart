@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:job_spot/common/theme/colors.dart';
+import 'package:job_spot/domain/entity/job_description_page_state.dart';
+import 'package:job_spot/ui/widgets/animated_size_and_fade.dart';
 import 'package:job_spot/ui/widgets/primary_action_button.dart';
+
+import '../../domain/entity/job_description_page_state.dart';
 
 const jobDescScreenNavRouteName = "job_description_screen/";
 
@@ -14,6 +18,8 @@ class JobDescriptionScreen extends StatefulWidget {
 }
 
 class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
+  JobDescriptionPageState _pageState = JobDescriptionPageState.description;
+
   late GoogleMapController mapController;
 
   final LatLng _center = const LatLng(22.313999275669637, 91.80758944137361);
@@ -25,6 +31,9 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+    setState(() {
+      _shouldShowMap = true;
+    });
   }
 
   void _navigateBack(BuildContext context) => Navigator.pop(context);
@@ -34,6 +43,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Container(
             padding: const EdgeInsets.only(left: 22.0, right: 22.0, top: 22.0),
             child: Column(
@@ -41,8 +51,10 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
                 _buildActionBar(context),
                 const SizedBox(height: 20),
                 _buildJobShortDesc(),
+                const SizedBox(height: 20),
+                _buildTabButtons(),
                 const SizedBox(height: 25),
-                _buildCompanyDescriptionFragment(),
+                _showFragmentBasedOnState(),
                 const SizedBox(height: 100),
               ],
             ),
@@ -53,10 +65,81 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
     );
   }
 
+  Widget _showFragmentBasedOnState() {
+    late Widget fragment;
+    if (_pageState.name == JobDescriptionPageState.description.name) {
+      fragment = _buildJobDescriptionFragment();
+    } else if (_pageState.name == JobDescriptionPageState.company.name) {
+      fragment = _buildCompanyDescriptionFragment();
+    } else {
+      fragment = _buildJobApplyFragment();
+    }
+    return AnimatedSizeAndFade(child: fragment);
+  }
+
+  Widget _buildJobApplyFragment() {
+    return Container();
+  }
+
+  Widget _buildTabButtons() {
+    final shouldShowCompanyTab =
+        _pageState.name == JobDescriptionPageState.company.name;
+
+    return _pageState.name == JobDescriptionPageState.apply.name
+        ? Container()
+        : Row(
+            children: [
+              Expanded(
+                child: AnimatedSizeAndFade(
+                  child: GestureDetector(
+                    onTap: _onDescriptionButtonClicked,
+                    child: PrimaryActionButton(
+                      buttonText: "Description",
+                      buttonTextColor:
+                          shouldShowCompanyTab ? Colors.white : darkIndigo,
+                      buttonColor: shouldShowCompanyTab
+                          ? darkIndigo
+                          : purpleBlueMoonraker,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 9),
+              Expanded(
+                child: AnimatedSizeAndFade(
+                  child: GestureDetector(
+                    onTap: _onCompanyButtonClicked,
+                    child: PrimaryActionButton(
+                      buttonText: "Company",
+                      buttonTextColor:
+                          shouldShowCompanyTab ? darkIndigo : Colors.white,
+                      buttonColor: shouldShowCompanyTab
+                          ? purpleBlueMoonraker
+                          : darkIndigo,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+  }
+
+  void _onCompanyButtonClicked() {
+    setState(() {
+      _pageState = JobDescriptionPageState.company;
+    });
+  }
+
+  void _onDescriptionButtonClicked() {
+    setState(() {
+      _pageState = JobDescriptionPageState.description;
+    });
+  }
+
   Widget _buildCompanyDescriptionFragment() {
     return Column(
       children: [
-        Align(
+        const Align(
           alignment: Alignment.topLeft,
           child: Text(
             "About Company",
@@ -68,8 +151,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 10),
-        Align(
+        const SizedBox(height: 10),
+        const Align(
           alignment: Alignment.topLeft,
           child: Text(
             "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem ...",
@@ -81,8 +164,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 20),
-        Align(
+        const SizedBox(height: 20),
+        const Align(
           alignment: Alignment.topLeft,
           child: Text(
             "Website",
@@ -94,8 +177,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 10),
-        Align(
+        const SizedBox(height: 10),
+        const Align(
           alignment: Alignment.topLeft,
           child: Text(
             "www.ubuntu.org",
@@ -108,8 +191,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 20),
-        Align(
+        const SizedBox(height: 20),
+        const Align(
           alignment: Alignment.topLeft,
           child: Text(
             "Industry",
@@ -121,8 +204,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 10),
-        Align(
+        const SizedBox(height: 10),
+        const Align(
           alignment: Alignment.topLeft,
           child: Text(
             "Operating system",
@@ -134,8 +217,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 20),
-        Align(
+        const SizedBox(height: 20),
+        const Align(
           alignment: Alignment.topLeft,
           child: Text(
             "Employee size",
@@ -147,8 +230,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 10),
-        Align(
+        const SizedBox(height: 10),
+        const Align(
           alignment: Alignment.topLeft,
           child: Text(
             "121,145 Employees",
@@ -160,8 +243,9 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 20),
-        Align(
+        const SizedBox(height: 20),
+        const SizedBox(height: 10),
+        const Align(
           alignment: Alignment.topLeft,
           child: Text(
             "Head Office",
@@ -173,8 +257,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 10),
-        Align(
+        const Align(
           alignment: Alignment.topLeft,
           child: Text(
             "Naya Bazar, Chittagong",
@@ -186,8 +269,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 20),
-        Align(
+        const SizedBox(height: 20),
+        const Align(
           alignment: Alignment.topLeft,
           child: Text(
             "Type",
@@ -199,8 +282,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 10),
-        Align(
+        const SizedBox(height: 10),
+        const Align(
           alignment: Alignment.topLeft,
           child: Text(
             "Multinational Company",
@@ -212,8 +295,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 20),
-        Align(
+        const SizedBox(height: 20),
+        const Align(
           alignment: Alignment.topLeft,
           child: Text(
             "Since",
@@ -225,8 +308,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 10),
-        Align(
+        const SizedBox(height: 10),
+        const Align(
           alignment: Alignment.topLeft,
           child: Text(
             "1998",
@@ -238,8 +321,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 20),
-        Align(
+        const SizedBox(height: 20),
+        const Align(
           alignment: Alignment.topLeft,
           child: Text(
             "Specialisation",
@@ -251,8 +334,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 10),
-        Align(
+        const SizedBox(height: 10),
+        const Align(
           alignment: Alignment.topLeft,
           child: Text(
             "Operating system, Open Source, FOSS Movement, IOT",
@@ -264,8 +347,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 20),
-        Align(
+        const SizedBox(height: 20),
+        const Align(
           alignment: Alignment.topLeft,
           child: Text(
             "Company Gallery",
@@ -277,7 +360,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Align(
           alignment: Alignment.topLeft,
           child: Row(
@@ -317,8 +400,10 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
       alignment: Alignment.bottomCenter,
       child: Container(
         margin: const EdgeInsets.only(left: 22.0),
-        child: const PrimaryActionButton(
-          buttonText: "proceed to apply",
+        child: PrimaryActionButton(
+          buttonText: _pageState.name == JobDescriptionPageState.apply.name
+              ? "apply"
+              : "proceed to apply",
           width: 270.0,
         ),
       ),
@@ -682,9 +767,11 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
     );
   }
 
+  bool _shouldShowMap = false;
+
   SizedBox _buildGoogleMapPreview() {
     return SizedBox(
-      height: 150,
+      height: _shouldShowMap ? 150 : 0,
       width: double.infinity,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15.0),
