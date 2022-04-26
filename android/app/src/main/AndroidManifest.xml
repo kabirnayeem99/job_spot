@@ -5,6 +5,7 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:label="job_spot">
+
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -30,6 +31,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDv8HeaZQE7k1Yev8N4tAOOJIgI99gMzE8"/>
 
 
     </application>

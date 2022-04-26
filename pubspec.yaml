@@ -17,6 +17,7 @@ dependencies:
   sailor: ^0.7.1
   fluro: ^2.0.3
   url_launcher: ^6.1.0
+  google_maps_flutter: ^2.1.3
 
 dev_dependencies:
   flutter_test:

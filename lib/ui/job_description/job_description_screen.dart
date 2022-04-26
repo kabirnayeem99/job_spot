@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:job_spot/common/theme/colors.dart';
 import 'package:job_spot/ui/widgets/primary_action_button.dart';
 
@@ -12,8 +13,25 @@ class JobDescriptionScreen extends StatefulWidget {
 }
 
 class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
+  late Size _size ;
+
+  late GoogleMapController mapController;
+
+  final LatLng _center = const LatLng(22.313999275669637, 91.80758944137361);
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
   @override
   Widget build(BuildContext context) {
+    _size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -21,7 +39,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 22.0),
             child: Column(
               children: [
-                const SizedBox(height: 30),
+                const SizedBox(height: 80),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(100.0),
                   child: Image.network(
@@ -85,7 +103,23 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children:  [
+                    PrimaryActionButton(
+                      buttonText: "Description",
+                      width: _size.width / 2.35,
+                    ),
+                    PrimaryActionButton(
+                      buttonText: "Company",
+                      buttonTextColor: darkIndigo,
+                      buttonColor: purpleBlueMoonraker,
+                      width: _size.width / 2.35,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
                 const Align(
                   alignment: Alignment.topLeft,
                   child: Text(
@@ -149,6 +183,203 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 20),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Location",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: blackHaiti,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Shapla Abashik Jame Mosjid Rd, Chattogram",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: mulledWine,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                _buildGoogleMapPreview(),
+                const SizedBox(height: 25),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Information",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: blackHaiti,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Position",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: blackHaiti,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "UI/UX Designer",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: blackHaiti,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                const Divider(
+                  thickness: 0.8,
+                  color: tealishBlue,
+                ),
+                const SizedBox(height: 15),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Qualification",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: blackHaiti,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Bachelor's Degree",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: blackHaiti,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                const Divider(
+                  thickness: 0.8,
+                  color: tealishBlue,
+                ),
+                const SizedBox(height: 15),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Job Type",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: blackHaiti,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Full-time",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: blackHaiti,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                const Divider(
+                  thickness: 0.8,
+                  color: tealishBlue,
+                ),
+                const SizedBox(height: 15),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Specialisation",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: blackHaiti,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Design",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: blackHaiti,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                const Divider(
+                  thickness: 0.8,
+                  color: tealishBlue,
+                ),
+                const SizedBox(height: 15),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Facilities and others",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: blackHaiti,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "• The main job is to run & monitor sales & marketing department.\n• Execute physical & digital marketing plan as per market feedback.\n• Generate innovative marketing ideas for promoting software products like ERP, Retail POS, Accounting applications etc.",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: blackHaiti,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                const Divider(
+                  thickness: 0.8,
+                  color: tealishBlue,
+                ),
+                const SizedBox(height: 100),
               ],
             ),
           ),
@@ -161,6 +392,46 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           child: const PrimaryActionButton(
             buttonText: "APPLY NOW",
             width: 270.0,
+          ),
+        ),
+      ),
+    );
+  }
+
+  SizedBox _buildGoogleMapPreview() {
+    return SizedBox(
+      height: 150,
+      width: double.infinity,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15.0),
+        child: GoogleMap(
+          compassEnabled: false,
+          trafficEnabled: false,
+          scrollGesturesEnabled: false,
+          zoomControlsEnabled: false,
+          buildingsEnabled: false,
+          myLocationEnabled: false,
+          rotateGesturesEnabled: false,
+          tiltGesturesEnabled: false,
+          myLocationButtonEnabled: false,
+          mapToolbarEnabled: false,
+          indoorViewEnabled: false,
+          zoomGesturesEnabled: false,
+          liteModeEnabled: true,
+          onMapCreated: _onMapCreated,
+          markers: {
+            Marker(
+              markerId: const MarkerId("bugicugi"),
+              position: _center,
+              infoWindow: const InfoWindow(
+                title: "Ubuntu",
+                snippet: "Shapla Abashik Jame Mosjid Rd, Chattogram",
+              ),
+            )
+          },
+          initialCameraPosition: CameraPosition(
+            target: _center,
+            zoom: 15.0,
           ),
         ),
       ),

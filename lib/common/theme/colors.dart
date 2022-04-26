@@ -19,3 +19,4 @@ const grayGhost = Color(0xffCBC9D4);
 const orangeBurning = Color(0xffFF6B2C);
 const blackHaiti = Color(0xff150B3D);
 const blueLotus = Color(0xff7551FF);
+const tealishBlue = Color(0xffDEE1E7);
