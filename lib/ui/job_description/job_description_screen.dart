@@ -1,3 +1,4 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -41,6 +42,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xfff5f5f7),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -78,7 +80,97 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
   }
 
   Widget _buildJobApplyFragment() {
-    return Container();
+    return Column(
+      children: [
+        const Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Upload CV",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: blackHaiti,
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        const Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Add your CV/Resume to apply for a job",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: mulledWine,
+              fontWeight: FontWeight.w400,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        DottedBorder(
+            color: mulledWine.withOpacity(0.8),
+            strokeWidth: 1.2,
+            radius: const Radius.circular(14.0),
+            borderType: BorderType.RRect,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(14)),
+              child: Container(
+                height: 75.0,
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      "assets/images/svgs/ic_upload.svg",
+                      height: 24.0,
+                      width: 24.0,
+                    ),
+                    const SizedBox(width: 17.0),
+                    const Text(
+                      "Upload CV/Resume",
+                      style: TextStyle(
+                        color: mulledWine,
+                        fontSize: 12.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )),
+        const SizedBox(height: 30),
+        const Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Information",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: blackHaiti,
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        const SizedBox(height: 15),
+        Container(
+          height: 232.0,
+          padding: const EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: const TextField(
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: "Explain why you are the right person for this job",
+            ),
+          ),
+        )
+      ],
+    );
   }
 
   Widget _buildTabButtons() {
@@ -133,6 +225,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
   void _onDescriptionButtonClicked() {
     setState(() {
       _pageState = JobDescriptionPageState.description;
+    });
+  }
+
+  void _onProceedToApplyClick() {
+    setState(() {
+      _pageState = JobDescriptionPageState.apply;
     });
   }
 
@@ -400,11 +498,14 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
       alignment: Alignment.bottomCenter,
       child: Container(
         margin: const EdgeInsets.only(left: 22.0),
-        child: PrimaryActionButton(
-          buttonText: _pageState.name == JobDescriptionPageState.apply.name
-              ? "apply"
-              : "proceed to apply",
-          width: 270.0,
+        child: GestureDetector(
+          onTap: _onProceedToApplyClick,
+          child: PrimaryActionButton(
+            buttonText: _pageState.name == JobDescriptionPageState.apply.name
+                ? "apply now"
+                : "proceed to apply",
+            width: 270.0,
+          ),
         ),
       ),
     );
@@ -558,7 +659,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         const Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "* Lorem Ispum Lorem\n* Lorem Ispum Lorem\n* Lorem Ispum Lorem\n* Lorem Ispum Lorem\n* Lorem Ispum Lorem",
+            "• Lorem Ispum Lorem\n• Lorem Ispum Loremdadf fdskfasdkj \n• Lorem Ispum Lorem\n• Lorem Ispum Lorem"
+            "\n• Lorem Ispum Lorem",
             textAlign: TextAlign.left,
             style: TextStyle(
               color: mulledWine,
@@ -769,9 +871,9 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
 
   bool _shouldShowMap = false;
 
-  SizedBox _buildGoogleMapPreview() {
+  Widget _buildGoogleMapPreview() {
     return SizedBox(
-      height: _shouldShowMap ? 150 : 0,
+      height: 150,
       width: double.infinity,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15.0),
