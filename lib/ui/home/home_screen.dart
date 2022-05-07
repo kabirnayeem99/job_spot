@@ -18,12 +18,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late FluroRouter router;
+  FluroRouter? router;
 
   @override
   void initState() {
     super.initState();
-    router = FluroRouter.appRouter;
+    router ??= FluroRouter.appRouter;
   }
 
   @override
@@ -265,7 +265,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _navigateToJobDetailsScreen(BuildContext context) =>
-      router.navigateTo(context, jobDescScreenNavRouteName,
-          transition: TransitionType.cupertino);
+  void _navigateToJobDetailsScreen(BuildContext context) {
+    router ??= FluroRouter.appRouter;
+    router?.navigateTo(context, jobDescScreenNavRouteName,
+        transition: TransitionType.cupertino);
+  }
 }

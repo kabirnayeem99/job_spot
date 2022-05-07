@@ -1,13 +1,15 @@
+import 'dart:io';
+
 import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:job_spot/common/theme/colors.dart';
 import 'package:job_spot/domain/entity/job_description_page_state.dart';
-import 'package:job_spot/ui/widgets/animated_size_and_fade.dart';
-import 'package:job_spot/ui/widgets/primary_action_button.dart';
 
-import '../../domain/entity/job_description_page_state.dart';
+import '../widgets/primary_action_button.dart';
 
 const jobDescScreenNavRouteName = "job_description_screen/";
 
@@ -25,16 +27,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
 
   final LatLng _center = const LatLng(22.313999275669637, 91.80758944137361);
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    setState(() {
-      _shouldShowMap = true;
-    });
   }
 
   void _navigateBack(BuildContext context) => Navigator.pop(context);
@@ -42,7 +36,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xfff5f5f7),
+      backgroundColor: const Color(0xfff5f5f7),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -76,7 +70,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
     } else {
       fragment = _buildJobApplyFragment();
     }
-    return AnimatedSizeAndFade(child: fragment);
+    return fragment;
   }
 
   Widget _buildJobApplyFragment() {
@@ -108,37 +102,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           ),
         ),
         const SizedBox(height: 20),
-        DottedBorder(
-            color: mulledWine.withOpacity(0.8),
-            strokeWidth: 1.2,
-            radius: const Radius.circular(14.0),
-            borderType: BorderType.RRect,
-            child: ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(14)),
-              child: Container(
-                height: 75.0,
-                width: double.infinity,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      "assets/images/svgs/ic_upload.svg",
-                      height: 24.0,
-                      width: 24.0,
-                    ),
-                    const SizedBox(width: 17.0),
-                    const Text(
-                      "Upload CV/Resume",
-                      style: TextStyle(
-                        color: mulledWine,
-                        fontSize: 12.0,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )),
+        _buildUploadCvButtonBox(),
         const SizedBox(height: 30),
         const Align(
           alignment: Alignment.topLeft,
@@ -173,6 +137,131 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
     );
   }
 
+  Widget _buildUploadCvButtonBox() {
+    return GestureDetector(
+      onTap: () => _pickPdfFiles(),
+      child: DottedBorder(
+        color: mulledWine.withOpacity(0.8),
+        strokeWidth: 1.2,
+        radius: const Radius.circular(14.0),
+        borderType: BorderType.RRect,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(14)),
+          child: Container(
+            color: bluePurpleAmethystSmoke.withOpacity(0.3),
+            width: double.infinity,
+            child: _buildAfterUploadBox(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAfterUploadBox() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        const SizedBox(height: 15.0),
+        Row(
+          children: [
+            const SizedBox(width: 15.0),
+            SvgPicture.asset(
+              "assets/images/svgs/ic_pdf_file.svg",
+              height: 44.0,
+              width: 44.0,
+            ),
+            const SizedBox(width: 20.0),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  "Jamet kudos - CV - UI/UX Designer",
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    color: blackHaiti,
+                  ),
+                ),
+                SizedBox(height: 5.0),
+                Text(
+                  "867 Kb * 14 Feb 2022 at 11:30 am",
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    color: spanPearl,
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+        const SizedBox(height: 27.0),
+        Row(
+          children: [
+            const SizedBox(width: 21.0),
+            SvgPicture.asset(
+              "assets/images/svgs/ic_delete.svg",
+              height: 24.0,
+              width: 24.0,
+            ),
+            const SizedBox(width: 10.0),
+            const Text(
+              "Remove file",
+              style: TextStyle(
+                color: lightRed,
+                fontSize: 12.0,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 15.0),
+      ],
+    );
+  }
+
+  Widget _buildBeforeUploadBox() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SvgPicture.asset(
+          "assets/images/svgs/ic_upload.svg",
+          height: 24.0,
+          width: 24.0,
+        ),
+        const SizedBox(width: 17.0),
+        const Text(
+          "Upload CV/Resume",
+          style: TextStyle(
+            color: mulledWine,
+            fontSize: 12.0,
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _pickPdfFiles() async {
+    try {
+      FilePickerResult? result =
+          await FilePicker.platform.pickFiles(allowMultiple: true);
+
+      if (result != null) {
+        List<File> files =
+            result.paths.map((path) => File(path ?? "")).toList();
+        if (kDebugMode) {
+          print(files[0]);
+        }
+      } else {
+        if (kDebugMode) {
+          print("no file was selected");
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
   Widget _buildTabButtons() {
     final shouldShowCompanyTab =
         _pageState.name == JobDescriptionPageState.company.name;
@@ -182,33 +271,27 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         : Row(
             children: [
               Expanded(
-                child: AnimatedSizeAndFade(
-                  child: GestureDetector(
-                    onTap: _onDescriptionButtonClicked,
-                    child: PrimaryActionButton(
-                      buttonText: "Description",
-                      buttonTextColor:
-                          shouldShowCompanyTab ? Colors.white : darkIndigo,
-                      buttonColor: shouldShowCompanyTab
-                          ? darkIndigo
-                          : purpleBlueMoonraker,
-                    ),
+                child: GestureDetector(
+                  onTap: _onDescriptionButtonClicked,
+                  child: PrimaryActionButton(
+                    buttonText: "Description",
+                    buttonTextColor:
+                        shouldShowCompanyTab ? Colors.white : darkIndigo,
+                    buttonColor:
+                        shouldShowCompanyTab ? darkIndigo : purpleBlueMoonraker,
                   ),
                 ),
               ),
               const SizedBox(width: 9),
               Expanded(
-                child: AnimatedSizeAndFade(
-                  child: GestureDetector(
-                    onTap: _onCompanyButtonClicked,
-                    child: PrimaryActionButton(
-                      buttonText: "Company",
-                      buttonTextColor:
-                          shouldShowCompanyTab ? darkIndigo : Colors.white,
-                      buttonColor: shouldShowCompanyTab
-                          ? purpleBlueMoonraker
-                          : darkIndigo,
-                    ),
+                child: GestureDetector(
+                  onTap: _onCompanyButtonClicked,
+                  child: PrimaryActionButton(
+                    buttonText: "Company",
+                    buttonTextColor:
+                        shouldShowCompanyTab ? darkIndigo : Colors.white,
+                    buttonColor:
+                        shouldShowCompanyTab ? purpleBlueMoonraker : darkIndigo,
                   ),
                 ),
               ),
@@ -869,43 +952,38 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
     );
   }
 
-  bool _shouldShowMap = false;
-
   Widget _buildGoogleMapPreview() {
     return SizedBox(
       height: 150,
       width: double.infinity,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15.0),
-        child: GoogleMap(
-          compassEnabled: false,
-          trafficEnabled: false,
-          scrollGesturesEnabled: false,
-          zoomControlsEnabled: false,
-          buildingsEnabled: false,
-          myLocationEnabled: false,
-          rotateGesturesEnabled: false,
-          tiltGesturesEnabled: false,
-          myLocationButtonEnabled: false,
-          mapToolbarEnabled: false,
-          indoorViewEnabled: false,
-          zoomGesturesEnabled: false,
-          liteModeEnabled: true,
-          onMapCreated: _onMapCreated,
-          markers: {
-            Marker(
-              markerId: const MarkerId("bugicugi"),
-              position: _center,
-              infoWindow: const InfoWindow(
-                title: "Ubuntu",
-                snippet: "Shapla Abashik Jame Mosjid Rd, Chattogram",
-              ),
-            )
-          },
-          initialCameraPosition: CameraPosition(
-            target: _center,
-            zoom: 15.0,
-          ),
+      child: GoogleMap(
+        compassEnabled: false,
+        trafficEnabled: false,
+        scrollGesturesEnabled: false,
+        zoomControlsEnabled: false,
+        buildingsEnabled: false,
+        myLocationEnabled: false,
+        rotateGesturesEnabled: false,
+        tiltGesturesEnabled: false,
+        myLocationButtonEnabled: false,
+        mapToolbarEnabled: false,
+        indoorViewEnabled: false,
+        zoomGesturesEnabled: false,
+        liteModeEnabled: false,
+        onMapCreated: _onMapCreated,
+        markers: {
+          Marker(
+            markerId: const MarkerId("bugicugi"),
+            position: _center,
+            infoWindow: const InfoWindow(
+              title: "Ubuntu",
+              snippet: "Shapla Abashik Jame Mosjid Rd, Chattogram",
+            ),
+          )
+        },
+        initialCameraPosition: CameraPosition(
+          target: _center,
+          zoom: 15.0,
         ),
       ),
     );
