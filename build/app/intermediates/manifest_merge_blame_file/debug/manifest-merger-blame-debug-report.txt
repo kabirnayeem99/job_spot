@@ -5,7 +5,7 @@
 5    android:versionName="1.0.0" >
 6
 7    <uses-sdk
-8        android:minSdkVersion="16"
+8        android:minSdkVersion="20"
 9        android:targetSdkVersion="31" />
 10    <!--
 11         Flutter needs it to communicate with the running application
@@ -16,93 +16,144 @@
 14-->/Users/kabir/Side_Projects/job_spot/android/app/src/debug/AndroidManifest.xml:6:22-64
 15
 16    <queries>
-16-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:37:5-47:15
+16-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:42:5-52:15
 17        <intent>
-17-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:38:9-42:18
+17-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:43:9-47:18
 18            <action android:name="android.intent.action.VIEW" />
-18-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:39:13-65
-18-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:39:21-62
+18-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:44:13-65
+18-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:44:21-62
 19
 20            <category android:name="android.intent.category.BROWSABLE" />
-20-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:40:13-74
-20-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:40:23-71
+20-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:45:13-74
+20-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:45:23-71
 21
 22            <data android:scheme="https" />
-22-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:41:13-44
-22-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:41:19-41
+22-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:46:13-44
+22-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:46:19-41
 23        </intent>
 24        <intent>
-24-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:43:9-46:18
+24-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:48:9-51:18
 25            <action android:name="android.intent.action.SEND" />
-25-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:44:13-65
-25-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:44:21-62
+25-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:49:13-65
+25-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:49:21-62
 26
 27            <data android:mimeType="*/*" />
-27-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:41:13-44
+27-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:46:13-44
 28        </intent>
-29    </queries>
-30
-31    <application
-32        android:name="android.app.Application"
-33        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-33-->[androidx.core:core:1.6.0] /Users/kabir/.gradle/caches/transforms-2/files-2.1/122df2e57d294d1a53db26bbc3b813c1/core-1.6.0/AndroidManifest.xml:24:18-86
-34        android:debuggable="true"
-35        android:icon="@mipmap/ic_launcher"
-36        android:label="job_spot" >
-37        <activity
-38            android:name="io.github.kabirnayeem99.job_spot.MainActivity"
-39            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-40            android:exported="true"
-41            android:hardwareAccelerated="true"
-42            android:launchMode="singleTop"
-43            android:theme="@style/LaunchTheme"
-44            android:windowSoftInputMode="adjustResize" >
-45
-46            <!--
-47                 Specifies an Android theme to apply to this Activity as soon as
-48                 the Android process has started. This theme is visible to the user
-49                 while the Flutter UI initializes. After that, this theme continues
-50                 to determine the Window background behind the Flutter UI.
-51            -->
-52            <meta-data
-53                android:name="io.flutter.embedding.android.NormalTheme"
-54                android:resource="@style/NormalTheme" />
-55
-56            <intent-filter>
-57                <action android:name="android.intent.action.MAIN" />
+29        <intent>
+29-->[:file_picker] /Users/kabir/Side_Projects/job_spot/build/file_picker/intermediates/library_manifest/debug/AndroidManifest.xml:10:9-14:18
+30            <action android:name="android.intent.action.GET_CONTENT" />
+30-->[:file_picker] /Users/kabir/Side_Projects/job_spot/build/file_picker/intermediates/library_manifest/debug/AndroidManifest.xml:11:13-72
+30-->[:file_picker] /Users/kabir/Side_Projects/job_spot/build/file_picker/intermediates/library_manifest/debug/AndroidManifest.xml:11:21-69
+31
+32            <data android:mimeType="*/*" />
+32-->/Users/kabir/Side_Projects/job_spot/android/app/src/main/AndroidManifest.xml:46:13-44
+33        </intent> <!-- Needs to be explicitly declared on Android R+ -->
+34        <package android:name="com.google.android.apps.maps" />
+34-->[com.google.android.gms:play-services-maps:18.0.2] /Users/kabir/.gradle/caches/transforms-3/fcec4db881fcef984ba8d52907f3649e/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:33:9-64
+34-->[com.google.android.gms:play-services-maps:18.0.2] /Users/kabir/.gradle/caches/transforms-3/fcec4db881fcef984ba8d52907f3649e/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:33:18-61
+35    </queries>
+36
+37    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Include required permissions for Google Maps API to run. -->
+37-->[:file_picker] /Users/kabir/Side_Projects/job_spot/build/file_picker/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-80
+37-->[:file_picker] /Users/kabir/Side_Projects/job_spot/build/file_picker/intermediates/library_manifest/debug/AndroidManifest.xml:7:22-77
+38    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+38-->[com.google.android.gms:play-services-maps:18.0.2] /Users/kabir/.gradle/caches/transforms-3/fcec4db881fcef984ba8d52907f3649e/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:23:5-79
+38-->[com.google.android.gms:play-services-maps:18.0.2] /Users/kabir/.gradle/caches/transforms-3/fcec4db881fcef984ba8d52907f3649e/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:23:22-76
+39
+40    <uses-feature
+40-->[com.google.android.gms:play-services-maps:18.0.2] /Users/kabir/.gradle/caches/transforms-3/fcec4db881fcef984ba8d52907f3649e/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:26:5-28:35
+41        android:glEsVersion="0x00020000"
+41-->[com.google.android.gms:play-services-maps:18.0.2] /Users/kabir/.gradle/caches/transforms-3/fcec4db881fcef984ba8d52907f3649e/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:27:9-41
+42        android:required="true" />
+42-->[com.google.android.gms:play-services-maps:18.0.2] /Users/kabir/.gradle/caches/transforms-3/fcec4db881fcef984ba8d52907f3649e/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:28:9-32
+43
+44    <application
+45        android:name="android.app.Application"
+46        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+46-->[androidx.core:core:1.6.0] /Users/kabir/.gradle/caches/transforms-3/50a3bd85611a91ea1f41c51532066009/transformed/core-1.6.0/AndroidManifest.xml:24:18-86
+47        android:debuggable="true"
+48        android:icon="@mipmap/ic_launcher"
+49        android:label="job_spot" >
+50        <activity
+51            android:name="io.github.kabirnayeem99.job_spot.MainActivity"
+52            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+53            android:exported="true"
+54            android:hardwareAccelerated="true"
+55            android:launchMode="singleTop"
+56            android:theme="@style/LaunchTheme"
+57            android:windowSoftInputMode="adjustResize" >
 58
-59                <category android:name="android.intent.category.LAUNCHER" />
-60            </intent-filter>
-61        </activity>
-62        <!--
-63             Don't delete the meta-data below.
-64             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
-65        -->
-66        <meta-data
-67            android:name="flutterEmbedding"
-68            android:value="2" />
-69
-70        <activity
-70-->[:url_launcher_android] /Users/kabir/Side_Projects/job_spot/build/url_launcher_android/intermediates/library_manifest/debug/AndroidManifest.xml:8:9-11:74
-71            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
-71-->[:url_launcher_android] /Users/kabir/Side_Projects/job_spot/build/url_launcher_android/intermediates/library_manifest/debug/AndroidManifest.xml:9:13-74
-72            android:exported="false"
-72-->[:url_launcher_android] /Users/kabir/Side_Projects/job_spot/build/url_launcher_android/intermediates/library_manifest/debug/AndroidManifest.xml:10:13-37
-73            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-73-->[:url_launcher_android] /Users/kabir/Side_Projects/job_spot/build/url_launcher_android/intermediates/library_manifest/debug/AndroidManifest.xml:11:13-71
-74
-75        <uses-library
-75-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
-76            android:name="androidx.window.extensions"
-76-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
-77            android:required="false" />
-77-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
-78        <uses-library
-78-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
-79            android:name="androidx.window.sidecar"
-79-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
-80            android:required="false" />
-80-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-2/files-2.1/03c633e46d75bfb21f082f0417f55161/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
-81    </application>
-82
-83</manifest>
+59            <!--
+60                 Specifies an Android theme to apply to this Activity as soon as
+61                 the Android process has started. This theme is visible to the user
+62                 while the Flutter UI initializes. After that, this theme continues
+63                 to determine the Window background behind the Flutter UI.
+64            -->
+65            <meta-data
+66                android:name="io.flutter.embedding.android.NormalTheme"
+67                android:resource="@style/NormalTheme" />
+68
+69            <intent-filter>
+70                <action android:name="android.intent.action.MAIN" />
+71
+72                <category android:name="android.intent.category.LAUNCHER" />
+73            </intent-filter>
+74        </activity>
+75        <!--
+76             Don't delete the meta-data below.
+77             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+78        -->
+79        <meta-data
+80            android:name="flutterEmbedding"
+81            android:value="2" />
+82        <meta-data
+83            android:name="com.google.android.geo.API_KEY"
+84            android:value="AIzaSyDv8HeaZQE7k1Yev8N4tAOOJIgI99gMzE8" />
+85
+86        <activity
+86-->[:url_launcher_android] /Users/kabir/Side_Projects/job_spot/build/url_launcher_android/intermediates/library_manifest/debug/AndroidManifest.xml:8:9-11:74
+87            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+87-->[:url_launcher_android] /Users/kabir/Side_Projects/job_spot/build/url_launcher_android/intermediates/library_manifest/debug/AndroidManifest.xml:9:13-74
+88            android:exported="false"
+88-->[:url_launcher_android] /Users/kabir/Side_Projects/job_spot/build/url_launcher_android/intermediates/library_manifest/debug/AndroidManifest.xml:10:13-37
+89            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+89-->[:url_launcher_android] /Users/kabir/Side_Projects/job_spot/build/url_launcher_android/intermediates/library_manifest/debug/AndroidManifest.xml:11:13-71
+90
+91        <uses-library
+91-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-3/ec851bf77ccab8428231a97fc0e2c9dd/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
+92            android:name="androidx.window.extensions"
+92-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-3/ec851bf77ccab8428231a97fc0e2c9dd/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
+93            android:required="false" />
+93-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-3/ec851bf77ccab8428231a97fc0e2c9dd/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
+94        <uses-library
+94-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-3/ec851bf77ccab8428231a97fc0e2c9dd/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
+95            android:name="androidx.window.sidecar"
+95-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-3/ec851bf77ccab8428231a97fc0e2c9dd/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
+96            android:required="false" /> <!-- Needs to be explicitly declared on P+ -->
+96-->[androidx.window:window:1.0.0-beta04] /Users/kabir/.gradle/caches/transforms-3/ec851bf77ccab8428231a97fc0e2c9dd/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
+97        <uses-library
+97-->[com.google.android.gms:play-services-maps:18.0.2] /Users/kabir/.gradle/caches/transforms-3/fcec4db881fcef984ba8d52907f3649e/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:39:9-41:40
+98            android:name="org.apache.http.legacy"
+98-->[com.google.android.gms:play-services-maps:18.0.2] /Users/kabir/.gradle/caches/transforms-3/fcec4db881fcef984ba8d52907f3649e/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:40:13-50
+99            android:required="false" />
+99-->[com.google.android.gms:play-services-maps:18.0.2] /Users/kabir/.gradle/caches/transforms-3/fcec4db881fcef984ba8d52907f3649e/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:41:13-37
+100
+101        <activity
+101-->[com.google.android.gms:play-services-base:18.0.1] /Users/kabir/.gradle/caches/transforms-3/7cf3c4c0daf21bf1b86a37b5b22b9cf9/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:9-22:45
+102            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+102-->[com.google.android.gms:play-services-base:18.0.1] /Users/kabir/.gradle/caches/transforms-3/7cf3c4c0daf21bf1b86a37b5b22b9cf9/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:19-85
+103            android:exported="false"
+103-->[com.google.android.gms:play-services-base:18.0.1] /Users/kabir/.gradle/caches/transforms-3/7cf3c4c0daf21bf1b86a37b5b22b9cf9/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:22:19-43
+104            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+104-->[com.google.android.gms:play-services-base:18.0.1] /Users/kabir/.gradle/caches/transforms-3/7cf3c4c0daf21bf1b86a37b5b22b9cf9/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:21:19-78
+105
+106        <meta-data
+106-->[com.google.android.gms:play-services-basement:18.0.0] /Users/kabir/.gradle/caches/transforms-3/62402bb41b630c7715574f8fa93009a9/transformed/jetified-play-services-basement-18.0.0/AndroidManifest.xml:21:9-23:69
+107            android:name="com.google.android.gms.version"
+107-->[com.google.android.gms:play-services-basement:18.0.0] /Users/kabir/.gradle/caches/transforms-3/62402bb41b630c7715574f8fa93009a9/transformed/jetified-play-services-basement-18.0.0/AndroidManifest.xml:22:13-58
+108            android:value="@integer/google_play_services_version" />
+108-->[com.google.android.gms:play-services-basement:18.0.0] /Users/kabir/.gradle/caches/transforms-3/62402bb41b630c7715574f8fa93009a9/transformed/jetified-play-services-basement-18.0.0/AndroidManifest.xml:23:13-66
+109    </application>
+110
+111</manifest>

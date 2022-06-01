@@ -4,21 +4,21 @@ description: Find Your Dream Job Here!
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.2 <3.0.0"
+  sdk: ">=2.16.2 <3.0.1"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.4
   flutter_svg: ^1.0.3
-  google_fonts: ^2.1.0
+  google_fonts: ^3.0.1
   sailor: ^0.7.1
   fluro: ^2.0.3
-  url_launcher: ^6.1.0
-  google_maps_flutter: ^2.1.4
+  url_launcher: ^6.1.2
+  google_maps_flutter: ^2.1.6
   dotted_border: ^2.0.0+2
-  file_picker: ^4.5.1
+  file_picker: ^4.6.0
 
 dev_dependencies:
   flutter_test:
