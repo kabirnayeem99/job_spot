@@ -4,12 +4,12 @@
         "source": "/Users/kabir/Side_Projects/job_spot/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png"
     },
     {
-        "merged": "/Users/kabir/Side_Projects/job_spot/build/app/intermediates/res/merged/debug/mipmap-mdpi_ic_launcher.png.flat",
-        "source": "/Users/kabir/Side_Projects/job_spot/android/app/src/main/res/mipmap-mdpi/ic_launcher.png"
-    },
-    {
         "merged": "/Users/kabir/Side_Projects/job_spot/build/app/intermediates/res/merged/debug/mipmap-xxxhdpi_ic_launcher.png.flat",
         "source": "/Users/kabir/Side_Projects/job_spot/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/kabir/Side_Projects/job_spot/build/app/intermediates/res/merged/debug/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "/Users/kabir/Side_Projects/job_spot/android/app/src/main/res/mipmap-mdpi/ic_launcher.png"
     },
     {
         "merged": "/Users/kabir/Side_Projects/job_spot/build/app/intermediates/res/merged/debug/mipmap-hdpi_ic_launcher.png.flat",
