@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/kabir/Side_Projects/job_spot/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml",
+            "outputFile": "io.github.kabirnayeem99.job_spot.app-mergeDebugResources-12:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
                     "source": "/Users/kabir/Side_Projects/job_spot/android/app/src/main/res/values-night/styles.xml",
@@ -14,12 +14,12 @@
                         "endOffsets": "464,970"
                     },
                     "to": {
-                        "startLines": "2,7",
+                        "startLines": "2,6",
                         "startColumns": "4,4",
-                        "startOffsets": "55,352",
-                        "endLines": "6,9",
+                        "startOffsets": "55,236",
+                        "endLines": "5,8",
                         "endColumns": "12,12",
-                        "endOffsets": "347,516"
+                        "endOffsets": "231,400"
                     }
                 }
             ]

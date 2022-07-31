@@ -10,15 +10,16 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.4
-  flutter_svg: ^1.0.3
+  cupertino_icons: ^1.0.5
+  flutter_svg: ^1.1.1+1
   google_fonts: ^3.0.1
   sailor: ^0.7.1
   fluro: ^2.0.3
   url_launcher: ^6.1.2
-  google_maps_flutter: ^2.1.6
+  google_maps_flutter: ^2.1.10
   dotted_border: ^2.0.0+2
   file_picker: ^4.6.0
+  flutter_bloc: ^8.0.1
 
 dev_dependencies:
   flutter_test:

@@ -39,7 +39,6 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
       backgroundColor: const Color(0xfff5f5f7),
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
           child: Container(
             padding: const EdgeInsets.only(left: 22.0, right: 22.0, top: 22.0),
             child: Column(
@@ -157,6 +156,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
     );
   }
 
+  var filaneName = "Jamet kudos - CV - UI/UX Designer";
+
   Widget _buildAfterUploadBox() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -173,16 +174,16 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             const SizedBox(width: 20.0),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
-                  "Jamet kudos - CV - UI/UX Designer",
-                  style: TextStyle(
+                  filaneName,
+                  style: const TextStyle(
                     fontSize: 12.0,
                     color: blackHaiti,
                   ),
                 ),
-                SizedBox(height: 5.0),
-                Text(
+                const SizedBox(height: 5.0),
+                const Text(
                   "867 Kb * 14 Feb 2022 at 11:30 am",
                   style: TextStyle(
                     fontSize: 12.0,
@@ -247,8 +248,16 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
       if (result != null) {
         List<File> files =
             result.paths.map((path) => File(path ?? "")).toList();
+
+        final file = files[0];
+        final name = file.path.split('/').last;
+
+        setState(() {
+          filaneName = name;
+        });
+
         if (kDebugMode) {
-          print(files[0]);
+          print(name);
         }
       } else {
         if (kDebugMode) {

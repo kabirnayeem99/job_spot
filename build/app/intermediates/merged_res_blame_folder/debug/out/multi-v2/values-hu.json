@@ -1,10 +1,27 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/kabir/Side_Projects/job_spot/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-hu/values-hu.xml",
+            "outputFile": "io.github.kabirnayeem99.job_spot.app-mergeDebugResources-12:/values-hu/values-hu.xml",
             "map": [
                 {
-                    "source": "/Users/kabir/.gradle/caches/transforms-3/50a3bd85611a91ea1f41c51532066009/transformed/core-1.6.0/res/values-hu/values-hu.xml",
+                    "source": "/Users/kabir/.gradle/caches/transforms-3/b1ca208d0eeca6cfed1c80920231ffe8/transformed/jetified-play-services-basement-18.0.0/res/values-hu/values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "195",
+                        "endColumns": "172",
+                        "endOffsets": "367"
+                    },
+                    "to": {
+                        "startLines": "10",
+                        "startColumns": "4",
+                        "startOffsets": "1135",
+                        "endColumns": "176",
+                        "endOffsets": "1307"
+                    }
+                },
+                {
+                    "source": "/Users/kabir/.gradle/caches/transforms-3/95125151e44ceba42463432097112b5b/transformed/core-1.6.0/res/values-hu/values-hu.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -21,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "/Users/kabir/.gradle/caches/transforms-3/7cf3c4c0daf21bf1b86a37b5b22b9cf9/transformed/jetified-play-services-base-18.0.1/res/values-hu/values.xml",
+                    "source": "/Users/kabir/.gradle/caches/transforms-3/fc46455b3963b3542eba504ddd9594c6/transformed/jetified-play-services-base-18.0.1/res/values-hu/values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -35,23 +52,6 @@
                         "startOffsets": "55,166,350,488,597,765,903,1025,1312,1482,1590,1775,1912,2084,2256,2327,2395",
                         "endColumns": "110,183,137,108,167,137,121,109,169,107,184,136,171,171,70,67,87",
                         "endOffsets": "161,345,483,592,760,898,1020,1130,1477,1585,1770,1907,2079,2251,2322,2390,2478"
-                    }
-                },
-                {
-                    "source": "/Users/kabir/.gradle/caches/transforms-3/62402bb41b630c7715574f8fa93009a9/transformed/jetified-play-services-basement-18.0.0/res/values-hu/values.xml",
-                    "from": {
-                        "startLines": "4",
-                        "startColumns": "0",
-                        "startOffsets": "195",
-                        "endColumns": "172",
-                        "endOffsets": "367"
-                    },
-                    "to": {
-                        "startLines": "10",
-                        "startColumns": "4",
-                        "startOffsets": "1135",
-                        "endColumns": "176",
-                        "endOffsets": "1307"
                     }
                 }
             ]

@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/kabir/Side_Projects/job_spot/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-en-rIN/values-en-rIN.xml",
+            "outputFile": "io.github.kabirnayeem99.job_spot.app-mergeDebugResources-12:/values-en-rIN/values-en-rIN.xml",
             "map": [
                 {
-                    "source": "/Users/kabir/.gradle/caches/transforms-2/files-2.1/122df2e57d294d1a53db26bbc3b813c1/core-1.6.0/res/values-en-rIN/values-en-rIN.xml",
+                    "source": "/Users/kabir/.gradle/caches/transforms-3/95125151e44ceba42463432097112b5b/transformed/core-1.6.0/res/values-en-rIN/values-en-rIN.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

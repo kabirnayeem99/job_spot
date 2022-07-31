@@ -8,13 +8,17 @@
 		<data>
 		+07W1N145g6+kFz/ocqMqHbdR6M=
 		</data>
+		<key>Headers/messages.g.h</key>
+		<data>
+		zSYoRO1KNPHItQK5GFq/2pDJCNU=
+		</data>
 		<key>Headers/path_provider_ios-umbrella.h</key>
 		<data>
-		0hPgzjh/PTlntpghx6J7VWPNSYk=
+		meNhPO5aukt6KH8WDJAqTc2w8Xo=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		IB1FuX3GAdFnxIO5ZfCQIW/xIYk=
+		CXM7vvqnepVwFMe/leo9BckLOYo=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -34,15 +38,26 @@
 			eRnBn9tRArmcmJ9UN/gE8Lokm52lhAX0yeWEFxjMJUY=
 			</data>
 		</dict>
+		<key>Headers/messages.g.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			zSYoRO1KNPHItQK5GFq/2pDJCNU=
+			</data>
+			<key>hash2</key>
+			<data>
+			IwfAsy/Ftg39ayHBIZZa/B25/bZ/f46ljPHwdiCTbEA=
+			</data>
+		</dict>
 		<key>Headers/path_provider_ios-umbrella.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			0hPgzjh/PTlntpghx6J7VWPNSYk=
+			meNhPO5aukt6KH8WDJAqTc2w8Xo=
 			</data>
 			<key>hash2</key>
 			<data>
-			/aCEXRNh2iE1PEDwhEwofBqAE43jJc7pGj9rIRUYA6o=
+			2cr9GlENniQWeI2iTMKOM5xcdS3tLr37Dt7FUZA9Vy8=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

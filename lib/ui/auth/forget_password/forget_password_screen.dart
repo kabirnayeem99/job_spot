@@ -16,7 +16,8 @@ class ForgetPasswordScreen extends StatefulWidget {
   State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
 }
 
-class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
+    with SingleTickerProviderStateMixin {
   late FluroRouter router;
 
   @override
@@ -28,53 +29,49 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 32.0),
-          child: Column(
-            children: [
-              const SizedBox(height: 40.0),
-              const Align(
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 32.0),
+        child: Column(
+          children: [
+            const SizedBox(height: 35.0),
+            const Align(
+              alignment: Alignment.center,
+              child: Text(
+                "Forget Password?",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            const SizedBox(height: 11.0),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 42.0),
+              child: const Align(
                 alignment: Alignment.center,
                 child: Text(
-                  "Forget Password?",
+                  "To reset your password, you need your email or mobile number that can be authenticated",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.w700,
+                    color: mulledWine,
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ),
-              const SizedBox(height: 11.0),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 42.0),
-                child: const Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "To reset your password, you need your email or mobile number that can be authenticated",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: mulledWine,
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 52.0),
-              SvgPicture.asset(
-                  "assets/images/svgs/banner_foreget_password.svg"),
-              const SizedBox(height: 72.0),
-              _buildEmailTextInput(),
-              const SizedBox(height: 35.0),
-              _buildOpenMailButton(),
-              const SizedBox(height: 30.0),
-              _buildBackToLogInButton(),
-              Expanded(child: Container()),
-            ],
-          ),
+            ),
+            const SizedBox(height: 45.0),
+            SvgPicture.asset("assets/images/svgs/banner_foreget_password.svg"),
+            const SizedBox(height: 60.0),
+            _buildEmailTextInput(),
+            const SizedBox(height: 30.0),
+            _buildOpenMailButton(),
+            const SizedBox(height: 25.0),
+            _buildBackToLogInButton(),
+          ],
         ),
       ),
     );
