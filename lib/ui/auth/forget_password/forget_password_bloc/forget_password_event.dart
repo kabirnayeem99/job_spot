@@ -1,3 +1,9 @@
 abstract class ForgetPasswordEvent {}
 
-class InitEvent extends ForgetPasswordEvent {}
+class InitialLoadEvent extends ForgetPasswordEvent {}
+
+class ResetPasswordEvent extends ForgetPasswordEvent {
+  String? emailAddress;
+
+  ResetPasswordEvent({this.emailAddress});
+}

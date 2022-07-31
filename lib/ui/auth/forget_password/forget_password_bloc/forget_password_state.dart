@@ -1,6 +1,10 @@
 class ForgetPasswordState {
+  bool? isLoading = false;
+
+  ForgetPasswordState({this.isLoading});
+
   ForgetPasswordState init() {
-    return ForgetPasswordState();
+    return ForgetPasswordState(isLoading: true);
   }
 
   ForgetPasswordState clone() {
