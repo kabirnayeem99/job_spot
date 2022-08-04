@@ -2,6 +2,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:job_spot/common/theme/colors.dart';
+import 'package:job_spot/common/utility/utility.dart';
 
 import '../auth/intro/intro_screen.dart';
 
@@ -17,6 +18,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
+    dismissKeyboard();
     super.initState();
     _waitAndMoveOn();
   }
@@ -37,22 +39,25 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: darkIndigo,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SvgPicture.asset("assets/images/svgs/logo_jobspot.svg"),
-            const SizedBox(height: 4),
-            const Text(
-              "Jobspot",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            )
-          ],
+      body: GestureDetector(
+        onTap: () => dismissKeyboard(),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SvgPicture.asset("assets/images/svgs/logo_jobspot.svg"),
+              const SizedBox(height: 4),
+              const Text(
+                "Jobspot",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

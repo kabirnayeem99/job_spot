@@ -1,8 +1,12 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:job_spot/common/theme/colors.dart';
 import 'package:job_spot/common/utility/utility.dart';
+import 'package:job_spot/ui/auth/log_in/log_in/log_in_bloc.dart';
+import 'package:job_spot/ui/auth/log_in/log_in/log_in_event.dart';
+import 'package:job_spot/ui/auth/log_in/log_in/log_in_state.dart';
 import 'package:job_spot/ui/home/home_screen.dart';
 
 import '../../widgets/primary_action_button.dart';
@@ -19,16 +23,34 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInScreenState extends State<LogInScreen> {
-  late FluroRouter router;
+  late FluroRouter _router;
+  LogInState _state = LogInState(false, "", "", "", "").init();
+  late LogInBloc _bloc;
 
   @override
   void initState() {
     super.initState();
-    router = FluroRouter.appRouter;
+    _router = FluroRouter.appRouter;
+    _bloc = LogInBloc();
   }
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+        create: (context) => _bloc..add(LoadLogInScreenEvent()),
+        child: BlocListener<LogInBloc, LogInState>(
+          bloc: _bloc,
+          listener: (BuildContext context, LogInState state) {
+            _state = state;
+            print(
+                "_state -> ${_state.email}, ${_state.emailValidationErrorText}");
+            print("state -> ${state.email}, ${state.emailValidationErrorText}");
+          },
+          child: _buildPage(_state),
+        ));
+  }
+
+  Scaffold _buildPage(LogInState state) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -38,68 +60,15 @@ class _LogInScreenState extends State<LogInScreen> {
           child: Column(
             children: [
               const SizedBox(height: 40.0),
-              const Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "Welcome Back!",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
+              _buildLogInTitle(),
               const SizedBox(height: 11.0),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 42.0),
-                child: const Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: mulledWine,
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ),
+              _buildLogInHintSubtitle(),
               const SizedBox(height: 64.0),
               _buildEmailTextInput(),
               const SizedBox(height: 15.0),
               _buildPasswordTextInput(),
               const SizedBox(height: 20.0),
-              Row(
-                children: [
-                  Checkbox(
-                    value: true,
-                    onChanged: (bool) {},
-                    activeColor: lavenderMist,
-                    checkColor: darkIndigo,
-                  ),
-                  const Text(
-                    "Remember Me",
-                    style: TextStyle(
-                      color: spanPearl,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  Expanded(child: Container()),
-                  GestureDetector(
-                    onTap: () => _navigateToForgetPasswordScreen(context),
-                    child: const Text(
-                      "Forget password?",
-                      style: TextStyle(
-                        color: nightBlue,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              _buildLogInActionsList(),
               const SizedBox(height: 36.0),
               _buildLogInButton(),
               const SizedBox(height: 19.0),
@@ -114,21 +83,76 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  void _navigateToSignUpScreen(BuildContext context) =>
-      router.navigateTo(context, signUpScreenNavigationRouteName,
-          transition: TransitionType.cupertino);
-
-  void _navigateToHomeScreen(BuildContext context) =>
-      router.navigateTo(context, homeScreenNavRouteName,
-          transition: TransitionType.cupertino);
-
-  void _signInWithGoogle(BuildContext context) async {
-    launchUrlInWeb("google.com");
+  Widget _buildLogInTitle() {
+    return const Align(
+      alignment: Alignment.center,
+      child: Text(
+        "Welcome Back!",
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 30.0,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
   }
 
-  void _navigateToForgetPasswordScreen(BuildContext context) =>
-      router.navigateTo(context, forgetPasswordScreenNavigationName,
-          transition: TransitionType.cupertino);
+  Widget _buildLogInHintSubtitle() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 42.0),
+      child: Align(
+        alignment: Alignment.center,
+        child: Text(
+          _bloc.state.emailValidationErrorText ?? "",
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: mulledWine,
+            fontSize: 12.0,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLogInActionsList() {
+    return Row(
+      children: [
+        Checkbox(
+          value: true,
+          onChanged: (isChecked) {
+            _bloc.add(ToggleRememberPassword(isChecked ?? false));
+          },
+          activeColor: lavenderMist,
+          checkColor: darkIndigo,
+        ),
+        const Text(
+          "Remember Me",
+          style: TextStyle(
+            color: spanPearl,
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        Expanded(child: Container()),
+        _buildForgetPasswordTextButton(),
+      ],
+    );
+  }
+
+  Widget _buildForgetPasswordTextButton() {
+    return GestureDetector(
+      onTap: () => _navigateToForgetPasswordScreen(context),
+      child: const Text(
+        "Forget password?",
+        style: TextStyle(
+          color: nightBlue,
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+    );
+  }
 
   Widget _buildSignUpTextButton() {
     return GestureDetector(
@@ -163,9 +187,18 @@ class _LogInScreenState extends State<LogInScreen> {
   Widget _buildLogInButton() {
     const buttonText = "login";
     return GestureDetector(
-      onTap: () => _navigateToHomeScreen(context),
+      onTap: () => _bloc.add(LogInWithEmailAndPassword()),
       child: const PrimaryActionButton(buttonText: buttonText),
     );
+  }
+
+  void _showUserMessage() {
+    if (!_bloc.state.isEmailValid()) {
+      print("Should proceed");
+      final message = _bloc.state.emailValidationErrorText;
+      final snackBar = SnackBar(content: Text(message ?? ""));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
   Widget _buildGoogleLogInButton() {
@@ -238,6 +271,9 @@ class _LogInScreenState extends State<LogInScreen> {
                   padding: const EdgeInsets.only(left: 16.0),
                   child: TextField(
                     obscureText: true,
+                    onChanged: (passwordAsTyping) {
+                      _bloc.add(CachePasswordEvent(passwordAsTyping));
+                    },
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       suffixIcon: Padding(
@@ -292,10 +328,13 @@ class _LogInScreenState extends State<LogInScreen> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10.0),
             ),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: TextField(
                 autocorrect: true,
+                onChanged: (emailAsTyping) {
+                  _bloc.add(CacheEmailEvent(emailAsTyping));
+                },
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
@@ -312,4 +351,20 @@ class _LogInScreenState extends State<LogInScreen> {
       ),
     );
   }
+
+  void _navigateToSignUpScreen(BuildContext context) =>
+      _router.navigateTo(context, signUpScreenNavigationRouteName,
+          transition: TransitionType.cupertino);
+
+  void _navigateToHomeScreen(BuildContext context) =>
+      _router.navigateTo(context, homeScreenNavRouteName,
+          transition: TransitionType.cupertino);
+
+  void _signInWithGoogle(BuildContext context) async {
+    launchUrlInWeb("google.com");
+  }
+
+  void _navigateToForgetPasswordScreen(BuildContext context) =>
+      _router.navigateTo(context, forgetPasswordScreenNavigationName,
+          transition: TransitionType.cupertino);
 }

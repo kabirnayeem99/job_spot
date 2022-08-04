@@ -20,6 +20,7 @@ dependencies:
   dotted_border: ^2.0.0+2
   file_picker: ^4.6.0
   flutter_bloc: ^8.0.1
+  keyboard_service: ^2.0.2
 
 dev_dependencies:
   flutter_test:
