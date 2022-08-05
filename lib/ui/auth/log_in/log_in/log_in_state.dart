@@ -3,22 +3,22 @@ class LogInState {
 
   String? email = "";
   String? password = "";
-  String? errorMessage = "";
+  Status status = Status.notAuthenticated;
 
-  String? emailValidationErrorText = "";
+  String? error = "";
 
   LogInState(
     this.shouldRememberPassword,
     this.email,
     this.password,
-    this.errorMessage,
-    this.emailValidationErrorText,
+    this.error,
+    this.status,
   );
 
-  bool isEmailValid() => emailValidationErrorText?.isNotEmpty ?? false;
+  bool isEmailValid() => error?.isNotEmpty ?? false;
 
   LogInState init() {
-    return LogInState(false, "", "", "", "");
+    return LogInState(false, "", "", "", Status.notAuthenticated);
   }
 }
 
@@ -27,7 +27,12 @@ LogInState cloneLogInState(LogInState state) {
     state.shouldRememberPassword,
     state.email,
     state.password,
-    state.errorMessage,
-    state.emailValidationErrorText,
+    state.error,
+    state.status,
   );
+}
+
+enum Status {
+  authenticated,
+  notAuthenticated,
 }

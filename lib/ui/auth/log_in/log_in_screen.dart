@@ -1,17 +1,18 @@
 import 'package:fluro/fluro.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:job_spot/common/theme/colors.dart';
 import 'package:job_spot/common/utility/utility.dart';
 import 'package:job_spot/ui/auth/log_in/log_in/log_in_bloc.dart';
-import 'package:job_spot/ui/auth/log_in/log_in/log_in_event.dart';
 import 'package:job_spot/ui/auth/log_in/log_in/log_in_state.dart';
 import 'package:job_spot/ui/home/home_screen.dart';
 
 import '../../widgets/primary_action_button.dart';
 import '../forget_password/forget_password_screen.dart';
 import '../sign_up/sign_up_screen.dart';
+import 'log_in/log_in_event.dart';
 
 const logInScreenNavigationRouteName = "log_in_screen/";
 
@@ -24,33 +25,35 @@ class LogInScreen extends StatefulWidget {
 
 class _LogInScreenState extends State<LogInScreen> {
   late FluroRouter _router;
-  LogInState _state = LogInState(false, "", "", "", "").init();
-  late LogInBloc _bloc;
 
   @override
   void initState() {
     super.initState();
     _router = FluroRouter.appRouter;
-    _bloc = LogInBloc();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (context) => _bloc..add(LoadLogInScreenEvent()),
-        child: BlocListener<LogInBloc, LogInState>(
-          bloc: _bloc,
-          listener: (BuildContext context, LogInState state) {
-            _state = state;
-            print(
-                "_state -> ${_state.email}, ${_state.emailValidationErrorText}");
-            print("state -> ${state.email}, ${state.emailValidationErrorText}");
-          },
-          child: _buildPage(_state),
-        ));
+    return BlocProvider<LogInBloc>(
+      create: (context) => LogInBloc(),
+      child: BlocListener<LogInBloc, LogInState>(
+        bloc: BlocProvider.of<LogInBloc>(context),
+        listener: (BuildContext context, LogInState state) {
+          _showUserMessage();
+          switch (state.status) {
+            case Status.authenticated:
+              _navigateToHomeScreen(context);
+              break;
+            case Status.notAuthenticated:
+              break;
+          }
+        },
+        child: _buildPage(context),
+      ),
+    );
   }
 
-  Scaffold _buildPage(LogInState state) {
+  Widget _buildPage(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -98,12 +101,13 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   Widget _buildLogInHintSubtitle() {
+    final bloc = BlocProvider.of<LogInBloc>(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 42.0),
       child: Align(
         alignment: Alignment.center,
         child: Text(
-          _bloc.state.emailValidationErrorText ?? "",
+          bloc.state.error ?? "",
           textAlign: TextAlign.center,
           style: const TextStyle(
             color: mulledWine,
@@ -116,12 +120,13 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   Widget _buildLogInActionsList() {
+    final bloc = BlocProvider.of<LogInBloc>(context);
     return Row(
       children: [
         Checkbox(
           value: true,
           onChanged: (isChecked) {
-            _bloc.add(ToggleRememberPassword(isChecked ?? false));
+            bloc.add(ToggleRememberPassword(isChecked ?? false));
           },
           activeColor: lavenderMist,
           checkColor: darkIndigo,
@@ -185,25 +190,29 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   Widget _buildLogInButton() {
+    final bloc = BlocProvider.of<LogInBloc>(context);
     const buttonText = "login";
     return GestureDetector(
-      onTap: () => _bloc.add(LogInWithEmailAndPassword()),
+      onTap: () => bloc.add(LogInWithEmailAndPassword()),
       child: const PrimaryActionButton(buttonText: buttonText),
     );
   }
 
   void _showUserMessage() {
-    if (!_bloc.state.isEmailValid()) {
-      print("Should proceed");
-      final message = _bloc.state.emailValidationErrorText;
+    final bloc = BlocProvider.of<LogInBloc>(context);
+
+    if (!bloc.state.isEmailValid()) {
+      if (kDebugMode) print("Should proceed");
+      final message = bloc.state.error;
       final snackBar = SnackBar(content: Text(message ?? ""));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
   Widget _buildGoogleLogInButton() {
+    final bloc = BlocProvider.of<LogInBloc>(context);
     return GestureDetector(
-      onTap: () => _signInWithGoogle(context),
+      onTap: () => bloc.add(LogInWithGoogle()),
       child: Container(
         height: 50.0,
         width: 266.0,
@@ -237,6 +246,7 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   Widget _buildPasswordTextInput() {
+    final bloc = BlocProvider.of<LogInBloc>(context);
     return Align(
       alignment: Alignment.topLeft,
       child: Center(
@@ -272,7 +282,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   child: TextField(
                     obscureText: true,
                     onChanged: (passwordAsTyping) {
-                      _bloc.add(CachePasswordEvent(passwordAsTyping));
+                      bloc.add(CachePasswordEvent(passwordAsTyping));
                     },
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -300,6 +310,7 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   Widget _buildEmailTextInput() {
+    final bloc = BlocProvider.of<LogInBloc>(context);
     return Align(
       alignment: Alignment.topLeft,
       child: Column(
@@ -333,11 +344,11 @@ class _LogInScreenState extends State<LogInScreen> {
               child: TextField(
                 autocorrect: true,
                 onChanged: (emailAsTyping) {
-                  _bloc.add(CacheEmailEvent(emailAsTyping));
+                  bloc.add(CacheEmailEvent(emailAsTyping));
                 },
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: "kabirnayeem.99@gmail.com",
                   hintStyle: TextStyle(

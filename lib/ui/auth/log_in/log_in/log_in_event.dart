@@ -21,3 +21,5 @@ class CachePasswordEvent extends LogInEvent {
 }
 
 class LogInWithEmailAndPassword extends LogInEvent {}
+
+class LogInWithGoogle extends LogInEvent {}
