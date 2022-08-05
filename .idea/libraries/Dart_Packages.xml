@@ -219,6 +219,13 @@
             </list>
           </value>
         </entry>
+        <entry key="logger">
+          <value>
+            <list>
+              <option value="$USER_HOME$/.local/development/flutter/.pub-cache/hosted/pub.dartlang.org/logger-1.1.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="matcher">
           <value>
             <list>
@@ -537,6 +544,7 @@
       <root url="file://$USER_HOME$/.local/development/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.4/lib" />
       <root url="file://$USER_HOME$/.local/development/flutter/.pub-cache/hosted/pub.dartlang.org/keyboard_service-2.0.2/lib" />
       <root url="file://$USER_HOME$/.local/development/flutter/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1/lib" />
+      <root url="file://$USER_HOME$/.local/development/flutter/.pub-cache/hosted/pub.dartlang.org/logger-1.1.0/lib" />
       <root url="file://$USER_HOME$/.local/development/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.11/lib" />
       <root url="file://$USER_HOME$/.local/development/flutter/.pub-cache/hosted/pub.dartlang.org/material_color_utilities-0.1.4/lib" />
       <root url="file://$USER_HOME$/.local/development/flutter/.pub-cache/hosted/pub.dartlang.org/meta-1.7.0/lib" />

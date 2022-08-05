@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:either_dart/either.dart';
+import 'package:job_spot/domain/use_case/log_in_with_google_use_case.dart';
 
 import '../../../../domain/entity/user_message.dart';
-import '../../../../domain/use_case/LogInWithEmailAndPassword.dart';
+import '../../../../domain/use_case/log_in_with_email_and_password_use_case.dart';
 import 'log_in_event.dart';
 import 'log_in_state.dart';
 
@@ -29,7 +30,7 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
 
   void _togglePasswordRemember(
       ToggleRememberPassword event, Emitter<LogInState> emit) {
-    final _state = cloneLogInState(state);
+    final _state = _cloneState();
     _state.shouldRememberPassword = !(state.shouldRememberPassword ?? false);
     print("should remember -> ${_state.shouldRememberPassword}");
     emit(_state);
@@ -54,7 +55,6 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
     useCase.logInWithEmailAndPassword(_state.email, _state.password).fold(
       (error) {
         _addErrorMessage(error, emit);
-        emit(_state);
       },
       (success) {
         final _state = _cloneState(status: Status.authenticated);
@@ -63,11 +63,28 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
     );
   }
 
+  void _logInWithGoogle(LogInWithGoogle event, Emitter<LogInState> emit) {
+    final useCase = LogInWithGoogleUseCase();
+    final _state = _cloneState(status: Status.notAuthenticated);
+    useCase.logInWithGoogle().fold(
+      (error) {
+        _addErrorMessage(error, emit);
+      },
+      (success) {
+        final _state = _cloneState(status: Status.authenticated);
+        emit(_state);
+      },
+    );
+    emit(_state);
+  }
+
   void _addErrorMessage(String message, Emitter<LogInState> emit) {
     if (message.isEmpty) return;
+
     final currentMessages = state.userMessages;
     final messages = List<UserMessage>.from(currentMessages, growable: true);
     messages.add(UserMessage(DateTime.now().second, message));
+
     final _state = _cloneState(userMessages: messages);
     emit(_state);
   }
@@ -76,12 +93,8 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
     final currentMessages = state.userMessages;
     final messages = List<UserMessage>.from(currentMessages, growable: true);
     messages.removeWhere((element) => element.id == event.id);
-    final _state = _cloneState(userMessages: messages);
-    emit(_state);
-  }
 
-  void _logInWithGoogle(LogInWithGoogle event, Emitter<LogInState> emit) {
-    final _state = _cloneState(status: Status.authenticated);
+    final _state = _cloneState(userMessages: messages);
     emit(_state);
   }
 

@@ -1,5 +1,4 @@
 import 'package:fluro/fluro.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -199,7 +198,8 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   void _showUserMessage(LogInBloc bloc, LogInState state) {
-    if (state.userMessages.isEmpty) return;
+    final isThereNotMessageToShow = (state.userMessages.isEmpty);
+    if (isThereNotMessageToShow) return;
 
     final message = state.userMessages.first.message;
     final snackBar = SnackBar(content: Text(message));

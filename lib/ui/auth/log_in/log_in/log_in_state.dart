@@ -17,20 +17,17 @@ class LogInState {
     this.status,
   );
 
+  @override
+  String toString() {
+    return 'LogInState{shouldRememberPassword: $shouldRememberPassword, email: '
+        '$email, password: $password, status: $status, userMessages: '
+        '$userMessages}';
+  }
+
   LogInState init() {
     return LogInState(
         false, "", "", List.empty(growable: true), Status.notAuthenticated);
   }
-}
-
-LogInState cloneLogInState(LogInState state) {
-  return LogInState(
-    state.shouldRememberPassword,
-    state.email,
-    state.password,
-    state.userMessages,
-    state.status,
-  );
 }
 
 enum Status {

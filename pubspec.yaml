@@ -22,6 +22,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   keyboard_service: ^2.0.2
   either_dart: ^0.2.0
+  logger: ^1.1.0
 
 dev_dependencies:
   flutter_test:
