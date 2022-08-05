@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:either_dart/either.dart';
 
 import '../../../../domain/entity/user_message.dart';
+import '../../../../domain/use_case/LogInWithEmailAndPassword.dart';
 import 'log_in_event.dart';
 import 'log_in_state.dart';
 
@@ -44,24 +46,21 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
   }
 
   void _loginWithEmailAndPassword(
-      LogInWithEmailAndPassword event, Emitter<LogInState> emit) {
+      LogInWithEmailAndPassword event, Emitter<LogInState> emit) async {
+    final useCase = LogInWithEmailAndPasswordUseCase();
+
     final _state = _cloneState(status: Status.notAuthenticated);
 
-    final email = _state.email ?? "";
-    final password = _state.password ?? "";
-
-    String error = "";
-    if (email.isEmpty) error = error + " " + "Your email is empty.";
-    if (password.isEmpty) error = error + " " + "Your password is empty";
-
-    _addErrorMessage(error, emit);
-
-    if (error.isEmpty) {
-      final _state = _cloneState(status: Status.authenticated);
-      emit(_state);
-    } else {
-      emit(_state);
-    }
+    useCase.logInWithEmailAndPassword(_state.email, _state.password).fold(
+      (error) {
+        _addErrorMessage(error, emit);
+        emit(_state);
+      },
+      (success) {
+        final _state = _cloneState(status: Status.authenticated);
+        emit(_state);
+      },
+    );
   }
 
   void _addErrorMessage(String message, Emitter<LogInState> emit) {
