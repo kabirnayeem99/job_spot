@@ -25,3 +25,9 @@ class LogInWithGoogle extends LogInEvent {}
 class NeedSignUp extends LogInEvent {}
 
 class NeedForgetPassword extends LogInEvent {}
+
+class UserMessageShown extends LogInEvent {
+  final int id;
+
+  UserMessageShown(this.id);
+}

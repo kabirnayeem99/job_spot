@@ -1,3 +1,5 @@
+import 'package:job_spot/domain/entity/user_message.dart';
+
 class LogInState {
   bool? shouldRememberPassword = false;
 
@@ -5,20 +7,19 @@ class LogInState {
   String? password = "";
   Status status = Status.notAuthenticated;
 
-  String? error = "";
+  var userMessages = <UserMessage>[];
 
   LogInState(
     this.shouldRememberPassword,
     this.email,
     this.password,
-    this.error,
+    this.userMessages,
     this.status,
   );
 
-  bool isEmailValid() => error?.isNotEmpty ?? false;
-
   LogInState init() {
-    return LogInState(false, "", "", "", Status.notAuthenticated);
+    return LogInState(
+        false, "", "", List.empty(growable: true), Status.notAuthenticated);
   }
 }
 
@@ -27,7 +28,7 @@ LogInState cloneLogInState(LogInState state) {
     state.shouldRememberPassword,
     state.email,
     state.password,
-    state.error,
+    state.userMessages,
     state.status,
   );
 }

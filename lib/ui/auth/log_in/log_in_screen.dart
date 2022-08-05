@@ -33,10 +33,11 @@ class _LogInScreenState extends State<LogInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LogInBloc, LogInState>(
-      bloc: BlocProvider.of<LogInBloc>(context),
+    final bloc = BlocProvider.of<LogInBloc>(context);
+    return BlocConsumer<LogInBloc, LogInState>(
+      bloc: bloc,
       listener: (BuildContext context, LogInState state) {
-        _showUserMessage();
+        _showUserMessage(bloc, state);
         switch (state.status) {
           case Status.authenticated:
             _navigateToHomeScreen(context);
@@ -51,11 +52,11 @@ class _LogInScreenState extends State<LogInScreen> {
             break;
         }
       },
-      child: _buildPage(context),
+      builder: (context, state) => _buildPage(context, bloc, state),
     );
   }
 
-  Widget _buildPage(BuildContext context) {
+  Widget _buildPage(BuildContext context, LogInBloc bloc, LogInState state) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -65,21 +66,21 @@ class _LogInScreenState extends State<LogInScreen> {
           child: Column(
             children: [
               const SizedBox(height: 40.0),
-              _buildLogInTitle(),
+              _buildLogInTitle(bloc, state),
               const SizedBox(height: 11.0),
-              _buildLogInHintSubtitle(),
+              _buildLogInHintSubtitle(bloc, state),
               const SizedBox(height: 64.0),
-              _buildEmailTextInput(),
+              _buildEmailTextInput(bloc, state),
               const SizedBox(height: 15.0),
-              _buildPasswordTextInput(),
+              _buildPasswordTextInput(bloc, state),
               const SizedBox(height: 20.0),
-              _buildLogInActionsList(),
+              _buildLogInActionsList(bloc, state),
               const SizedBox(height: 36.0),
-              _buildLogInButton(),
+              _buildLogInButton(bloc, state),
               const SizedBox(height: 19.0),
-              _buildGoogleLogInButton(),
+              _buildGoogleLogInButton(bloc, state),
               const SizedBox(height: 16.0),
-              _buildSignUpTextButton(),
+              _buildSignUpTextButton(bloc, state),
               Expanded(child: Container()),
             ],
           ),
@@ -88,7 +89,7 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget _buildLogInTitle() {
+  Widget _buildLogInTitle(LogInBloc bloc, LogInState state) {
     return const Align(
       alignment: Alignment.center,
       child: Text(
@@ -102,16 +103,15 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget _buildLogInHintSubtitle() {
-    final bloc = BlocProvider.of<LogInBloc>(context);
+  Widget _buildLogInHintSubtitle(LogInBloc bloc, LogInState state) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 42.0),
-      child: Align(
+      child: const Align(
         alignment: Alignment.center,
         child: Text(
-          bloc.state.error ?? "",
+          "All the Great Jobs in One Place! But you need to log in first to explore.",
           textAlign: TextAlign.center,
-          style: const TextStyle(
+          style: TextStyle(
             color: mulledWine,
             fontSize: 12.0,
             fontWeight: FontWeight.w400,
@@ -121,8 +121,7 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget _buildLogInActionsList() {
-    final bloc = BlocProvider.of<LogInBloc>(context);
+  Widget _buildLogInActionsList(LogInBloc bloc, LogInState state) {
     return Row(
       children: [
         Checkbox(
@@ -142,13 +141,12 @@ class _LogInScreenState extends State<LogInScreen> {
           ),
         ),
         Expanded(child: Container()),
-        _buildForgetPasswordTextButton(),
+        _buildForgetPasswordTextButton(bloc, state),
       ],
     );
   }
 
-  Widget _buildForgetPasswordTextButton() {
-    final bloc = BlocProvider.of<LogInBloc>(context);
+  Widget _buildForgetPasswordTextButton(LogInBloc bloc, LogInState state) {
     return GestureDetector(
       onTap: () => bloc.add(NeedForgetPassword()),
       child: const Text(
@@ -162,8 +160,7 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget _buildSignUpTextButton() {
-    final bloc = BlocProvider.of<LogInBloc>(context);
+  Widget _buildSignUpTextButton(LogInBloc bloc, LogInState state) {
     return GestureDetector(
       onTap: () => bloc.add(NeedSignUp()),
       child: Align(
@@ -193,8 +190,7 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget _buildLogInButton() {
-    final bloc = BlocProvider.of<LogInBloc>(context);
+  Widget _buildLogInButton(LogInBloc bloc, LogInState state) {
     const buttonText = "login";
     return GestureDetector(
       onTap: () => bloc.add(LogInWithEmailAndPassword()),
@@ -202,19 +198,17 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  void _showUserMessage() {
-    final bloc = BlocProvider.of<LogInBloc>(context);
+  void _showUserMessage(LogInBloc bloc, LogInState state) {
+    if (state.userMessages.isEmpty) return;
 
-    // if (!bloc.state.isEmailValid()) {
-    //   if (kDebugMode) print("Should proceed");
-    //   final message = bloc.state.error;
-    //   final snackBar = SnackBar(content: Text(message ?? ""));
-    //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    // }
+    final message = state.userMessages.first.message;
+    final snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+    bloc.add(UserMessageShown(state.userMessages.first.id));
   }
 
-  Widget _buildGoogleLogInButton() {
-    final bloc = BlocProvider.of<LogInBloc>(context);
+  Widget _buildGoogleLogInButton(LogInBloc bloc, LogInState state) {
     return GestureDetector(
       onTap: () => bloc.add(LogInWithGoogle()),
       child: Container(
@@ -249,8 +243,7 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget _buildPasswordTextInput() {
-    final bloc = BlocProvider.of<LogInBloc>(context);
+  Widget _buildPasswordTextInput(LogInBloc bloc, LogInState state) {
     return Align(
       alignment: Alignment.topLeft,
       child: Center(
@@ -313,8 +306,7 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget _buildEmailTextInput() {
-    final bloc = BlocProvider.of<LogInBloc>(context);
+  Widget _buildEmailTextInput(LogInBloc bloc, LogInState state) {
     return Align(
       alignment: Alignment.topLeft,
       child: Column(
@@ -354,7 +346,7 @@ class _LogInScreenState extends State<LogInScreen> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
-                  hintText: "kabirnayeem.99@gmail.com",
+                  hintText: "username@example.com",
                   hintStyle: TextStyle(
                     color: transCongressBlue,
                   ),
