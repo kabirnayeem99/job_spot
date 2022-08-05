@@ -3,9 +3,7 @@ abstract class LogInEvent {}
 class LoadLogInScreenEvent extends LogInEvent {}
 
 class ToggleRememberPassword extends LogInEvent {
-  final bool shouldRemember;
-
-  ToggleRememberPassword(this.shouldRemember);
+  ToggleRememberPassword();
 }
 
 class CacheEmailEvent extends LogInEvent {
@@ -23,3 +21,7 @@ class CachePasswordEvent extends LogInEvent {
 class LogInWithEmailAndPassword extends LogInEvent {}
 
 class LogInWithGoogle extends LogInEvent {}
+
+class NeedSignUp extends LogInEvent {}
+
+class NeedForgetPassword extends LogInEvent {}

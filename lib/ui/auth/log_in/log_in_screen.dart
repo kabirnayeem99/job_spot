@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:job_spot/common/theme/colors.dart';
-import 'package:job_spot/common/utility/utility.dart';
 import 'package:job_spot/ui/auth/log_in/log_in/log_in_bloc.dart';
 import 'package:job_spot/ui/auth/log_in/log_in/log_in_state.dart';
 import 'package:job_spot/ui/home/home_screen.dart';
@@ -34,22 +33,25 @@ class _LogInScreenState extends State<LogInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<LogInBloc>(
-      create: (context) => LogInBloc(),
-      child: BlocListener<LogInBloc, LogInState>(
-        bloc: BlocProvider.of<LogInBloc>(context),
-        listener: (BuildContext context, LogInState state) {
-          _showUserMessage();
-          switch (state.status) {
-            case Status.authenticated:
-              _navigateToHomeScreen(context);
-              break;
-            case Status.notAuthenticated:
-              break;
-          }
-        },
-        child: _buildPage(context),
-      ),
+    return BlocListener<LogInBloc, LogInState>(
+      bloc: BlocProvider.of<LogInBloc>(context),
+      listener: (BuildContext context, LogInState state) {
+        _showUserMessage();
+        switch (state.status) {
+          case Status.authenticated:
+            _navigateToHomeScreen(context);
+            break;
+          case Status.needsSignUp:
+            _navigateToSignUpScreen(context);
+            break;
+          case Status.notAuthenticated:
+            break;
+          case Status.needResetPassword:
+            _navigateToForgetPasswordScreen(context);
+            break;
+        }
+      },
+      child: _buildPage(context),
     );
   }
 
@@ -124,12 +126,12 @@ class _LogInScreenState extends State<LogInScreen> {
     return Row(
       children: [
         Checkbox(
-          value: true,
-          onChanged: (isChecked) {
-            bloc.add(ToggleRememberPassword(isChecked ?? false));
-          },
           activeColor: lavenderMist,
           checkColor: darkIndigo,
+          value: bloc.state.shouldRememberPassword,
+          onChanged: (bool? value) {
+            bloc.add(ToggleRememberPassword());
+          },
         ),
         const Text(
           "Remember Me",
@@ -146,8 +148,9 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   Widget _buildForgetPasswordTextButton() {
+    final bloc = BlocProvider.of<LogInBloc>(context);
     return GestureDetector(
-      onTap: () => _navigateToForgetPasswordScreen(context),
+      onTap: () => bloc.add(NeedForgetPassword()),
       child: const Text(
         "Forget password?",
         style: TextStyle(
@@ -160,8 +163,9 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   Widget _buildSignUpTextButton() {
+    final bloc = BlocProvider.of<LogInBloc>(context);
     return GestureDetector(
-      onTap: () => _navigateToSignUpScreen(context),
+      onTap: () => bloc.add(NeedSignUp()),
       child: Align(
         alignment: Alignment.center,
         child: Row(
@@ -201,12 +205,12 @@ class _LogInScreenState extends State<LogInScreen> {
   void _showUserMessage() {
     final bloc = BlocProvider.of<LogInBloc>(context);
 
-    if (!bloc.state.isEmailValid()) {
-      if (kDebugMode) print("Should proceed");
-      final message = bloc.state.error;
-      final snackBar = SnackBar(content: Text(message ?? ""));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
+    // if (!bloc.state.isEmailValid()) {
+    //   if (kDebugMode) print("Should proceed");
+    //   final message = bloc.state.error;
+    //   final snackBar = SnackBar(content: Text(message ?? ""));
+    //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    // }
   }
 
   Widget _buildGoogleLogInButton() {
@@ -370,10 +374,6 @@ class _LogInScreenState extends State<LogInScreen> {
   void _navigateToHomeScreen(BuildContext context) =>
       _router.navigateTo(context, homeScreenNavRouteName,
           transition: TransitionType.cupertino);
-
-  void _signInWithGoogle(BuildContext context) async {
-    launchUrlInWeb("google.com");
-  }
 
   void _navigateToForgetPasswordScreen(BuildContext context) =>
       _router.navigateTo(context, forgetPasswordScreenNavigationName,

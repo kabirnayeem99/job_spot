@@ -35,4 +35,6 @@ LogInState cloneLogInState(LogInState state) {
 enum Status {
   authenticated,
   notAuthenticated,
+  needsSignUp,
+  needResetPassword,
 }
