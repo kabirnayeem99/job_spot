@@ -16,8 +16,11 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  FluroRouter? router;
+
   @override
   void initState() {
+    router = FluroRouter.appRouter;
     dismissKeyboard();
     super.initState();
     _waitAndMoveOn();
@@ -29,9 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _navigateToIntroScreen(BuildContext context) {
-    final router = FluroRouter.appRouter;
-
-    router.navigateTo(context, introScreenNavigationRouteName,
+    router?.navigateTo(context, introScreenNavigationRouteName,
         transition: TransitionType.nativeModal);
   }
 
