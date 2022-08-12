@@ -10,7 +10,8 @@ class ProfileRepositoryImpl extends ProfileRepository {
   @override
   Future<Either<String, Profile>> getProfileData() async {
     try {
-      final profileDto = await _profileRemoteDataSource.getProfileData("");
+      final profileDto = await _profileRemoteDataSource.getProfileData("abcd");
+      logger.d(profileDto);
       final profile = profileDto.toProfileEntity();
       return Right(profile);
     } on Exception catch (e) {

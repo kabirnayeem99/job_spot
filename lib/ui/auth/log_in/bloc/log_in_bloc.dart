@@ -118,6 +118,18 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
     emit(_state);
   }
 
+
+
+  void _needSignUp(NeedSignUp event, Emitter<LogInState> emit) {
+    final _state = _cloneState(status: Status.needsSignUp);
+    emit(_state);
+  }
+
+  void _needForgetPassword(NeedForgetPassword event, Emitter<LogInState> emit) {
+    final _state = _cloneState(status: Status.needResetPassword);
+    emit(_state);
+  }
+
   LogInState _cloneState({
     bool? shouldRememberPassword,
     String? email,
@@ -134,15 +146,5 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
       status ?? Status.notAuthenticated,
       isLoading ?? state.isLoading,
     );
-  }
-
-  void _needSignUp(NeedSignUp event, Emitter<LogInState> emit) {
-    final _state = _cloneState(status: Status.needsSignUp);
-    emit(_state);
-  }
-
-  void _needForgetPassword(NeedForgetPassword event, Emitter<LogInState> emit) {
-    final _state = _cloneState(status: Status.needResetPassword);
-    emit(_state);
   }
 }

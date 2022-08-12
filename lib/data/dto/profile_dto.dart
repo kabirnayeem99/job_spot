@@ -45,4 +45,9 @@ class ProfileDto {
       username ?? "",
     );
   }
+
+  @override
+  String toString() {
+    return 'ProfileDto{username: $username, firstName: $firstName, lastName: $lastName, profileImageUrl: $profileImageUrl, userId: $userId}';
+  }
 }

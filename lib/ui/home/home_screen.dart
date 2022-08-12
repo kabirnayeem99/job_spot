@@ -1,6 +1,9 @@
+import 'package:floading/floading.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:job_spot/ui/home/bloc/home_bloc.dart';
 
 import '../../common/theme/colors.dart';
 import '../../domain/entity/job_preview.dart';
@@ -28,30 +31,61 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<HomeBloc>();
+    return BlocConsumer<HomeBloc, HomeState>(
+      bloc: bloc..add(LoadHomeScreenDataEvent()),
+      listener: (context, state) {
+        _showUserMessage(bloc, state);
+        _showLoadingIndicatorWhileNeeded(state);
+      },
+      builder: (context, state) => _buildPage(bloc, state),
+    );
+  }
+
+  void _showUserMessage(HomeBloc bloc, HomeState state) {
+    final isThereNotMessageToShow = (state.userMessages?.isEmpty ?? true);
+    if (isThereNotMessageToShow) return;
+
+    final message = state.userMessages?.first.message;
+    final snackBar = SnackBar(content: Text(message!));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+    bloc.add(UserMessageShown(state.userMessages!.first.id));
+  }
+
+  void _showLoadingIndicatorWhileNeeded(HomeState state) {
+    if (state.isLoading == null) FLoading.hide(context: context);
+    if (state.isLoading!) FLoading.show(context);
+    if (!state.isLoading!) FLoading.hide(context: context);
+  }
+
+  Scaffold _buildPage(HomeBloc bloc, HomeState state) {
     return Scaffold(
       backgroundColor: whiteSnowDrift,
       body: SafeArea(
-        child: Container(
-          margin: const EdgeInsets.only(left: 22.0, right: 22.0, top: 18),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildAppBar(),
-                const SizedBox(height: 38.0),
-                _buildOfferSlider(),
-                const SizedBox(height: 24.0),
-                _buildFindYourJobTitle(),
-                const SizedBox(height: 24.0),
-                _buildJobOverViewGrid(),
-                const SizedBox(height: 19.0),
-                _buildRecentJobTitle(),
-                const SizedBox(height: 16.0),
-                _buildJobItemList(),
-              ],
-            ),
-          ),
-        ),
+        child: !state.isLoading!
+            ? Container(
+                margin: const EdgeInsets.only(left: 22.0, right: 22.0, top: 18),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildAppBar(state),
+                      const SizedBox(height: 38.0),
+                      _buildOfferSlider(),
+                      const SizedBox(height: 24.0),
+                      _buildFindYourJobTitle(),
+                      const SizedBox(height: 24.0),
+                      _buildJobOverViewGrid(),
+                      const SizedBox(height: 19.0),
+                      _buildRecentJobTitle(),
+                      const SizedBox(height: 16.0),
+                      _buildJobItemList(),
+                    ],
+                  ),
+                ),
+              )
+            : const CircularProgressIndicator(),
       ),
     );
   }
@@ -85,17 +119,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar(HomeState state) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 18.0),
+        Padding(
+          padding: const EdgeInsets.only(top: 18.0),
           child: Text(
-            "Hello, \nNaimul Kabir",
-            style: TextStyle(
+            "Hello, \n${state.fullUserName ?? ""}",
+            style: const TextStyle(
               color: nightBlue,
               fontSize: 22,
               fontWeight: FontWeight.w700,
@@ -106,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ClipRRect(
           borderRadius: BorderRadius.circular(20.0),
           child: Image.network(
-            "https://avatars.githubusercontent.com/u/39023212?v=4",
+            state.userProfilePictureUrl ?? "",
             height: 40.0,
             width: 40.0,
           ),

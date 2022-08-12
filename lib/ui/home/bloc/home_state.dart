@@ -1,6 +1,20 @@
 part of 'home_bloc.dart';
 
-@immutable
-abstract class HomeState {}
+class HomeState {
+  List<UserMessage>? userMessages;
+  String? fullUserName;
+  String? userProfilePictureUrl;
+  bool? isLoading;
 
-class LoadingHomeState extends HomeState {}
+  HomeState({
+    List<UserMessage>? userMessages,
+    String? fullUserName,
+    String? userProfilePictureUrl,
+    bool? isLoading,
+  }) {
+    this.userMessages = userMessages ?? List.empty();
+    this.fullUserName = fullUserName ?? "";
+    this.userProfilePictureUrl = userProfilePictureUrl ?? "";
+    this.isLoading = isLoading ?? false;
+  }
+}
