@@ -6,14 +6,14 @@ import 'package:job_spot/domain/repository/auth_repository.dart';
 class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<bool> isUserAuthenticated() async {
-    await Future.delayed(Duration(microseconds: Random().nextInt(1200)));
+    await Future.delayed(const Duration(microseconds: 2000));
     return Random().nextBool();
   }
 
   @override
   Future<Either<String, bool>> logInWithGoogle() async {
     final success = Random().nextBool();
-    await Future.delayed(Duration(microseconds: Random().nextInt(1200)));
+    await Future.delayed(const Duration(microseconds: 2000));
     if (success) {
       return Right(success);
     } else {
@@ -27,7 +27,7 @@ class AuthRepositoryImpl extends AuthRepository {
     String password,
   ) async {
     final success = Random().nextBool();
-    await Future.delayed(Duration(microseconds: Random().nextInt(1200)));
+    await Future.delayed(const Duration(microseconds: 2000));
     if (success) {
       return Right(success);
     } else {
@@ -38,6 +38,7 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either<String, bool>> sendRecoveryEmail(String email) async {
     final success = Random().nextBool();
+    await Future.delayed(const Duration(microseconds: 2000));
     if (success) {
       return Right(success);
     } else {

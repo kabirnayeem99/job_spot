@@ -1,3 +1,4 @@
+import 'package:floading/floading.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,11 +33,13 @@ class _LogInScreenState extends State<LogInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<LogInBloc>(context);
+    final bloc = BlocProvider.of<LogInBloc>(context)
+      ..add(LoadLogInScreenEvent());
     return BlocConsumer<LogInBloc, LogInState>(
       bloc: bloc,
       listener: (BuildContext context, LogInState state) {
         _showUserMessage(bloc, state);
+        _showLoadingIndicatorWhileNeeded(state);
         switch (state.status) {
           case Status.authenticated:
             _navigateToHomeScreen(context);
@@ -206,6 +209,12 @@ class _LogInScreenState extends State<LogInScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
     bloc.add(UserMessageShown(state.userMessages.first.id));
+  }
+
+  void _showLoadingIndicatorWhileNeeded(LogInState state) {
+    if (state.isLoading == null) FLoading.hide(context: context);
+    if (state.isLoading!) FLoading.show(context);
+    if (!state.isLoading!) FLoading.hide(context: context);
   }
 
   Widget _buildGoogleLogInButton(LogInBloc bloc, LogInState state) {

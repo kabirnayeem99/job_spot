@@ -6,16 +6,16 @@ class LogInState {
   String? email = "";
   String? password = "";
   Status status = Status.notAuthenticated;
+  bool? isLoading = false;
 
   var userMessages = <UserMessage>[];
 
-  LogInState(
-    this.shouldRememberPassword,
-    this.email,
-    this.password,
-    this.userMessages,
-    this.status,
-  );
+  LogInState(this.shouldRememberPassword,
+      this.email,
+      this.password,
+      this.userMessages,
+      this.status,
+      this.isLoading,);
 
   @override
   String toString() {
@@ -24,8 +24,8 @@ class LogInState {
         '$userMessages}';
   }
 
-  LogInState init() {
-    return LogInState(false, "", "", [], Status.notAuthenticated);
+  static LogInState init() {
+    return LogInState(false, "", "", [], Status.notAuthenticated, false);
   }
 }
 

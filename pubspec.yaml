@@ -23,6 +23,7 @@ dependencies:
   keyboard_service: ^2.0.2
   either_dart: ^0.2.0
   logger: ^1.1.0
+  floading: ^2.0.0
 
 dev_dependencies:
   flutter_test:
