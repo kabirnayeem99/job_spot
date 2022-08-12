@@ -41,7 +41,7 @@ class AuthRepositoryImpl extends AuthRepository {
     try {
       authRemoteDataSource.sendRecoveryEmail(email);
       return const Right(true);
-    } catch (e) {
+    } on Exception catch (e) {
       logger.e(e);
       return const Left("Could not send recovery email.");
     }

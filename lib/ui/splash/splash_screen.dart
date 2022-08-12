@@ -57,13 +57,21 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _navigateToIntroScreen(BuildContext context) {
-    router?.navigateTo(context, introScreenNavigationRouteName,
-        transition: TransitionType.cupertino);
+    router?.navigateTo(
+      context,
+      introScreenNavigationRouteName,
+      transition: TransitionType.cupertino,
+      replace: true,
+    );
   }
 
   void _navigateToHomeScreen(BuildContext context) {
-    router?.navigateTo(context, homeScreenNavRouteName,
-        transition: TransitionType.cupertino);
+    router?.navigateTo(
+      context,
+      homeScreenNavRouteName,
+      transition: TransitionType.cupertino,
+      replace: true,
+    );
   }
 
   Widget _buildPage() {

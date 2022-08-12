@@ -24,6 +24,7 @@ dependencies:
   either_dart: ^0.2.0
   logger: ^1.1.0
   floading: ^2.0.0
+  faker_dart: ^0.1.6
 
 dev_dependencies:
   flutter_test:
