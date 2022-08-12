@@ -25,8 +25,7 @@ class LogInState {
   }
 
   LogInState init() {
-    return LogInState(
-        false, "", "", List.empty(growable: true), Status.notAuthenticated);
+    return LogInState(false, "", "", [], Status.notAuthenticated);
   }
 }
 

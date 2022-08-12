@@ -8,7 +8,16 @@ class ResetPasswordEvent extends ForgetPasswordEvent {
   ResetPasswordEvent({this.emailAddress});
 }
 
-class SaveEmailEvent extends ForgetPasswordEvent{
+class GoBackToSignInScreeEvent extends ForgetPasswordEvent {}
+
+class SaveEmailEvent extends ForgetPasswordEvent {
   final String emailAsTyping;
+
   SaveEmailEvent({required this.emailAsTyping});
+}
+
+class UserMessageShown extends ForgetPasswordEvent {
+  final int id;
+
+  UserMessageShown(this.id);
 }

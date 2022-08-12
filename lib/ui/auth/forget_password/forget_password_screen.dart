@@ -2,14 +2,14 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:job_spot/ui/auth/forget_password/forget_password_bloc/forget_password_bloc.dart';
 
 import '../../../common/theme/colors.dart';
 import '../../../common/utility/utility.dart';
 import '../../widgets/primary_action_button.dart';
-import '../log_in/log_in_screen.dart';
+import 'bloc/forget_password_bloc.dart';
+import 'bloc/forget_password_event.dart';
+import 'bloc/forget_password_state.dart';
 import 'check_email_screen.dart';
-import 'forget_password_bloc/forget_password_event.dart';
 
 const forgetPasswordScreenNavigationName = "forget_password_screen/";
 
@@ -23,13 +23,11 @@ class ForgetPasswordScreen extends StatefulWidget {
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
     with SingleTickerProviderStateMixin {
   late FluroRouter router;
-  late ForgetPasswordBloc _bloc;
 
   @override
   void initState() {
     super.initState();
     dismissKeyboard();
-    _bloc = ForgetPasswordBloc();
     router = FluroRouter.appRouter;
   }
 
@@ -41,16 +39,47 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => _bloc..add(LoadForgetPasswordScreen()),
-      child: GestureDetector(
-        onTap: () => dismissKeyboard(),
-        child: _buildPage(),
-      ),
+    final bloc = BlocProvider.of<ForgetPasswordBloc>(context);
+
+    return BlocConsumer<ForgetPasswordBloc, ForgetPasswordState>(
+      bloc: bloc,
+      listener: (BuildContext context, ForgetPasswordState state) {
+        _showUserMessage(bloc, state);
+        if (state.status != null) {
+          switch (state.status!) {
+            case ForgetPasswordStatus.launchForgetPasswordScreen:
+              break;
+            case ForgetPasswordStatus.navigateBackToSignInScreen:
+              dismissKeyboard();
+              _navigateBackToSignInScreen();
+              break;
+            case ForgetPasswordStatus.navigateToCheckEmailScreen:
+              dismissKeyboard();
+              _navigateToCheckEmailScreen();
+              break;
+          }
+        }
+      },
+      builder: (context, state) => _buildPage(context, bloc, state),
     );
   }
 
-  Scaffold _buildPage() {
+  void _showUserMessage(ForgetPasswordBloc bloc, ForgetPasswordState state) {
+    final isThereNotMessageToShow = (state.userMessages.isEmpty);
+    if (isThereNotMessageToShow) return;
+
+    final message = state.userMessages.first.message;
+    final snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+    bloc.add(UserMessageShown(state.userMessages.first.id));
+  }
+
+  Scaffold _buildPage(
+    BuildContext context,
+    ForgetPasswordBloc bloc,
+    ForgetPasswordState state,
+  ) {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
@@ -59,24 +88,24 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
         child: Column(
           children: [
             const SizedBox(height: 35.0),
-            _buildForgetPasswordTitle(),
+            _buildForgetPasswordTitle(bloc),
             const SizedBox(height: 11.0),
-            _buildHintSubtitle(),
+            _buildHintSubtitle(bloc),
             const SizedBox(height: 45.0),
             _buildForgetPasswordHintIllustration(),
             const SizedBox(height: 60.0),
-            _buildEmailTextInput(),
+            _buildEmailTextInput(bloc),
             const SizedBox(height: 30.0),
-            _buildOpenMailButton(),
+            _buildOpenMailButton(bloc),
             const SizedBox(height: 25.0),
-            _buildBackToLogInButton(),
+            _buildBackToLogInButton(bloc),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildForgetPasswordTitle() {
+  Widget _buildForgetPasswordTitle(ForgetPasswordBloc bloc) {
     return const Align(
       alignment: Alignment.center,
       child: Text(
@@ -93,7 +122,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
   Widget _buildForgetPasswordHintIllustration() =>
       SvgPicture.asset("assets/images/svgs/banner_foreget_password.svg");
 
-  Widget _buildHintSubtitle() {
+  Widget _buildHintSubtitle(ForgetPasswordBloc bloc) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 42.0),
       child: const Align(
@@ -111,9 +140,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
     );
   }
 
-  Widget _buildOpenMailButton() {
+  Widget _buildOpenMailButton(ForgetPasswordBloc bloc) {
     return GestureDetector(
-      onTap: () => _navigateToCheckEmailScreen(),
+      onTap: () => bloc.add(ResetPasswordEvent()),
       child: const PrimaryActionButton(
         buttonText: "reset password",
         width: double.infinity,
@@ -121,9 +150,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
     );
   }
 
-  Widget _buildBackToLogInButton() {
+  Widget _buildBackToLogInButton(ForgetPasswordBloc bloc) {
     return GestureDetector(
-      onTap: () => _navigateBackToSignInScreen(),
+      onTap: () => bloc.add(GoBackToSignInScreeEvent()),
       child: const PrimaryActionButton(
         buttonText: "back to login",
         buttonColor: purpleBlueMoonraker,
@@ -133,7 +162,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
     );
   }
 
-  Widget _buildEmailTextInput() {
+  Widget _buildEmailTextInput(ForgetPasswordBloc bloc) {
     return Align(
       alignment: Alignment.topLeft,
       child: Column(
@@ -162,20 +191,23 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
               color: Colors.white,
               borderRadius: BorderRadius.circular(10.0),
             ),
-            child: _buildEmailTextBox(),
+            child: _buildEmailTextBox(bloc),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildEmailTextBox() {
+  Widget _buildEmailTextBox(ForgetPasswordBloc bloc) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: TextField(
         autocorrect: true,
-        onChanged: (emailAsTyping) =>
-            {_bloc..add(SaveEmailEvent(emailAsTyping: emailAsTyping))},
+        onChanged: (emailAsTyping) => {
+          bloc.add(
+            SaveEmailEvent(emailAsTyping: emailAsTyping),
+          ),
+        },
         textInputAction: TextInputAction.done,
         keyboardType: TextInputType.emailAddress,
         decoration: const InputDecoration(
@@ -189,9 +221,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
     );
   }
 
-  Future<void> _navigateBackToSignInScreen() async =>
-      router.navigateTo(context, logInScreenNavigationRouteName,
-          transition: TransitionType.cupertino);
+  Future<void> _navigateBackToSignInScreen() async => router.pop(context);
 
   Future<void> _navigateToCheckEmailScreen() =>
       router.navigateTo(context, checkEmailScreenNavigationRouteName,

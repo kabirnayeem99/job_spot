@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:job_spot/common/theme/colors.dart';
-import 'package:job_spot/ui/auth/log_in/log_in/log_in_bloc.dart';
-import 'package:job_spot/ui/auth/log_in/log_in/log_in_state.dart';
 import 'package:job_spot/ui/home/home_screen.dart';
 
 import '../../widgets/primary_action_button.dart';
 import '../forget_password/forget_password_screen.dart';
 import '../sign_up/sign_up_screen.dart';
-import 'log_in/log_in_event.dart';
+import 'bloc/log_in_bloc.dart';
+import 'bloc/log_in_event.dart';
+import 'bloc/log_in_state.dart';
 
 const logInScreenNavigationRouteName = "log_in_screen/";
 
