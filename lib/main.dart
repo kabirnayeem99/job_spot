@@ -7,6 +7,7 @@ import 'package:job_spot/common/config/app.dart';
 import 'package:job_spot/common/config/routes.dart';
 import 'package:job_spot/ui/auth/forget_password/bloc/forget_password_bloc.dart';
 import 'package:job_spot/ui/auth/log_in/bloc/log_in_bloc.dart';
+import 'package:job_spot/ui/splash/bloc/splash_bloc.dart';
 
 void main() async {
   runApp(const JobSpotApp());
@@ -33,6 +34,7 @@ class _JobSpotAppState extends State<JobSpotApp> {
         BlocProvider<LogInBloc>(create: (context) => LogInBloc()),
         BlocProvider<ForgetPasswordBloc>(
             create: (context) => ForgetPasswordBloc()),
+        BlocProvider<SplashBloc>(create: (context) => SplashBloc()),
       ],
       child: MaterialApp(
         theme: ThemeData(
