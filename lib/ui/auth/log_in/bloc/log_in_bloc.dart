@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:either_dart/either.dart';
-import 'package:job_spot/domain/use_case/log_in_with_google_use_case.dart';
+import 'package:job_spot/domain/use_case/auth/log_in/log_in_with_google_use_case.dart';
 
 import '../../../../domain/entity/user_message.dart';
-import '../../../../domain/use_case/log_in_with_email_and_password_use_case.dart';
+import '../../../../domain/use_case/auth/log_in/log_in_with_email_and_password_use_case.dart';
 import 'log_in_event.dart';
 import 'log_in_state.dart';
 

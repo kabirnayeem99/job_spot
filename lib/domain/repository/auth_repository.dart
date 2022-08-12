@@ -7,4 +7,6 @@ abstract class AuthRepository {
       String email, String password);
 
   Future<Either<String, bool>> logInWithGoogle();
+
+  Future<Either<String, bool>> sendRecoveryEmail(String email);
 }

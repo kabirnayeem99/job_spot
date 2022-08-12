@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:either_dart/either.dart';
 import 'package:job_spot/domain/entity/user_message.dart';
+import 'package:job_spot/domain/use_case/auth/forget_password/send_recovery_email_use_case.dart';
 
 import 'forget_password_event.dart';
 import 'forget_password_state.dart';
@@ -42,14 +44,24 @@ class ForgetPasswordBloc
     ResetPasswordEvent event,
     Emitter<ForgetPasswordState> emit,
   ) async {
-    emit(_cloneState(isLoading: false));
-    Future.delayed(const Duration(seconds: 2));
-    _addErrorMessage("Sent user message to your email ${state.email}", emit);
-    Future.delayed(const Duration(seconds: 2));
-    emit(_cloneState(status: ForgetPasswordStatus.navigateToCheckEmailScreen));
+    final useCase = SendRecoveryEmailUseCase();
+    emit(_cloneState(isLoading: true));
+    useCase.sendRecoveryEmail(state.email).fold(
+      (error) {
+        _addUserMessage(error, emit);
+      },
+      (success) {
+        emit(_cloneState(
+            status: ForgetPasswordStatus.navigateToCheckEmailScreen));
+        if (emit.isDone) {
+          _addUserMessage(
+              "Sent user message to your email ${state.email}", emit);
+        }
+      },
+    );
   }
 
-  void _addErrorMessage(
+  void _addUserMessage(
     String message,
     Emitter<ForgetPasswordState> emit,
   ) {
