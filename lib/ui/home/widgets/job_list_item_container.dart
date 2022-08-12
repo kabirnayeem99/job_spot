@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:job_spot/common/utility/utility.dart';
 import 'package:job_spot/domain/entity/job_preview.dart';
 
 import '../../../common/theme/colors.dart';
@@ -15,6 +16,7 @@ class JobListItemContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    logger.d(job);
     return Container(
       padding: const EdgeInsets.all(20.0),
       margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -39,12 +41,18 @@ class JobListItemContainer extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(40.0),
-                child: Image.network(
-                  job.companyLogo,
-                  fit: BoxFit.cover,
-                  height: 40.0,
-                  width: 40.0,
-                ),
+                child: job.companyLogo.isNotEmpty
+                    ? Image.network(
+                        job.companyLogo,
+                        fit: BoxFit.cover,
+                        height: 40.0,
+                        width: 40.0,
+                      )
+                    : Container(
+                        height: 40.0,
+                        width: 40.0,
+                        color: nightBlue,
+                      ),
               ),
               const SizedBox(width: 10.0),
               Column(
@@ -58,26 +66,32 @@ class JobListItemContainer extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 4.0),
-                  Row(
-                    children: [
-                      Text(
-                        job.companyName,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.0,
+                  SizedBox(
+                    width: 200,
+                    child: Row(
+                      children: [
+                        Text(
+                          job.companyName,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12.0,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 4.0),
-                      const Text("•"),
-                      const SizedBox(width: 4.0),
-                      Text(
-                        job.location,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.0,
+                        const SizedBox(width: 4.0),
+                        const Text("•"),
+                        const SizedBox(width: 4.0),
+                        Flexible(
+                          child: Text(
+                            job.location,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12.0,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -96,14 +110,15 @@ class JobListItemContainer extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: RichText(
               text: TextSpan(
-                  text: "\$${job.monthlySalary}",
+                  text: "\$${job.salary}",
                   style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w600,
                       fontSize: 14.0),
                   children: <TextSpan>[
                     TextSpan(
-                      text: "/Mo",
+                      text:
+                          job.salaryType == SalaryType.monthly ? "/Mo" : "/Yr",
                       style: TextStyle(
                         color: Colors.black.withOpacity(0.6),
                         fontSize: 12.0,
@@ -116,9 +131,9 @@ class JobListItemContainer extends StatelessWidget {
           const SizedBox(height: 8.0),
           Row(
             children: [
-              ChipButton(text: job.jobCategory),
+              ChipButton(text: job.tags[0]),
               const SizedBox(width: 8.0),
-              ChipButton(text: job.jobType),
+              ChipButton(text: job.tags[1]),
               Expanded(child: Container()),
               ChipButton(
                 text: "Apply",

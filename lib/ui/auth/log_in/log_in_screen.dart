@@ -33,10 +33,9 @@ class _LogInScreenState extends State<LogInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<LogInBloc>(context)
-      ..add(LoadLogInScreenEvent());
+    final bloc = BlocProvider.of<LogInBloc>(context);
     return BlocConsumer<LogInBloc, LogInState>(
-      bloc: bloc,
+      bloc: bloc..add(LoadLogInScreenEvent()),
       listener: (BuildContext context, LogInState state) {
         _showUserMessage(bloc, state);
         _showLoadingIndicatorWhileNeeded(state);
@@ -212,7 +211,7 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   void _showLoadingIndicatorWhileNeeded(LogInState state) {
-    if (state.isLoading == null) FLoading.hide(context: context);
+    if (state.isLoading == null) return;
     if (state.isLoading!) FLoading.show(context);
     if (!state.isLoading!) FLoading.hide(context: context);
   }

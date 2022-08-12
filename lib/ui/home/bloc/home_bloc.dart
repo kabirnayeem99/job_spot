@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:job_spot/common/utility/utility.dart';
+import 'package:job_spot/domain/use_case/home/fetch_offers_use_case.dart';
 import 'package:job_spot/domain/use_case/home/fetch_user_data_use_case.dart';
 import 'package:meta/meta.dart';
 
+import '../../../domain/entity/offer.dart';
 import '../../../domain/entity/user_message.dart';
 
 part 'home_event.dart';
@@ -31,7 +32,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         _state.userProfilePictureUrl = profile.profileImageUrl,
       },
     );
-    logger.d(_state.fullUserName);
+
+    final fetchOffersUseCase = await FetchOffersUseCase.fetchOffers();
+    fetchOffersUseCase.fold(
+      (error) => _addErrorMessage(error, emit),
+      (offers) => {_state.offers = offers},
+    );
+
     emit(_state);
   }
 

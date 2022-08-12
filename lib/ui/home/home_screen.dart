@@ -3,12 +3,12 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:job_spot/ui/home/bloc/home_bloc.dart';
+import 'package:job_spot/data/data_source/remote_job_data_source.dart';
 
 import '../../common/theme/colors.dart';
-import '../../domain/entity/job_preview.dart';
 import '../job_description/job_description_screen.dart';
 import '../widgets/secondary_action_button.dart';
+import 'bloc/home_bloc.dart';
 import 'widgets/job_list_item_container.dart';
 
 const homeScreenNavRouteName = "home_screen/";
@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 _buildAppBar(state),
                 const SizedBox(height: 38.0),
-                _buildOfferSlider(),
+                _buildOfferSlider(state),
                 const SizedBox(height: 24.0),
                 _buildFindYourJobTitle(),
                 const SizedBox(height: 24.0),
@@ -88,33 +88,36 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildOfferSlider() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 17.0, vertical: 17.0),
-      width: double.infinity,
-      height: 143.0,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6.0),
-        color: darkIndigo,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(child: Container()),
-          const Text(
-            "50% off\ntake any courses",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18.0,
-              fontWeight: FontWeight.w400,
+  Widget _buildOfferSlider(HomeState state) {
+    return state.offers!.isNotEmpty
+        ? Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 17.0, vertical: 17.0),
+            width: double.infinity,
+            height: 140,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6.0),
+              color: darkIndigo,
             ),
-          ),
-          const SizedBox(height: 17.0),
-          const SecondaryActionButton(buttonText: "Join Now"),
-          Expanded(child: Container()),
-        ],
-      ),
-    );
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: Container()),
+                Text(
+                  state.offers!.first.message,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                const SizedBox(height: 17.0),
+                const SecondaryActionButton(buttonText: "Join Now"),
+                Expanded(child: Container()),
+              ],
+            ),
+          )
+        : Container();
   }
 
   Widget _buildAppBar(HomeState state) {
@@ -126,7 +129,9 @@ class _HomeScreenState extends State<HomeScreen> {
         Padding(
           padding: const EdgeInsets.only(top: 18.0),
           child: Text(
-            "Hello, \n${state.fullUserName ?? ""}",
+            (state.fullUserName!.isNotEmpty
+                ? "Hello, \n${state.fullUserName ?? ""}"
+                : "Welcome"),
             style: const TextStyle(
               color: nightBlue,
               fontSize: 22,
@@ -140,12 +145,14 @@ class _HomeScreenState extends State<HomeScreen> {
           child: state.userProfilePictureUrl!.isNotEmpty
               ? Image.network(
                   state.userProfilePictureUrl!,
+                  fit: BoxFit.fill,
                   height: 40.0,
                   width: 40.0,
                 )
-              : const SizedBox(
+              : SizedBox(
                   height: 40.0,
                   width: 40.0,
+                  child: Container(color: nightBlue),
                 ),
         ),
       ],
@@ -311,16 +318,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return GestureDetector(
       onTap: () => _navigateToJobDetailsScreen(context),
       child: JobListItemContainer(
-        job: JobPreview(
-          jobCategory: "Senior Dev",
-          jobPostName: "iOS Developer - ${position + 1}",
-          monthlySalary: "2${position}${position + 3}K",
-          companyLogo:
-              "http://2.bp.blogspot.com/-i4eGD4DSnjQ/T60e7I4WHfI/AAAAAAAACqw/PFbWuA2ONAI/s1600/Apple+Logo+Wallpapers+2.jpg",
-          companyName: "Apple Inc.",
-          jobType: "Full-time",
-          location: "Chittagong, BD",
-        ),
+        job: RemoteJobDataSource.getRandomJobPreview(),
       ),
     );
   }

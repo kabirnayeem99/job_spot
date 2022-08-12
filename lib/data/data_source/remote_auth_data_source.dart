@@ -8,7 +8,7 @@ class RemoteAuthDataSource {
 
   Future<void> logInWithGoogle() async {
     final success = Random().nextBool();
-    await Future.delayed(const Duration(microseconds: 2000));
+    await Future.delayed(const Duration(seconds: 2));
     if (!success) {
       throw Exception("Your log in was not successful.");
     }

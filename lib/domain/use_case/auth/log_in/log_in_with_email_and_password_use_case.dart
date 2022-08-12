@@ -1,8 +1,8 @@
 import 'package:either_dart/either.dart';
-import 'package:job_spot/data/repository/auth_repository_impl.dart';
-import 'package:job_spot/domain/repository/auth_repository.dart';
 
 import '../../../../common/utility/validator.dart';
+import '../../../../data/repository/auth_repository_impl.dart';
+import '../../../repository/auth_repository.dart';
 
 class LogInWithEmailAndPasswordUseCase {
   static Future<Either<String, bool>> logInWithEmailAndPassword(
@@ -16,6 +16,9 @@ class LogInWithEmailAndPasswordUseCase {
 
     final passwordValidator = isPasswordValid(password);
     final passwordValid = passwordValidator.isRight;
+
+    if (!emailValid) return emailValidator;
+    if (!passwordValid) return passwordValidator;
 
     if (emailValid && passwordValid) {
       return await repository.logInWithEmailAndPassword(email!, password!);
