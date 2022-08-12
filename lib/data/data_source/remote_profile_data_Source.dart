@@ -7,6 +7,7 @@ class RemoteProfileDataSource {
   final _faker = Faker.instance;
 
   Future<ProfileDto> getProfileData(String? userId) async {
+    await Future.delayed(const Duration(seconds: 2));
     if (userId == null || userId.isEmpty) return ProfileDto();
     final name = _faker.name;
     final dto = ProfileDto(

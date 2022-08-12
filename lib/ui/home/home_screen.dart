@@ -63,29 +63,27 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: whiteSnowDrift,
       body: SafeArea(
-        child: !state.isLoading!
-            ? Container(
-                margin: const EdgeInsets.only(left: 22.0, right: 22.0, top: 18),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildAppBar(state),
-                      const SizedBox(height: 38.0),
-                      _buildOfferSlider(),
-                      const SizedBox(height: 24.0),
-                      _buildFindYourJobTitle(),
-                      const SizedBox(height: 24.0),
-                      _buildJobOverViewGrid(),
-                      const SizedBox(height: 19.0),
-                      _buildRecentJobTitle(),
-                      const SizedBox(height: 16.0),
-                      _buildJobItemList(),
-                    ],
-                  ),
-                ),
-              )
-            : const CircularProgressIndicator(),
+        child: Container(
+          margin: const EdgeInsets.only(left: 22.0, right: 22.0, top: 18),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildAppBar(state),
+                const SizedBox(height: 38.0),
+                _buildOfferSlider(),
+                const SizedBox(height: 24.0),
+                _buildFindYourJobTitle(),
+                const SizedBox(height: 24.0),
+                _buildJobOverViewGrid(),
+                const SizedBox(height: 19.0),
+                _buildRecentJobTitle(),
+                const SizedBox(height: 16.0),
+                _buildJobItemList(),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -139,11 +137,16 @@ class _HomeScreenState extends State<HomeScreen> {
         Expanded(child: Container()),
         ClipRRect(
           borderRadius: BorderRadius.circular(20.0),
-          child: Image.network(
-            state.userProfilePictureUrl ?? "",
-            height: 40.0,
-            width: 40.0,
-          ),
+          child: state.userProfilePictureUrl!.isNotEmpty
+              ? Image.network(
+                  state.userProfilePictureUrl!,
+                  height: 40.0,
+                  width: 40.0,
+                )
+              : const SizedBox(
+                  height: 40.0,
+                  width: 40.0,
+                ),
         ),
       ],
     );
