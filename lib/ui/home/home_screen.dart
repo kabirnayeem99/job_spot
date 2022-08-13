@@ -3,12 +3,15 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/data_source/remote_job_data_source.dart';
+import 'package:job_spot/common/utility/utility.dart';
+import 'package:job_spot/domain/entity/job_preview.dart';
+import 'package:job_spot/ui/home/bloc/home_cubit.dart';
 
 import '../../common/theme/colors.dart';
+import '../../domain/entity/offer.dart';
 import '../job_description/job_description_screen.dart';
 import '../widgets/secondary_action_button.dart';
-import 'bloc/home_bloc.dart';
+import 'bloc/home_state.dart';
 import 'widgets/job_list_item_container.dart';
 
 const homeScreenNavRouteName = "home_screen/";
@@ -22,44 +25,56 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   FluroRouter? router;
+  late HomeCubit bloc;
 
   @override
   void initState() {
+    bloc = HomeCubit()..loadHomeScreenData();
     super.initState();
     router ??= FluroRouter.appRouter;
   }
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<HomeBloc>();
-    return BlocConsumer<HomeBloc, HomeState>(
-      bloc: bloc..add(LoadHomeScreenDataEvent()),
-      listener: (context, state) {
-        _showUserMessage(bloc, state);
-        _showLoadingIndicatorWhileNeeded(state);
-      },
-      builder: (context, state) => _buildPage(bloc, state),
+    return BlocProvider<HomeCubit>(
+      create: (_) => bloc,
+      child: BlocConsumer<HomeCubit, HomeState>(
+        bloc: bloc,
+        listener: (context, state) {
+          logger.d(state);
+          _showUserMessage();
+          _showLoadingIndicatorWhileNeeded();
+        },
+        builder: (context, state) => _buildPage(),
+      ),
     );
   }
 
-  void _showUserMessage(HomeBloc bloc, HomeState state) {
+  void _showUserMessage() {
+    final state = bloc.state;
+
     final isThereNotMessageToShow = (state.userMessages?.isEmpty ?? true);
     if (isThereNotMessageToShow) return;
 
-    final message = state.userMessages?.first.message;
-    final snackBar = SnackBar(content: Text(message!));
+    final userMessage = state.userMessages?.first;
+    if (userMessage == null) return;
+
+    final snackBar = SnackBar(content: Text(userMessage.message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-    bloc.add(UserMessageShown(state.userMessages!.first.id));
+    bloc.userMessageShown(userMessage.id);
   }
 
-  void _showLoadingIndicatorWhileNeeded(HomeState state) {
+  void _showLoadingIndicatorWhileNeeded() {
+    final state = bloc.state;
+
     if (state.isLoading == null) FLoading.hide(context: context);
+
     if (state.isLoading!) FLoading.show(context);
     if (!state.isLoading!) FLoading.hide(context: context);
   }
 
-  Scaffold _buildPage(HomeBloc bloc, HomeState state) {
+  Scaffold _buildPage() {
     return Scaffold(
       backgroundColor: whiteSnowDrift,
       body: SafeArea(
@@ -69,17 +84,24 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _buildAppBar(state),
+                _HomeAppBar(
+                  fullUserName: bloc.state.fullUserName ?? "",
+                  userProfilePictureUrl: bloc.state.userProfilePictureUrl ?? "",
+                ),
                 const SizedBox(height: 38.0),
-                _buildOfferSlider(state),
+                _OfferSlider(offers: bloc.state.offers ?? []),
                 const SizedBox(height: 24.0),
-                _buildFindYourJobTitle(),
+                const _FindYourJobTitle(),
                 const SizedBox(height: 24.0),
-                _buildJobOverViewGrid(),
+                const _JobOverViewGrid(
+                  remoteJobsCount: 44000,
+                  fullTimeJobCount: 10000,
+                  partTimeJobCount: 12000,
+                ),
                 const SizedBox(height: 19.0),
-                _buildRecentJobTitle(),
+                const _RecentJobTitle(),
                 const SizedBox(height: 16.0),
-                _buildJobItemList(),
+                _RecentJobList(recentJobs: bloc.state.recentJobs ?? []),
               ],
             ),
           ),
@@ -87,93 +109,15 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
 
-  Widget _buildOfferSlider(HomeState state) {
-    return state.offers!.isNotEmpty
-        ? Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 17.0, vertical: 17.0),
-            width: double.infinity,
-            height: 140,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6.0),
-              color: darkIndigo,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: Container()),
-                Text(
-                  state.offers!.first.message,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const SizedBox(height: 17.0),
-                const SecondaryActionButton(buttonText: "Join Now"),
-                Expanded(child: Container()),
-              ],
-            ),
-          )
-        : Container();
-  }
+class _RecentJobTitle extends StatelessWidget {
+  const _RecentJobTitle({
+    Key? key,
+  }) : super(key: key);
 
-  Widget _buildAppBar(HomeState state) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 18.0),
-          child: Text(
-            (state.fullUserName!.isNotEmpty
-                ? "Hello, \n${state.fullUserName ?? ""}"
-                : "Welcome"),
-            style: const TextStyle(
-              color: nightBlue,
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-        Expanded(child: Container()),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(20.0),
-          child: state.userProfilePictureUrl!.isNotEmpty
-              ? Image.network(
-                  state.userProfilePictureUrl!,
-                  fit: BoxFit.fill,
-                  height: 40.0,
-                  width: 40.0,
-                )
-              : SizedBox(
-                  height: 40.0,
-                  width: 40.0,
-                  child: Container(color: nightBlue),
-                ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFindYourJobTitle() {
-    return const Align(
-      alignment: Alignment.topLeft,
-      child: Text(
-        "Find Your Job",
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 16.0,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRecentJobTitle() {
+  @override
+  Widget build(BuildContext context) {
     return const Align(
       alignment: Alignment.topLeft,
       child: Text(
@@ -186,8 +130,22 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
 
-  Widget _buildJobOverViewGrid() {
+class _JobOverViewGrid extends StatelessWidget {
+  const _JobOverViewGrid({
+    Key? key,
+    required this.remoteJobsCount,
+    required this.fullTimeJobCount,
+    required this.partTimeJobCount,
+  }) : super(key: key);
+
+  final int remoteJobsCount;
+  final int fullTimeJobCount;
+  final int partTimeJobCount;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
@@ -200,21 +158,21 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                Icon(
+              children: [
+                const Icon(
                   CupertinoIcons.compass,
                   size: 34.0,
                   color: darkIndigo,
                 ),
                 Text(
-                  "44.5K",
-                  style: TextStyle(
+                  "$remoteJobsCount",
+                  style: const TextStyle(
                     color: nightBlue,
                     fontSize: 16.0,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                Text(
+                const Text(
                   "Remote Jobs",
                   style: TextStyle(
                     color: nightBlue,
@@ -242,16 +200,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
-                        "66.5K",
-                        style: TextStyle(
+                        "$fullTimeJobCount",
+                        style: const TextStyle(
                           color: nightBlue,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      Text(
+                      const Text(
                         "Full Time",
                         style: TextStyle(
                           color: nightBlue,
@@ -271,16 +229,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
-                        "38.5K",
-                        style: TextStyle(
+                        "$partTimeJobCount",
+                        style: const TextStyle(
                           color: nightBlue,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      Text(
+                      const Text(
                         "Part Time",
                         style: TextStyle(
                           color: nightBlue,
@@ -298,34 +256,165 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
+}
 
-  Widget _buildJobItemList() {
+class _HomeAppBar extends StatelessWidget {
+  const _HomeAppBar({
+    Key? key,
+    required this.fullUserName,
+    required this.userProfilePictureUrl,
+  }) : super(key: key);
+
+  final String fullUserName;
+  final String userProfilePictureUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 18.0),
+          child: Text(
+            (fullUserName.isNotEmpty ? "Hello, \n$fullUserName" : "Welcome"),
+            style: const TextStyle(
+              color: nightBlue,
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        Expanded(child: Container()),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(20.0),
+          child: userProfilePictureUrl.isNotEmpty
+              ? Image.network(
+                  userProfilePictureUrl,
+                  fit: BoxFit.fill,
+                  height: 40.0,
+                  width: 40.0,
+                )
+              : SizedBox(
+                  height: 40.0,
+                  width: 40.0,
+                  child: Container(color: nightBlue),
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+class _RecentJobList extends StatelessWidget {
+  const _RecentJobList({
+    Key? key,
+    required this.recentJobs,
+  }) : super(key: key);
+
+  final List<JobPreview> recentJobs;
+
+  @override
+  Widget build(BuildContext context) {
     return Flexible(
       child: ListView.builder(
         scrollDirection: Axis.vertical,
         padding: EdgeInsets.zero,
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemCount: 5,
+        itemCount: recentJobs.length,
         itemBuilder: (context, position) {
-          return _buildJobAdItem(context, position);
+          return _JobItem(job: recentJobs[position]);
         },
       ),
     );
   }
+}
 
-  Widget _buildJobAdItem(BuildContext context, int position) {
+class _JobItem extends StatelessWidget {
+  _JobItem({
+    Key? key,
+    required this.job,
+  }) : super(key: key);
+
+  final FluroRouter? router = FluroRouter.appRouter;
+  final JobPreview job;
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _navigateToJobDetailsScreen(context),
-      child: JobListItemContainer(
-        job: RemoteJobDataSource.getRandomJobPreview(),
-      ),
+      onTap: () async => _navigateToJobDetailsScreen(context),
+      child: JobListItemContainer(job: job),
     );
   }
 
-  void _navigateToJobDetailsScreen(BuildContext context) {
-    router ??= FluroRouter.appRouter;
+  Future<void> _navigateToJobDetailsScreen(BuildContext context) async {
     router?.navigateTo(context, jobDescScreenNavRouteName,
         transition: TransitionType.cupertino);
+  }
+}
+
+class _FindYourJobTitle extends StatelessWidget {
+  const _FindYourJobTitle({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Align(
+      alignment: Alignment.topLeft,
+      child: Text(
+        "Find Your Job",
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 16.0,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
+}
+
+class _OfferSlider extends StatelessWidget {
+  const _OfferSlider({
+    Key? key,
+    required this.offers,
+  }) : super(key: key);
+
+  final List<Offer> offers;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 17.0, vertical: 17.0),
+      width: double.infinity,
+      height: 140,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6.0),
+        color: darkIndigo,
+      ),
+      child: offers.isNotEmpty
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: Container()),
+                Text(
+                  offers.first.message,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                const SizedBox(height: 17.0),
+                const SecondaryActionButton(buttonText: "Join Now"),
+                Expanded(child: Container()),
+              ],
+            )
+          : Container(),
+    );
   }
 }

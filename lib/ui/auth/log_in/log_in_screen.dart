@@ -45,13 +45,7 @@ class _LogInScreenState extends State<LogInScreen> {
             case Status.authenticated:
               _navigateToHomeScreen(context);
               break;
-            case Status.needsSignUp:
-              _navigateToSignUpScreen(context);
-              break;
             case Status.notAuthenticated:
-              break;
-            case Status.needResetPassword:
-              _navigateToForgetPasswordScreen(context);
               break;
           }
         },
@@ -70,38 +64,24 @@ class _LogInScreenState extends State<LogInScreen> {
           child: Column(
             children: [
               const SizedBox(height: 40.0),
-              _buildLogInTitle(),
+              const _LogInTitle(),
               const SizedBox(height: 11.0),
               _buildLogInHintSubtitle(),
               const SizedBox(height: 64.0),
-              _buildEmailTextInput(),
+              const _EmailTextInput(),
               const SizedBox(height: 15.0),
-              _buildPasswordTextInput(),
+              const _PasswordTextInput(),
               const SizedBox(height: 20.0),
               _buildLogInActionsList(),
               const SizedBox(height: 36.0),
-              _buildLogInButton(),
+              const _LogInButton(),
               const SizedBox(height: 19.0),
-              _buildGoogleLogInButton(),
+              const _GoogleLogInButton(),
               const SizedBox(height: 16.0),
-              _buildSignUpTextButton(),
+              _SignUpTextButton(),
               Expanded(child: Container()),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLogInTitle() {
-    return const Align(
-      alignment: Alignment.center,
-      child: Text(
-        "Welcome Back!",
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 30.0,
-          fontWeight: FontWeight.w700,
         ),
       ),
     );
@@ -144,12 +124,43 @@ class _LogInScreenState extends State<LogInScreen> {
           ),
         ),
         Expanded(child: Container()),
-        _buildForgetPasswordTextButton(),
+        _ForgetPasswordTextButton(),
       ],
     );
   }
 
-  Widget _buildForgetPasswordTextButton() {
+  void _showUserMessage() {
+    final isThereNotMessageToShow = (bloc.state.userMessages.isEmpty);
+    if (isThereNotMessageToShow) return;
+
+    final message = bloc.state.userMessages.first.message;
+    final snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+    bloc.userMessageShown(bloc.state.userMessages.first.id);
+  }
+
+  void _showLoadingIndicatorWhileNeeded() {
+    final state = bloc.state;
+    if (state.isLoading == null) return;
+    if (state.isLoading!) FLoading.show(context);
+    if (!state.isLoading!) FLoading.hide(context: context);
+  }
+
+  void _navigateToHomeScreen(BuildContext context) =>
+      _router.navigateTo(context, homeScreenNavRouteName,
+          transition: TransitionType.cupertino);
+}
+
+class _ForgetPasswordTextButton extends StatelessWidget {
+  _ForgetPasswordTextButton({
+    Key? key,
+  }) : super(key: key);
+
+  final FluroRouter router = FluroRouter.appRouter;
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => _navigateToForgetPasswordScreen(context),
       child: const Text(
@@ -163,7 +174,20 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget _buildSignUpTextButton() {
+  void _navigateToForgetPasswordScreen(BuildContext context) =>
+      router.navigateTo(context, forgetPasswordScreenNavigationName,
+          transition: TransitionType.cupertino);
+}
+
+class _SignUpTextButton extends StatelessWidget {
+  _SignUpTextButton({
+    Key? key,
+  }) : super(key: key);
+
+  final FluroRouter router = FluroRouter.appRouter;
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => _navigateToSignUpScreen(context),
       child: Align(
@@ -193,68 +217,19 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget _buildLogInButton() {
-    const buttonText = "login";
-    return GestureDetector(
-      onTap: () async => bloc.loginWithEmailAndPassword(),
-      child: const PrimaryActionButton(buttonText: buttonText),
-    );
-  }
+  void _navigateToSignUpScreen(BuildContext context) =>
+      router.navigateTo(context, signUpScreenNavigationRouteName,
+          transition: TransitionType.cupertino);
+}
 
-  void _showUserMessage() {
-    final isThereNotMessageToShow = (bloc.state.userMessages.isEmpty);
-    if (isThereNotMessageToShow) return;
+class _PasswordTextInput extends StatelessWidget {
+  const _PasswordTextInput({
+    Key? key,
+  }) : super(key: key);
 
-    final message = bloc.state.userMessages.first.message;
-    final snackBar = SnackBar(content: Text(message));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-    bloc.userMessageShown(bloc.state.userMessages.first.id);
-  }
-
-  void _showLoadingIndicatorWhileNeeded() {
-    final state = bloc.state;
-    if (state.isLoading == null) return;
-    if (state.isLoading!) FLoading.show(context);
-    if (!state.isLoading!) FLoading.hide(context: context);
-  }
-
-  Widget _buildGoogleLogInButton() {
-    return GestureDetector(
-      onTap: () async => bloc.logInWithGoogle(),
-      child: Container(
-        height: 50.0,
-        width: 266.0,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6.0),
-          color: fog,
-        ),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                "assets/images/pngs/logo_google.png",
-                height: 20.0,
-                width: 20.0,
-              ),
-              const SizedBox(width: 11.0),
-              const Text(
-                "SIGN IN WITH GOOGLE",
-                style: TextStyle(
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w700,
-                  color: darkIndigo,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPasswordTextInput() {
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<LogInCubit>();
     return Align(
       alignment: Alignment.topLeft,
       child: Center(
@@ -314,8 +289,59 @@ class _LogInScreenState extends State<LogInScreen> {
       ),
     );
   }
+}
 
-  Widget _buildEmailTextInput() {
+class _GoogleLogInButton extends StatelessWidget {
+  const _GoogleLogInButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<LogInCubit>();
+    return GestureDetector(
+      onTap: () async => bloc.logInWithGoogle(),
+      child: Container(
+        height: 50.0,
+        width: 266.0,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6.0),
+          color: fog,
+        ),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                "assets/images/pngs/logo_google.png",
+                height: 20.0,
+                width: 20.0,
+              ),
+              const SizedBox(width: 11.0),
+              const Text(
+                "SIGN IN WITH GOOGLE",
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w700,
+                  color: darkIndigo,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _EmailTextInput extends StatelessWidget {
+  const _EmailTextInput({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<LogInCubit>();
     return Align(
       alignment: Alignment.topLeft,
       child: Column(
@@ -365,16 +391,41 @@ class _LogInScreenState extends State<LogInScreen> {
       ),
     );
   }
+}
 
-  void _navigateToSignUpScreen(BuildContext context) =>
-      _router.navigateTo(context, signUpScreenNavigationRouteName,
-          transition: TransitionType.cupertino);
+class _LogInButton extends StatelessWidget {
+  const _LogInButton({
+    Key? key,
+  }) : super(key: key);
 
-  void _navigateToHomeScreen(BuildContext context) =>
-      _router.navigateTo(context, homeScreenNavRouteName,
-          transition: TransitionType.cupertino);
+  @override
+  Widget build(BuildContext context) {
+    final LogInCubit bloc = context.read<LogInCubit>();
 
-  void _navigateToForgetPasswordScreen(BuildContext context) =>
-      _router.navigateTo(context, forgetPasswordScreenNavigationName,
-          transition: TransitionType.cupertino);
+    return GestureDetector(
+      onTap: () async => bloc.loginWithEmailAndPassword(),
+      child: const PrimaryActionButton(buttonText: "login"),
+    );
+  }
+}
+
+class _LogInTitle extends StatelessWidget {
+  const _LogInTitle({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Align(
+      alignment: Alignment.center,
+      child: Text(
+        "Welcome Back!",
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 30.0,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
 }

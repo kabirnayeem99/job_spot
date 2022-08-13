@@ -38,11 +38,9 @@ class LogInCubit extends Cubit<LogInState> {
   Future<void> loginWithEmailAndPassword() async {
     emit(state.copyWith(status: Status.notAuthenticated, isLoading: true));
 
-    final _state = state.copyWith();
-
     final useCase =
         await LogInWithEmailAndPasswordUseCase.logInWithEmailAndPassword(
-            _state.email, _state.password);
+            state.email, state.password);
 
     useCase.fold(
       (error) {
@@ -84,7 +82,7 @@ class LogInCubit extends Cubit<LogInState> {
     final messages = List<UserMessage>.from(currentMessages, growable: true);
     messages.add(UserMessage(DateTime.now().second, message));
 
-    final _state = state.copyWith(userMessages: messages);
+    final _state = state.copyWith(userMessages: messages, isLoading: false);
     emit(_state);
   }
 

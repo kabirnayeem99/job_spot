@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:faker_dart/faker_dart.dart';
-import '../../domain/entity/job_preview.dart';
+import 'package:job_spot/common/utility/utility.dart';
 
 import '../dto/recent_job_list_dto.dart';
 
@@ -29,39 +29,21 @@ class RemoteJobDataSource {
 
     final List<JobSummary> jobs = List.empty(growable: true);
 
-    for (int i = 0; i < 12; i++) {
+    for (int i = 0; i < Random().nextInt(20); i++) {
       final job = JobSummary(
-        title: _faker.hacker.noun(),
+        title: _faker.commerce.department().toUpperCase(),
         companyName: _faker.company.companyName(),
-        salaryType: "Monthly",
-        salary: "\$250/K",
+        salaryType: Random().nextBool() ? "Monthly" : "Yearly",
+        salary: "${Random().nextInt(580)}K",
         tags: tags,
-        location: _faker.address.toString(),
-        companyLogoUrl: _faker.image.loremPixel.image(),
+        location: _faker.address.cityName() + ", " + _faker.address.country(),
+        companyLogoUrl: _faker.image.unsplash.image(),
       );
       jobs.add(job);
     }
 
+    logger.d(jobs);
+
     return RecentJobListDto(jobs: jobs);
-  }
-
-  static JobPreview getRandomJobPreview() {
-    final _faker = Faker.instance;
-    final tags = [
-      _faker.lorem.word(),
-      _faker.lorem.word(),
-      _faker.lorem.word(),
-    ];
-    final _address = _faker.address;
-
-    return JobSummary(
-      title: "Software Engineer",
-      companyName: _faker.company.companyName(),
-      salaryType: "Monthly",
-      salary: "${Random().nextInt(500)}K",
-      tags: tags,
-      location: " ${_address.cityName()}, ${_address.country()}",
-      companyLogoUrl: _faker.image.unsplash.technology(),
-    ).toJobPreview();
   }
 }

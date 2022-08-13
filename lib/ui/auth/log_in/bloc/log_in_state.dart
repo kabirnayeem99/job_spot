@@ -64,6 +64,4 @@ class LogInState extends Equatable {
 enum Status {
   authenticated,
   notAuthenticated,
-  needsSignUp,
-  needResetPassword,
 }
