@@ -2,12 +2,12 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:job_spot/ui/auth/forget_password/bloc/forget_password_cubit.dart';
+import 'package:job_spot/ui/auth/log_in/log_in_screen.dart';
 
 import '../../../common/theme/colors.dart';
 import '../../../common/utility/utility.dart';
 import '../../widgets/primary_action_button.dart';
-import 'bloc/forget_password_bloc.dart';
-import 'bloc/forget_password_event.dart';
 import 'bloc/forget_password_state.dart';
 
 const checkEmailScreenNavigationRouteName = "check_email_screen/";
@@ -21,38 +21,27 @@ class CheckEmailScreen extends StatefulWidget {
 
 class _CheckEmailScreenState extends State<CheckEmailScreen> {
   late FluroRouter router;
+  late ForgetPasswordCubit bloc;
 
   @override
   void initState() {
     super.initState();
     router = FluroRouter.appRouter;
+    bloc = ForgetPasswordCubit();
   }
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<ForgetPasswordBloc>(context);
-    return BlocConsumer<ForgetPasswordBloc, ForgetPasswordState>(
+    return BlocConsumer<ForgetPasswordCubit, ForgetPasswordState>(
       bloc: bloc,
       listener: (BuildContext context, ForgetPasswordState state) {
-        _showUserMessage(bloc, state);
-        if (state.status != null) {
-          switch (state.status!) {
-            case ForgetPasswordStatus.launchForgetPasswordScreen:
-              break;
-            case ForgetPasswordStatus.navigateBackToSignInScreen:
-              dismissKeyboard();
-              _navigateBackToSignInScreen();
-              break;
-            case ForgetPasswordStatus.navigateToCheckEmailScreen:
-              break;
-          }
-        }
+        _showUserMessage(state);
       },
-      builder: (context, state) => _buildPage(context, bloc, state),
+      builder: (context, state) => _buildPage(context, state),
     );
   }
 
-  void _showUserMessage(ForgetPasswordBloc bloc, ForgetPasswordState state) {
+  void _showUserMessage(ForgetPasswordState state) {
     final isThereNotMessageToShow = (state.userMessages.isEmpty);
     if (isThereNotMessageToShow) return;
 
@@ -60,12 +49,11 @@ class _CheckEmailScreenState extends State<CheckEmailScreen> {
     final snackBar = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-    bloc.add(UserMessageShown(state.userMessages.first.id));
+    bloc.userMessageShown(state.userMessages.first.id);
   }
 
   Widget _buildPage(
     BuildContext context,
-    ForgetPasswordBloc bloc,
     ForgetPasswordState state,
   ) {
     return Scaffold(
@@ -110,7 +98,7 @@ class _CheckEmailScreenState extends State<CheckEmailScreen> {
               const SizedBox(height: 35.0),
               _buildOpenEmail(),
               const SizedBox(height: 30.0),
-              _buildBackToLogInButton(bloc),
+              _buildBackToLogInButton(),
               Expanded(child: Container()),
             ],
           ),
@@ -119,7 +107,11 @@ class _CheckEmailScreenState extends State<CheckEmailScreen> {
     );
   }
 
-  void _navigateBackToSignInScreen() => router.pop(context);
+  void _navigateBackToSignInScreen() => router.navigateTo(
+        context,
+        logInScreenNavigationRouteName,
+        replace: true,
+      );
 
   void _navigateToEmailScreen() =>
       launchEmail("kabirnayeem.99@gmail.com", "", "");
@@ -134,9 +126,9 @@ class _CheckEmailScreenState extends State<CheckEmailScreen> {
     );
   }
 
-  Widget _buildBackToLogInButton(ForgetPasswordBloc bloc) {
+  Widget _buildBackToLogInButton() {
     return GestureDetector(
-      onTap: () => bloc.add(GoBackToSignInScreeEvent()),
+      onTap: () => _navigateBackToSignInScreen(),
       child: const PrimaryActionButton(
         buttonText: "back to login",
         buttonColor: purpleBlueMoonraker,

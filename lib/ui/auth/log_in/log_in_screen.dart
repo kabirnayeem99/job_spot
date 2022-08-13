@@ -3,14 +3,13 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:job_spot/ui/auth/log_in/bloc/log_in_cubit.dart';
+
 import '../../../common/theme/colors.dart';
 import '../../home/home_screen.dart';
-
 import '../../widgets/primary_action_button.dart';
 import '../forget_password/forget_password_screen.dart';
 import '../sign_up/sign_up_screen.dart';
-import 'bloc/log_in_bloc.dart';
-import 'bloc/log_in_event.dart';
 import 'bloc/log_in_state.dart';
 
 const logInScreenNavigationRouteName = "log_in_screen/";
@@ -24,40 +23,44 @@ class LogInScreen extends StatefulWidget {
 
 class _LogInScreenState extends State<LogInScreen> {
   late FluroRouter _router;
+  late LogInCubit bloc;
 
   @override
   void initState() {
     super.initState();
     _router = FluroRouter.appRouter;
+    bloc = LogInCubit();
   }
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<LogInBloc>(context);
-    return BlocConsumer<LogInBloc, LogInState>(
-      bloc: bloc..add(LoadLogInScreenEvent()),
-      listener: (BuildContext context, LogInState state) {
-        _showUserMessage(bloc, state);
-        _showLoadingIndicatorWhileNeeded(state);
-        switch (state.status) {
-          case Status.authenticated:
-            _navigateToHomeScreen(context);
-            break;
-          case Status.needsSignUp:
-            _navigateToSignUpScreen(context);
-            break;
-          case Status.notAuthenticated:
-            break;
-          case Status.needResetPassword:
-            _navigateToForgetPasswordScreen(context);
-            break;
-        }
-      },
-      builder: (context, state) => _buildPage(context, bloc, state),
+    return BlocProvider<LogInCubit>(
+      create: (_) => bloc,
+      child: BlocConsumer<LogInCubit, LogInState>(
+        bloc: bloc..loadLogInScreen(),
+        listener: (BuildContext context, LogInState state) {
+          _showUserMessage();
+          _showLoadingIndicatorWhileNeeded();
+          switch (state.status) {
+            case Status.authenticated:
+              _navigateToHomeScreen(context);
+              break;
+            case Status.needsSignUp:
+              _navigateToSignUpScreen(context);
+              break;
+            case Status.notAuthenticated:
+              break;
+            case Status.needResetPassword:
+              _navigateToForgetPasswordScreen(context);
+              break;
+          }
+        },
+        builder: (context, state) => _buildPage(context, state),
+      ),
     );
   }
 
-  Widget _buildPage(BuildContext context, LogInBloc bloc, LogInState state) {
+  Widget _buildPage(BuildContext context, LogInState state) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -67,21 +70,21 @@ class _LogInScreenState extends State<LogInScreen> {
           child: Column(
             children: [
               const SizedBox(height: 40.0),
-              _buildLogInTitle(bloc, state),
+              _buildLogInTitle(),
               const SizedBox(height: 11.0),
-              _buildLogInHintSubtitle(bloc, state),
+              _buildLogInHintSubtitle(),
               const SizedBox(height: 64.0),
-              _buildEmailTextInput(bloc, state),
+              _buildEmailTextInput(),
               const SizedBox(height: 15.0),
-              _buildPasswordTextInput(bloc, state),
+              _buildPasswordTextInput(),
               const SizedBox(height: 20.0),
-              _buildLogInActionsList(bloc, state),
+              _buildLogInActionsList(),
               const SizedBox(height: 36.0),
-              _buildLogInButton(bloc, state),
+              _buildLogInButton(),
               const SizedBox(height: 19.0),
-              _buildGoogleLogInButton(bloc, state),
+              _buildGoogleLogInButton(),
               const SizedBox(height: 16.0),
-              _buildSignUpTextButton(bloc, state),
+              _buildSignUpTextButton(),
               Expanded(child: Container()),
             ],
           ),
@@ -90,7 +93,7 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget _buildLogInTitle(LogInBloc bloc, LogInState state) {
+  Widget _buildLogInTitle() {
     return const Align(
       alignment: Alignment.center,
       child: Text(
@@ -104,7 +107,7 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget _buildLogInHintSubtitle(LogInBloc bloc, LogInState state) {
+  Widget _buildLogInHintSubtitle() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 42.0),
       child: const Align(
@@ -122,16 +125,15 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget _buildLogInActionsList(LogInBloc bloc, LogInState state) {
+  Widget _buildLogInActionsList() {
     return Row(
       children: [
         Checkbox(
           activeColor: lavenderMist,
           checkColor: darkIndigo,
           value: bloc.state.shouldRememberPassword,
-          onChanged: (bool? value) {
-            bloc.add(ToggleRememberPassword());
-          },
+          onChanged: (isToggled) async =>
+              bloc.togglePasswordRemember(isToggled),
         ),
         const Text(
           "Remember Me",
@@ -142,14 +144,14 @@ class _LogInScreenState extends State<LogInScreen> {
           ),
         ),
         Expanded(child: Container()),
-        _buildForgetPasswordTextButton(bloc, state),
+        _buildForgetPasswordTextButton(),
       ],
     );
   }
 
-  Widget _buildForgetPasswordTextButton(LogInBloc bloc, LogInState state) {
+  Widget _buildForgetPasswordTextButton() {
     return GestureDetector(
-      onTap: () => bloc.add(NeedForgetPassword()),
+      onTap: () => _navigateToForgetPasswordScreen(context),
       child: const Text(
         "Forget password?",
         style: TextStyle(
@@ -161,9 +163,9 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget _buildSignUpTextButton(LogInBloc bloc, LogInState state) {
+  Widget _buildSignUpTextButton() {
     return GestureDetector(
-      onTap: () => bloc.add(NeedSignUp()),
+      onTap: () => _navigateToSignUpScreen(context),
       child: Align(
         alignment: Alignment.center,
         child: Row(
@@ -191,34 +193,35 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget _buildLogInButton(LogInBloc bloc, LogInState state) {
+  Widget _buildLogInButton() {
     const buttonText = "login";
     return GestureDetector(
-      onTap: () => bloc.add(LogInWithEmailAndPassword()),
+      onTap: () async => bloc.loginWithEmailAndPassword(),
       child: const PrimaryActionButton(buttonText: buttonText),
     );
   }
 
-  void _showUserMessage(LogInBloc bloc, LogInState state) {
-    final isThereNotMessageToShow = (state.userMessages.isEmpty);
+  void _showUserMessage() {
+    final isThereNotMessageToShow = (bloc.state.userMessages.isEmpty);
     if (isThereNotMessageToShow) return;
 
-    final message = state.userMessages.first.message;
+    final message = bloc.state.userMessages.first.message;
     final snackBar = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-    bloc.add(UserMessageShown(state.userMessages.first.id));
+    bloc.userMessageShown(bloc.state.userMessages.first.id);
   }
 
-  void _showLoadingIndicatorWhileNeeded(LogInState state) {
+  void _showLoadingIndicatorWhileNeeded() {
+    final state = bloc.state;
     if (state.isLoading == null) return;
     if (state.isLoading!) FLoading.show(context);
     if (!state.isLoading!) FLoading.hide(context: context);
   }
 
-  Widget _buildGoogleLogInButton(LogInBloc bloc, LogInState state) {
+  Widget _buildGoogleLogInButton() {
     return GestureDetector(
-      onTap: () => bloc.add(LogInWithGoogle()),
+      onTap: () async => bloc.logInWithGoogle(),
       child: Container(
         height: 50.0,
         width: 266.0,
@@ -251,7 +254,7 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget _buildPasswordTextInput(LogInBloc bloc, LogInState state) {
+  Widget _buildPasswordTextInput() {
     return Align(
       alignment: Alignment.topLeft,
       child: Center(
@@ -286,9 +289,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   padding: const EdgeInsets.only(left: 16.0),
                   child: TextField(
                     obscureText: true,
-                    onChanged: (passwordAsTyping) {
-                      bloc.add(CachePasswordEvent(passwordAsTyping));
-                    },
+                    onChanged: (pass) => bloc.passwordChanged(pass),
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       suffixIcon: Padding(
@@ -314,7 +315,7 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget _buildEmailTextInput(LogInBloc bloc, LogInState state) {
+  Widget _buildEmailTextInput() {
     return Align(
       alignment: Alignment.topLeft,
       child: Column(
@@ -347,9 +348,7 @@ class _LogInScreenState extends State<LogInScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: TextField(
                 autocorrect: true,
-                onChanged: (emailAsTyping) {
-                  bloc.add(CacheEmailEvent(emailAsTyping));
-                },
+                onChanged: (email) async => bloc.emailChanged(email),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(

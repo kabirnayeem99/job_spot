@@ -1,6 +1,8 @@
+import 'package:equatable/equatable.dart';
+
 import '../../../../domain/entity/user_message.dart';
 
-class LogInState {
+class LogInState extends Equatable {
   bool? shouldRememberPassword = false;
 
   String? email = "";
@@ -10,12 +12,14 @@ class LogInState {
 
   var userMessages = <UserMessage>[];
 
-  LogInState(this.shouldRememberPassword,
-      this.email,
-      this.password,
-      this.userMessages,
-      this.status,
-      this.isLoading,);
+  LogInState(
+    this.shouldRememberPassword,
+    this.email,
+    this.password,
+    this.userMessages,
+    this.status,
+    this.isLoading,
+  );
 
   @override
   String toString() {
@@ -27,6 +31,34 @@ class LogInState {
   static LogInState init() {
     return LogInState(false, "", "", [], Status.notAuthenticated, false);
   }
+
+  LogInState copyWith({
+    bool? shouldRememberPassword,
+    String? email,
+    String? password,
+    List<UserMessage>? userMessages,
+    Status? status,
+    bool? isLoading,
+  }) {
+    return LogInState(
+      shouldRememberPassword ?? this.shouldRememberPassword,
+      email ?? this.email,
+      password ?? this.password,
+      userMessages ?? this.userMessages,
+      status ?? this.status,
+      isLoading ?? this.isLoading,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+        shouldRememberPassword,
+        email,
+        password,
+        userMessages,
+        status,
+        isLoading,
+      ];
 }
 
 enum Status {

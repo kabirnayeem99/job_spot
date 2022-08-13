@@ -25,7 +25,7 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
     LoadLogInScreenEvent event,
     Emitter<LogInState> emit,
   ) async {
-    emit(_cloneState(status: Status.notAuthenticated, isLoading: true));
+    emit(state.copyWith(status: Status.notAuthenticated, isLoading: true));
 
     final status = await CheckIfAuthenticated.isAuthenticated()
         ? Status.authenticated
@@ -35,32 +35,32 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
     logger.d("is authenticated -> $status");
 
     emit(
-      _cloneState(status: status, isLoading: false),
+      state.copyWith(status: status, isLoading: false),
     );
   }
 
   void _togglePasswordRemember(
       ToggleRememberPassword event, Emitter<LogInState> emit) {
-    final _state = _cloneState();
+    final _state = state.copyWith();
     _state.shouldRememberPassword = !(state.shouldRememberPassword ?? false);
     emit(_state);
   }
 
   void _cacheEmail(CacheEmailEvent event, Emitter<LogInState> emit) {
-    final _state = _cloneState(email: event.email);
+    final _state = state.copyWith(email: event.email);
     emit(_state);
   }
 
   void _cachePassword(CachePasswordEvent event, Emitter<LogInState> emit) {
-    final _state = _cloneState(password: event.password);
+    final _state = state.copyWith(password: event.password);
     emit(_state);
   }
 
   void _loginWithEmailAndPassword(
       LogInWithEmailAndPassword event, Emitter<LogInState> emit) async {
-    emit(_cloneState(status: Status.notAuthenticated, isLoading: true));
+    emit(state.copyWith(status: Status.notAuthenticated, isLoading: true));
 
-    final _state = _cloneState();
+    final _state = state.copyWith();
 
     final useCase =
         await LogInWithEmailAndPasswordUseCase.logInWithEmailAndPassword(
@@ -72,7 +72,7 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
       },
       (success) {
         final _state =
-            _cloneState(status: Status.authenticated, isLoading: false);
+            state.copyWith(status: Status.authenticated, isLoading: false);
         emit(_state);
       },
     );
@@ -80,7 +80,8 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
 
   Future<void> _logInWithGoogle(
       LogInWithGoogle event, Emitter<LogInState> emit) async {
-    var _state = _cloneState(status: Status.notAuthenticated, isLoading: true);
+    var _state =
+        state.copyWith(status: Status.notAuthenticated, isLoading: true);
     emit(_state);
     final useCase = await LogInWithGoogleUseCase.logInWithGoogle();
     useCase.fold(
@@ -88,7 +89,7 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
         _addErrorMessage(error, emit);
       },
       (success) {
-        final _state = _cloneState(
+        final _state = state.copyWith(
           status: Status.authenticated,
           isLoading: false,
         );
@@ -105,7 +106,7 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
     final messages = List<UserMessage>.from(currentMessages, growable: true);
     messages.add(UserMessage(DateTime.now().second, message));
 
-    final _state = _cloneState(userMessages: messages, isLoading: false);
+    final _state = state.copyWith(userMessages: messages, isLoading: false);
     emit(_state);
   }
 
@@ -114,37 +115,17 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
     final messages = List<UserMessage>.from(currentMessages, growable: true);
     messages.removeWhere((element) => element.id == event.id);
 
-    final _state = _cloneState(userMessages: messages);
+    final _state = state.copyWith(userMessages: messages);
     emit(_state);
   }
 
-
-
   void _needSignUp(NeedSignUp event, Emitter<LogInState> emit) {
-    final _state = _cloneState(status: Status.needsSignUp);
+    final _state = state.copyWith(status: Status.needsSignUp);
     emit(_state);
   }
 
   void _needForgetPassword(NeedForgetPassword event, Emitter<LogInState> emit) {
-    final _state = _cloneState(status: Status.needResetPassword);
+    final _state = state.copyWith(status: Status.needResetPassword);
     emit(_state);
-  }
-
-  LogInState _cloneState({
-    bool? shouldRememberPassword,
-    String? email,
-    String? password,
-    List<UserMessage>? userMessages,
-    Status? status,
-    bool? isLoading,
-  }) {
-    return LogInState(
-      shouldRememberPassword ?? state.shouldRememberPassword,
-      email ?? state.email,
-      password ?? state.password,
-      userMessages ?? state.userMessages,
-      status ?? Status.notAuthenticated,
-      isLoading ?? state.isLoading,
-    );
   }
 }

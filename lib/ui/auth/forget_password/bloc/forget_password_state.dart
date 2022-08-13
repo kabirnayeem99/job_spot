@@ -1,6 +1,8 @@
+import 'package:equatable/equatable.dart';
+
 import '../../../../domain/entity/user_message.dart';
 
-class ForgetPasswordState {
+class ForgetPasswordState extends Equatable {
   bool? isLoading = false;
   String? email = "";
   ForgetPasswordStatus? status;
@@ -17,14 +19,30 @@ class ForgetPasswordState {
     return ForgetPasswordState(
       false,
       "",
-      ForgetPasswordStatus.launchForgetPasswordScreen,
-      [],
+      ForgetPasswordStatus.needForgotPasswordMail,
+      const [],
     );
   }
+
+  ForgetPasswordState copyWith({
+    bool? isLoading,
+    String? email,
+    ForgetPasswordStatus? status,
+    List<UserMessage>? userMessages,
+  }) {
+    return ForgetPasswordState(
+      isLoading ?? this.isLoading,
+      email ?? this.email,
+      status ?? this.status,
+      userMessages ?? this.userMessages,
+    );
+  }
+
+  @override
+  List<Object?> get props => [isLoading, email, status, userMessages];
 }
 
 enum ForgetPasswordStatus {
-  launchForgetPasswordScreen,
-  navigateBackToSignInScreen,
-  navigateToCheckEmailScreen,
+  sentForgotPasswordRecoveryMail,
+  needForgotPasswordMail,
 }

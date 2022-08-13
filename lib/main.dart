@@ -3,11 +3,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:job_spot/ui/auth/log_in/bloc/log_in_bloc.dart';
+import 'package:job_spot/ui/home/bloc/home_bloc.dart';
+
 import 'common/config/app.dart';
 import 'common/config/routes.dart';
-import 'ui/auth/forget_password/bloc/forget_password_bloc.dart';
-import 'ui/auth/log_in/bloc/log_in_bloc.dart';
-import 'ui/home/bloc/home_bloc.dart';
 
 void main() async => runApp(const JobSpotApp());
 
@@ -30,8 +30,6 @@ class _JobSpotAppState extends State<JobSpotApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<LogInBloc>(create: (context) => LogInBloc()),
-        BlocProvider<ForgetPasswordBloc>(
-            create: (context) => ForgetPasswordBloc()),
         BlocProvider<HomeBloc>(create: (context) => HomeBloc()),
       ],
       child: MaterialApp(
