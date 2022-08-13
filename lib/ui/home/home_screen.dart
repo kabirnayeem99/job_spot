@@ -3,7 +3,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:job_spot/data/data_source/remote_job_data_source.dart';
+import '../../data/data_source/remote_job_data_source.dart';
 
 import '../../common/theme/colors.dart';
 import '../job_description/job_description_screen.dart';

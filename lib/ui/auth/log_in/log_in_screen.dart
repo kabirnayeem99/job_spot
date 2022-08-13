@@ -3,8 +3,8 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:job_spot/common/theme/colors.dart';
-import 'package:job_spot/ui/home/home_screen.dart';
+import '../../../common/theme/colors.dart';
+import '../../home/home_screen.dart';
 
 import '../../widgets/primary_action_button.dart';
 import '../forget_password/forget_password_screen.dart';

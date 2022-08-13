@@ -1,8 +1,8 @@
 import 'package:either_dart/either.dart';
-import 'package:job_spot/common/utility/utility.dart';
-import 'package:job_spot/data/data_source/remote_profile_data_Source.dart';
-import 'package:job_spot/domain/entity/profile.dart';
-import 'package:job_spot/domain/repository/profile_repository.dart';
+import '../../common/utility/utility.dart';
+import '../data_source/remote_profile_data_Source.dart';
+import '../../domain/entity/profile.dart';
+import '../../domain/repository/profile_repository.dart';
 
 class ProfileRepositoryImpl extends ProfileRepository {
   final _profileRemoteDataSource = RemoteProfileDataSource();

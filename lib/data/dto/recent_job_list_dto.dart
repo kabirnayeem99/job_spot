@@ -1,4 +1,4 @@
-import 'package:job_spot/domain/entity/job_preview.dart';
+import '../../domain/entity/job_preview.dart';
 
 class RecentJobListDto {
   List<JobSummary>? jobs;

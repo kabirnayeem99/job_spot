@@ -1,5 +1,5 @@
 import 'package:either_dart/either.dart';
-import 'package:job_spot/domain/entity/job_preview.dart';
+import '../entity/job_preview.dart';
 
 abstract class JobRepository {
   Future<Either<String, int>> getRemoteJobCount();

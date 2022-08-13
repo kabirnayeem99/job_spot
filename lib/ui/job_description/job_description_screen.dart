@@ -6,8 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:job_spot/common/theme/colors.dart';
-import 'package:job_spot/domain/entity/job_description_page_state.dart';
+import '../../common/theme/colors.dart';
+import '../../domain/entity/job_description_page_state.dart';
 
 import '../widgets/primary_action_button.dart';
 

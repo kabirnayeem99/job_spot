@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:faker_dart/faker_dart.dart';
-import 'package:job_spot/domain/entity/job_preview.dart';
+import '../../domain/entity/job_preview.dart';
 
 import '../dto/recent_job_list_dto.dart';
 

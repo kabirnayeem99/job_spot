@@ -1,9 +1,9 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:job_spot/common/config/route_handlers.dart';
-import 'package:job_spot/ui/home/home_screen.dart';
-import 'package:job_spot/ui/job_description/job_description_screen.dart';
-import 'package:job_spot/ui/splash/splash_screen.dart';
+import 'route_handlers.dart';
+import '../../ui/home/home_screen.dart';
+import '../../ui/job_description/job_description_screen.dart';
+import '../../ui/splash/splash_screen.dart';
 
 import '../../ui/auth/forget_password/check_email_screen.dart';
 import '../../ui/auth/forget_password/forget_password_screen.dart';

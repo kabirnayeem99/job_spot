@@ -1,4 +1,4 @@
-import 'package:job_spot/domain/entity/profile.dart';
+import '../../domain/entity/profile.dart';
 
 class ProfileDto {
   String? username;

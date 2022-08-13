@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:job_spot/domain/use_case/home/fetch_offers_use_case.dart';
-import 'package:job_spot/domain/use_case/home/fetch_user_data_use_case.dart';
+import '../../../domain/use_case/home/fetch_offers_use_case.dart';
+import '../../../domain/use_case/home/fetch_user_data_use_case.dart';
 import 'package:meta/meta.dart';
 
 import '../../../domain/entity/offer.dart';

@@ -1,9 +1,9 @@
 import 'package:either_dart/src/either.dart';
-import 'package:job_spot/common/utility/utility.dart';
-import 'package:job_spot/data/data_source/remote_job_data_source.dart';
-import 'package:job_spot/data/dto/recent_job_list_dto.dart';
-import 'package:job_spot/domain/entity/job_preview.dart';
-import 'package:job_spot/domain/repository/job_repository.dart';
+import '../../common/utility/utility.dart';
+import '../data_source/remote_job_data_source.dart';
+import '../dto/recent_job_list_dto.dart';
+import '../../domain/entity/job_preview.dart';
+import '../../domain/repository/job_repository.dart';
 
 class JobRepositoryImpl extends JobRepository {
   final _remoteJobDataSource = RemoteJobDataSource();

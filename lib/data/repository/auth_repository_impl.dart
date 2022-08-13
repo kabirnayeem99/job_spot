@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
-import 'package:job_spot/common/utility/utility.dart';
-import 'package:job_spot/data/data_source/remote_auth_data_source.dart';
-import 'package:job_spot/domain/repository/auth_repository.dart';
+import '../../common/utility/utility.dart';
+import '../data_source/remote_auth_data_source.dart';
+import '../../domain/repository/auth_repository.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
   final authRemoteDataSource = RemoteAuthDataSource();

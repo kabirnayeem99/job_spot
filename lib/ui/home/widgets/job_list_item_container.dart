@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:job_spot/common/utility/utility.dart';
-import 'package:job_spot/domain/entity/job_preview.dart';
+import '../../../common/utility/utility.dart';
+import '../../../domain/entity/job_preview.dart';
 
 import '../../../common/theme/colors.dart';
 import '../../widgets/chip_button.dart';

@@ -1,5 +1,5 @@
 import 'package:either_dart/either.dart';
-import 'package:job_spot/common/utility/validator.dart';
+import '../../../../common/utility/validator.dart';
 
 import '../../../../data/repository/auth_repository_impl.dart';
 import '../../../repository/auth_repository.dart';

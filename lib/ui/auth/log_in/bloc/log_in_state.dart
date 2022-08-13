@@ -1,4 +1,4 @@
-import 'package:job_spot/domain/entity/user_message.dart';
+import '../../../../domain/entity/user_message.dart';
 
 class LogInState {
   bool? shouldRememberPassword = false;

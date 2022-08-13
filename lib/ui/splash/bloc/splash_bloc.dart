@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:job_spot/domain/use_case/auth/log_in/check_if_authenticated.dart';
+import 'package:equatable/equatable.dart';
+import '../../../domain/use_case/auth/log_in/check_if_authenticated.dart';
 
 part 'splash_event.dart';
 
@@ -15,6 +16,6 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     Emitter<SplashState> emit,
   ) async {
     final isAuthenticated = await CheckIfAuthenticated.isAuthenticated();
-    emit(SplashState(isAuthenticated));
+    emit(state.copyWith(isAuthenticated));
   }
 }

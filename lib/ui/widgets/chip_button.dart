@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:job_spot/common/theme/colors.dart';
+import '../../common/theme/colors.dart';
 
 class ChipButton extends StatelessWidget {
   final Color backgroundColor;

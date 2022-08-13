@@ -1,5 +1,5 @@
 import 'package:faker_dart/faker_dart.dart';
-import 'package:job_spot/data/dto/profile_dto.dart';
+import '../dto/profile_dto.dart';
 
 import '../../common/utility/utility.dart';
 

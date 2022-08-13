@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:job_spot/domain/entity/user_message.dart';
-import 'package:job_spot/domain/use_case/auth/forget_password/send_recovery_email_use_case.dart';
+import '../../../../domain/entity/user_message.dart';
+import '../../../../domain/use_case/auth/forget_password/send_recovery_email_use_case.dart';
 
 import 'forget_password_event.dart';
 import 'forget_password_state.dart';

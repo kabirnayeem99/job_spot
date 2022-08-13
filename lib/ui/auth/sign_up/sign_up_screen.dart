@@ -1,7 +1,7 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:job_spot/ui/widgets/primary_action_button.dart';
+import '../../widgets/primary_action_button.dart';
 
 import '../../../common/theme/colors.dart';
 import '../../../common/utility/utility.dart';

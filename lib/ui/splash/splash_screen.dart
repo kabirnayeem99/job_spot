@@ -2,10 +2,10 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:job_spot/common/theme/colors.dart';
-import 'package:job_spot/common/utility/utility.dart';
-import 'package:job_spot/ui/home/home_screen.dart';
-import 'package:job_spot/ui/splash/bloc/splash_bloc.dart';
+import '../../common/theme/colors.dart';
+import '../../common/utility/utility.dart';
+import '../home/home_screen.dart';
+import 'bloc/splash_bloc.dart';
 
 import '../auth/intro/intro_screen.dart';
 
@@ -25,24 +25,26 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     router ??= FluroRouter.appRouter;
-    bloc = context.read<SplashBloc>()..add(CheckAuthenticationSplashEvent());
+    bloc = SplashBloc();
     dismissKeyboard();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SplashBloc, SplashState>(
-      listener: (context, state) {
-        if (state.isAuthenticated == null) return;
-        if (state.isAuthenticated!) {
-          _waitAndGoToHomeScreen();
-        } else {
-          _waitAndGoToIntroScreen();
-        }
-      },
-      bloc: bloc,
-      builder: (context, state) => _buildPage(),
+    return BlocProvider<SplashBloc>(
+      create: (_) => bloc..add(CheckAuthenticationSplashEvent()),
+      child: BlocConsumer<SplashBloc, SplashState>(
+        listener: (context, state) {
+          if (state.isAuthenticated == null) return;
+          if (state.isAuthenticated!) {
+            _waitAndGoToHomeScreen();
+          } else {
+            _waitAndGoToIntroScreen();
+          }
+        },
+        builder: (context, state) => _buildPage(),
+      ),
     );
   }
 
