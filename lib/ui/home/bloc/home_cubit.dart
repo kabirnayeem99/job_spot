@@ -7,7 +7,9 @@ import '../../../domain/use_case/home/fetch_user_data_use_case.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit() : super(HomeState());
+  HomeCubit() : super(HomeState()) {
+    loadHomeScreenData();
+  }
 
   Future<void> loadHomeScreenData() async {
     emit(state.copyWith(isLoading: true));
@@ -26,7 +28,9 @@ class HomeCubit extends Cubit<HomeState> {
     final fetchOffersUseCase = await FetchOffersUseCase.fetchOffers();
     fetchOffersUseCase.fold(
       (error) => _addUserMessage(error),
-      (offers) => {_state.offers = offers},
+      (offers) {
+        _state.offers = offers;
+      },
     );
 
     final fetchRecentJobListUseCase =
