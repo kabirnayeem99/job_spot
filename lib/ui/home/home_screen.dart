@@ -39,9 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocProvider<HomeCubit>(
       create: (_) => bloc,
       child: BlocConsumer<HomeCubit, HomeState>(
-        bloc: bloc,
         listener: (context, state) {
-          logger.d(state);
           _showUserMessage();
           _showLoadingIndicatorWhileNeeded();
         },
@@ -67,6 +65,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _showLoadingIndicatorWhileNeeded() {
     final state = bloc.state;
+
+    logger.d("is loading -> " + state.isLoading.toString());
 
     if (state.isLoading == null) FLoading.hide(context: context);
 
@@ -148,42 +148,7 @@ class _JobOverViewGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(
-          child: Container(
-            height: 170.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6.0),
-              color: bluishCyanFrenchPass,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Icon(
-                  CupertinoIcons.compass,
-                  size: 34.0,
-                  color: darkIndigo,
-                ),
-                Text(
-                  "$remoteJobsCount",
-                  style: const TextStyle(
-                    color: nightBlue,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const Text(
-                  "Remote Jobs",
-                  style: TextStyle(
-                    color: nightBlue,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        _RemoteJobsCounterGridItem(remoteJobsCount: remoteJobsCount),
         const SizedBox(width: 20.0),
         Expanded(
           child: SizedBox(
@@ -191,69 +156,148 @@ class _JobOverViewGrid extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  width: double.infinity,
-                  height: 75.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6.0),
-                    color: violetPale,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "$fullTimeJobCount",
-                        style: const TextStyle(
-                          color: nightBlue,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const Text(
-                        "Full Time",
-                        style: TextStyle(
-                          color: nightBlue,
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 75.0,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6.0),
-                    color: orangeLightApricot,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "$partTimeJobCount",
-                        style: const TextStyle(
-                          color: nightBlue,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const Text(
-                        "Part Time",
-                        style: TextStyle(
-                          color: nightBlue,
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                _FullTimeJobsCounterGridItem(
+                    fullTimeJobCount: fullTimeJobCount),
+                _PartTimeJobsCounterGridItem(
+                    partTimeJobCount: partTimeJobCount),
               ],
             ),
           ),
         )
       ],
+    );
+  }
+}
+
+class _PartTimeJobsCounterGridItem extends StatelessWidget {
+  const _PartTimeJobsCounterGridItem({
+    Key? key,
+    required this.partTimeJobCount,
+  }) : super(key: key);
+
+  final int partTimeJobCount;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 75.0,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6.0),
+        color: orangeLightApricot,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "$partTimeJobCount",
+            style: const TextStyle(
+              color: nightBlue,
+              fontSize: 16.0,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const Text(
+            "Part Time",
+            style: TextStyle(
+              color: nightBlue,
+              fontSize: 14.0,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FullTimeJobsCounterGridItem extends StatelessWidget {
+  const _FullTimeJobsCounterGridItem({
+    Key? key,
+    required this.fullTimeJobCount,
+  }) : super(key: key);
+
+  final int fullTimeJobCount;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 75.0,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6.0),
+        color: violetPale,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "$fullTimeJobCount",
+            style: const TextStyle(
+              color: nightBlue,
+              fontSize: 16.0,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const Text(
+            "Full Time",
+            style: TextStyle(
+              color: nightBlue,
+              fontSize: 14.0,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RemoteJobsCounterGridItem extends StatelessWidget {
+  const _RemoteJobsCounterGridItem({
+    Key? key,
+    required this.remoteJobsCount,
+  }) : super(key: key);
+
+  final int remoteJobsCount;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        height: 170.0,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6.0),
+          color: bluishCyanFrenchPass,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Icon(
+              CupertinoIcons.compass,
+              size: 34.0,
+              color: darkIndigo,
+            ),
+            Text(
+              "$remoteJobsCount",
+              style: const TextStyle(
+                color: nightBlue,
+                fontSize: 16.0,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const Text(
+              "Remote Jobs",
+              style: TextStyle(
+                color: nightBlue,
+                fontSize: 14.0,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -34,6 +34,11 @@ class OfferDto {
             .toList() ??
         List.empty();
   }
+
+  @override
+  String toString() {
+    return 'OfferDto{offers: $offers}';
+  }
 }
 
 class OfferItemDto {
@@ -55,5 +60,10 @@ class OfferItemDto {
     data['offer_message'] = offerMessage;
     data['course_id'] = courseId;
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'OfferItemDto{offerId: $offerId, offerMessage: $offerMessage, courseId: $courseId}';
   }
 }

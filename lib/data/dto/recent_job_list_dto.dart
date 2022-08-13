@@ -25,6 +25,11 @@ class RecentJobListDto {
     }
     return data;
   }
+
+  @override
+  String toString() {
+    return 'RecentJobListDto{jobs: $jobs}';
+  }
 }
 
 class JobSummary {
@@ -87,4 +92,6 @@ class JobSummary {
           salaryType == "Monthly" ? SalaryType.monthly : SalaryType.yearly,
     );
   }
+
+
 }

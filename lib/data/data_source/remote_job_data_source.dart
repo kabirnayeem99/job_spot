@@ -29,7 +29,7 @@ class RemoteJobDataSource {
 
     final List<JobSummary> jobs = List.empty(growable: true);
 
-    for (int i = 0; i < Random().nextInt(20); i++) {
+    for (int i = 0; i < 10 + Random().nextInt(20); i++) {
       final job = JobSummary(
         title: _faker.commerce.department().toUpperCase(),
         companyName: _faker.company.companyName(),

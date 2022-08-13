@@ -3,7 +3,7 @@ import 'dart:math';
 class RemoteAuthDataSource {
   Future<bool> isUserAuthenticated() async {
     await Future.delayed(const Duration(microseconds: 2000));
-    return Random().nextBool();
+    return true;
   }
 
   Future<void> logInWithGoogle() async {

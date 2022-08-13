@@ -8,6 +8,7 @@ class RemoteOfferDataSource {
   final _faker = Faker.instance;
 
   Future<OfferDto> getOffers() async {
+    await Future.delayed(const Duration(seconds: 3));
     final List<OfferItemDto> offers = List.empty(growable: true);
     for (int i = 0; i < 4; i++) {
       final offer = OfferItemDto(

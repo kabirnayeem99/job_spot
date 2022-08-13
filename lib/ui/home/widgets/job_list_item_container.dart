@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../../common/utility/utility.dart';
-import '../../../domain/entity/job_preview.dart';
 
 import '../../../common/theme/colors.dart';
+import '../../../domain/entity/job_preview.dart';
 import '../../widgets/chip_button.dart';
 
 class JobListItemContainer extends StatelessWidget {
@@ -16,7 +15,6 @@ class JobListItemContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    logger.d(job);
     return Container(
       padding: const EdgeInsets.all(20.0),
       margin: const EdgeInsets.symmetric(vertical: 8.0),
