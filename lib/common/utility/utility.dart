@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,4 +25,6 @@ void dismissKeyboard() {
   FocusManager.instance.primaryFocus?.unfocus();
 }
 
-
+String getFileNameFromFile(File? file) {
+  return file?.path.split('/').last ?? "No file selected";
+}

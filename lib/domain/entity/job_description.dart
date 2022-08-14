@@ -1,23 +1,24 @@
+import 'package:equatable/equatable.dart';
 import 'package:job_spot/domain/entity/job_type.dart';
 
 import 'location.dart';
 
-class JobDescription {
-  String? title;
-  String? timePassed;
-  String? companyName;
-  String? companyLogoImageUrl;
-  String? shortDescription;
-  String? longDescription;
-  String? requirements;
-  Location? location;
-  JobType? jobType;
-  String? facilities;
-  String? qualification;
-  String? specialisation;
-  String? city;
+class JobDescription extends Equatable {
+  final String? title;
+  final String? timePassed;
+  final String? companyName;
+  final String? companyLogoImageUrl;
+  final String? shortDescription;
+  final String? longDescription;
+  final String? requirements;
+  final Location? location;
+  final JobType? jobType;
+  final String? facilities;
+  final String? qualification;
+  final String? specialisation;
+  final String? city;
 
-  JobDescription({
+  const JobDescription({
     this.title,
     this.timePassed,
     this.companyName,
@@ -100,4 +101,21 @@ class JobDescription {
       jobType: JobType.partTime,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        title,
+        timePassed,
+        companyName,
+        companyLogoImageUrl,
+        shortDescription,
+        longDescription,
+        requirements,
+        location,
+        jobType,
+        facilities,
+        qualification,
+        specialisation,
+        city,
+      ];
 }

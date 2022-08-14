@@ -1,14 +1,14 @@
-import 'dart:io';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:job_spot/common/utility/utility.dart';
 import 'package:job_spot/domain/entity/company_description.dart';
 import 'package:job_spot/domain/entity/job_type.dart';
+import 'package:job_spot/ui/job_description/bloc/job_description_cubit.dart';
 import 'package:job_spot/ui/widgets/image.dart';
 import 'package:unicons/unicons.dart';
 
@@ -27,6 +27,8 @@ class JobDescriptionScreen extends StatefulWidget {
 }
 
 class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
+  late JobDescriptionCubit bloc;
+
   JobDescriptionPageState _pageState = JobDescriptionPageState.description;
   final jobDescription = JobDescription.generateMockJobDescription();
   final companyDescription =
@@ -38,10 +40,28 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
     mapController = controller;
   }
 
+  @override
+  void initState() {
+    super.initState();
+    bloc = JobDescriptionCubit()..loadJobDescription("");
+  }
+
   void _navigateBack(BuildContext context) => Navigator.pop(context);
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider<JobDescriptionCubit>(
+      create: (_) => bloc,
+      child: BlocConsumer<JobDescriptionCubit, JobDescriptionState>(
+        bloc: bloc,
+        listener: (context, state) {},
+        builder: (context, state) => _buildPage(context),
+      ),
+    );
+    //
+  }
+
+  Scaffold _buildPage(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xfff5f5f7),
       body: SafeArea(
@@ -163,8 +183,6 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
     );
   }
 
-  var filaneName = "Jamet kudos - CV - UI/UX Designer";
-
   Widget _buildAfterUploadBox() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -183,7 +201,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  filaneName,
+                  getFileNameFromFile(bloc.state.file),
                   style: const TextStyle(
                     fontSize: 12.0,
                     color: blackHaiti,
@@ -245,28 +263,10 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
 
   void _pickPdfFiles() async {
     try {
-      FilePickerResult? result =
-          await FilePicker.platform.pickFiles(allowMultiple: true);
-
-      if (result != null) {
-        List<File> files =
-            result.paths.map((path) => File(path ?? "")).toList();
-
-        final file = files[0];
-        final name = file.path.split('/').last;
-
-        setState(() {
-          filaneName = name;
-        });
-
-        logger.w("file name -> $name");
-      } else {
-        logger.w("no file was selected");
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      var result = await FilePicker.platform.pickFiles(allowMultiple: false);
+      bloc.selectedFilePickerResult(result);
+    } on Exception catch (e) {
+      logger.e(e);
     }
   }
 
