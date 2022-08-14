@@ -6,7 +6,7 @@ import '../../repository/offer_repository.dart';
 
 class FetchOffersUseCase {
   static Future<Either<String, List<Offer>>> fetchOffers() {
-    final OfferRepository _offerRepository = OfferRepositoryImpl();
-    return _offerRepository.getOffers();
+    final OfferRepository offerRepository = OfferRepositoryImpl();
+    return offerRepository.getOffers();
   }
 }

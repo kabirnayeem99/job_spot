@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:job_spot/ui/widgets/image.dart';
 
 import '../../../common/theme/colors.dart';
 import '../../../domain/entity/job_preview.dart';
@@ -40,9 +41,8 @@ class JobListItemContainer extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(40.0),
                 child: job.companyLogo.isNotEmpty
-                    ? Image.network(
-                        job.companyLogo,
-                        fit: BoxFit.cover,
+                    ? RemoteImage(
+                        imageUrl: job.companyLogo,
                         height: 40.0,
                         width: 40.0,
                       )

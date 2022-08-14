@@ -26,11 +26,12 @@ dependencies:
   floading: ^2.0.0
   faker_dart: ^0.1.6
   equatable: ^2.0.3
+  cached_network_image: ^3.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^1.0.0
+  flutter_lints: 2.0.1
 
 flutter:
   uses-material-design: true

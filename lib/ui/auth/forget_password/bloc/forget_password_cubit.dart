@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../domain/entity/user_message.dart';
 import '../../../../domain/use_case/auth/forget_password/send_recovery_email_use_case.dart';
@@ -8,8 +8,8 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
   ForgetPasswordCubit() : super(ForgetPasswordState.init());
 
   Future<void> emailChanged(String? email) async {
-    final _state = state.copyWith(email: email);
-    emit(_state);
+    final newState = state.copyWith(email: email);
+    emit(newState);
   }
 
   Future<void> resetPassword() async {
@@ -37,8 +37,8 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
     final messages = List<UserMessage>.from(currentMessages, growable: true);
     messages.add(UserMessage(DateTime.now().second, message));
 
-    final _state = state.copyWith(userMessages: messages);
-    emit(_state);
+    final newState = state.copyWith(userMessages: messages);
+    emit(newState);
   }
 
   void userMessageShown(int id) {
@@ -46,7 +46,7 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
     final messages = List<UserMessage>.from(currentMessages, growable: true);
     messages.removeWhere((element) => element.id == id);
 
-    final _state = state.copyWith(userMessages: messages);
-    emit(_state);
+    final newState = state.copyWith(userMessages: messages);
+    emit(newState);
   }
 }

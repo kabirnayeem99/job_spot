@@ -5,7 +5,7 @@ import '../../repository/profile_repository.dart';
 
 class FetchUserDataUseCase {
   static Future<Either<String, Profile>> fetchUserData() async {
-    final ProfileRepository _profileRepository = ProfileRepositoryImpl();
-    return _profileRepository.getProfileData();
+    final ProfileRepository profileRepository = ProfileRepositoryImpl();
+    return profileRepository.getProfileData();
   }
 }

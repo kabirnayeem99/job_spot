@@ -6,8 +6,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:job_spot/common/utility/utility.dart';
 import 'package:job_spot/domain/entity/company_description.dart';
 import 'package:job_spot/domain/entity/job_type.dart';
+import 'package:job_spot/ui/widgets/image.dart';
 
 import '../../common/theme/colors.dart';
 import '../../domain/entity/job_description.dart';
@@ -260,13 +262,9 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           filaneName = name;
         });
 
-        if (kDebugMode) {
-          print(name);
-        }
+        logger.w("file name -> $name");
       } else {
-        if (kDebugMode) {
-          print("no file was selected");
-        }
+        logger.w("no file was selected");
       }
     } catch (e) {
       if (kDebugMode) {
@@ -562,9 +560,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
               Expanded(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6.0),
-                  child: Image.network(
-                    companyDescription.companyGalleryImages[0],
-                    fit: BoxFit.cover,
+                  child: RemoteImage(
+                    imageUrl: companyDescription.companyGalleryImages[0],
                     height: 158.0,
                     width: 115.0,
                   ),
@@ -574,9 +571,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
               Expanded(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6.0),
-                  child: Image.network(
-                    companyDescription.companyGalleryImages[1],
-                    fit: BoxFit.cover,
+                  child: RemoteImage(
+                    imageUrl: companyDescription.companyGalleryImages[1],
                     height: 158.0,
                   ),
                 ),
@@ -613,10 +609,9 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         ClipRRect(
           borderRadius: BorderRadius.circular(100.0),
           child: (jobDescription.companyLogoImageUrl ?? "").isNotEmpty
-              ? Image.network(
-                  jobDescription.companyLogoImageUrl ?? "",
+              ? RemoteImage(
+                  imageUrl: jobDescription.companyLogoImageUrl ?? "",
                   height: 84,
-                  fit: BoxFit.cover,
                   width: 84,
                 )
               : const SizedBox(

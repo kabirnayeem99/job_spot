@@ -3,7 +3,7 @@ import '../../../repository/auth_repository.dart';
 
 class CheckIfAuthenticated {
   static Future<bool> isAuthenticated() async {
-    final AuthRepository _repo = AuthRepositoryImpl();
-    return _repo.isUserAuthenticated();
+    final AuthRepository repo = AuthRepositoryImpl();
+    return repo.isUserAuthenticated();
   }
 }

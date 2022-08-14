@@ -9,6 +9,7 @@ import '../../common/theme/colors.dart';
 import '../../domain/entity/job_preview.dart';
 import '../../domain/entity/offer.dart';
 import '../job_description/job_description_screen.dart';
+import '../widgets/image.dart';
 import '../widgets/secondary_action_button.dart';
 import 'bloc/home_state.dart';
 import 'widgets/job_list_item_container.dart';
@@ -335,9 +336,8 @@ class _HomeAppBar extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(20.0),
           child: userProfilePictureUrl.isNotEmpty
-              ? Image.network(
-                  userProfilePictureUrl,
-                  fit: BoxFit.fill,
+              ? RemoteImage(
+                  imageUrl: userProfilePictureUrl,
                   height: 40.0,
                   width: 40.0,
                 )

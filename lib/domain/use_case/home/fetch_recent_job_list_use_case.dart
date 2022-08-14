@@ -5,7 +5,7 @@ import '../../entity/job_preview.dart';
 
 class FetchRecentJobListUseCase {
   static Future<Either<String, List<JobPreview>>> fetchRecentJobList() async {
-    final _jobRepo = JobRepositoryImpl();
-    return _jobRepo.getRecentJobList();
+    final jobRepo = JobRepositoryImpl();
+    return jobRepo.getRecentJobList();
   }
 }

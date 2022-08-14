@@ -1,7 +1,7 @@
 import 'package:faker_dart/faker_dart.dart';
-import '../dto/profile_dto.dart';
 
 import '../../common/utility/utility.dart';
+import '../dto/profile_dto.dart';
 
 class RemoteProfileDataSource {
   final _faker = Faker.instance;

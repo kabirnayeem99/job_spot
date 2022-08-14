@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../common/utility/utility.dart';
 import '../../../../domain/entity/user_message.dart';
@@ -47,32 +47,32 @@ class LogInCubit extends Cubit<LogInState> {
         _addUserMessage(error);
       },
       (success) {
-        final _state =
+        final newState =
             state.copyWith(status: Status.authenticated, isLoading: false);
-        emit(_state);
+        emit(newState);
         _addUserMessage("You are successfully logged in with ${state.email}.");
       },
     );
   }
 
   Future<void> logInWithGoogle() async {
-    var _state =
+    var newState =
         state.copyWith(status: Status.notAuthenticated, isLoading: true);
-    emit(_state);
+    emit(newState);
     final useCase = await LogInWithGoogleUseCase.logInWithGoogle();
     useCase.fold(
       (error) {
         _addUserMessage(error);
       },
       (success) {
-        final _state = state.copyWith(
+        final newState = state.copyWith(
           status: Status.authenticated,
           isLoading: false,
         );
-        emit(_state);
+        emit(newState);
       },
     );
-    emit(_state);
+    emit(newState);
   }
 
   void _addUserMessage(String message) {
@@ -82,8 +82,8 @@ class LogInCubit extends Cubit<LogInState> {
     final messages = List<UserMessage>.from(currentMessages, growable: true);
     messages.add(UserMessage(DateTime.now().second, message));
 
-    final _state = state.copyWith(userMessages: messages, isLoading: false);
-    emit(_state);
+    final newState = state.copyWith(userMessages: messages, isLoading: false);
+    emit(newState);
   }
 
   void userMessageShown(int id) {
@@ -91,7 +91,7 @@ class LogInCubit extends Cubit<LogInState> {
     final messages = List<UserMessage>.from(currentMessages, growable: true);
     messages.removeWhere((element) => element.id == id);
 
-    final _state = state.copyWith(userMessages: messages);
-    emit(_state);
+    final newState = state.copyWith(userMessages: messages);
+    emit(newState);
   }
 }
