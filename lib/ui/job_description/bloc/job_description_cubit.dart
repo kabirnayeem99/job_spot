@@ -9,6 +9,7 @@ import 'package:job_spot/domain/entity/job_description_page_state.dart';
 import 'package:job_spot/domain/use_case/job_description/fetch_company_information_by_id_use_case.dart';
 import 'package:job_spot/domain/use_case/job_description/fetch_job_description_by_id_use_case.dart';
 
+import '../../../common/utility/utility.dart';
 import '../../../domain/entity/user_message.dart';
 
 part 'job_description_state.dart';
@@ -57,7 +58,8 @@ class JobDescriptionCubit extends Cubit<JobDescriptionState> {
 
   Future<void> selectedFilePickerResult(FilePickerResult? result) async {
     if (result == null) return;
-    List<File> files = result.paths.map((path) => File(path ?? "")).toList();
+    List<File?> files =
+        result.paths.map((path) => path != null ? File(path) : null).toList();
     emit(state.copyWith(file: files[0]));
   }
 

@@ -59,7 +59,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
       backgroundColor: const Color(0xfff5f5f7),
       body: SafeArea(
         child: SingleChildScrollView(
-          physics: ClampingScrollPhysics(),
+          physics: const ClampingScrollPhysics(),
           child: Container(
             padding: const EdgeInsets.only(left: 22.0, right: 22.0, top: 22.0),
             child: Column(
@@ -160,7 +160,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
 
   Widget _buildUploadCvButtonBox() {
     return GestureDetector(
-      onTap: () => _pickPdfFiles(),
+      onTap: () async => _pickPdfFiles(),
       child: DottedBorder(
         color: mulledWine.withOpacity(0.8),
         strokeWidth: 1.2,

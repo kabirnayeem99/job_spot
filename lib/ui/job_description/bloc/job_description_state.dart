@@ -35,13 +35,14 @@ class JobDescriptionState extends Equatable {
     File? file,
     List<UserMessage>? userMessages,
   }) {
-    return JobDescriptionState(
+    final state = JobDescriptionState(
       jobDescription: jobDescription ?? this.jobDescription,
       companyDescription: companyDescription ?? this.companyDescription,
       pageState: pageState ?? this.pageState,
       file: file ?? this.file,
       userMessages: userMessages ?? this.userMessages,
     );
+    return state;
   }
 
   @override
@@ -50,4 +51,25 @@ class JobDescriptionState extends Equatable {
         'companyDescription: $companyDescription, '
         'pageState: $pageState, file: $file}';
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      super == other &&
+          other is JobDescriptionState &&
+          runtimeType == other.runtimeType &&
+          jobDescription == other.jobDescription &&
+          companyDescription == other.companyDescription &&
+          pageState == other.pageState &&
+          file == other.file &&
+          userMessages == other.userMessages;
+
+  @override
+  int get hashCode =>
+      super.hashCode ^
+      jobDescription.hashCode ^
+      companyDescription.hashCode ^
+      pageState.hashCode ^
+      file.hashCode ^
+      userMessages.hashCode;
 }
