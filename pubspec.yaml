@@ -4,7 +4,7 @@ description: Find Your Dream Job Here!
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.2 <3.0.1"
+  sdk: ">=2.16.2 <3.0.5"
 
 dependencies:
   flutter:
@@ -15,7 +15,7 @@ dependencies:
   google_fonts: ^3.0.1
   sailor: ^0.7.1
   fluro: ^2.0.3
-  url_launcher: ^6.1.2
+  url_launcher: ^6.1.5
   google_maps_flutter: ^2.1.10
   dotted_border: ^2.0.0+2
   file_picker: ^4.6.0
