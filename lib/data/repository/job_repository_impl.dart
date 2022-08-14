@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:either_dart/src/either.dart';
 import 'package:job_spot/domain/entity/company_description.dart';
 import 'package:job_spot/domain/entity/job_description.dart';
@@ -49,7 +51,10 @@ class JobRepositoryImpl extends JobRepository {
     try {
       final RecentJobListDto dto =
           await _remoteJobDataSource.getRecentJobList();
-      final recentJobList = dto.toJobPreviewList();
+      final recentJobList = dto
+          .toJobPreviewList()
+          .map((j) => j.copyWith(isSaved: Random().nextBool()))
+          .toList();
       return Right(recentJobList);
     } on Exception catch (e) {
       logger.e(e);

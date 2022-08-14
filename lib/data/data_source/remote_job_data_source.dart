@@ -30,13 +30,14 @@ class RemoteJobDataSource {
     final List<JobSummary> jobs = List.empty(growable: true);
 
     for (int i = 0; i < 10 + Random().nextInt(20); i++) {
+      final address = _faker.address;
       final job = JobSummary(
-        title: _faker.commerce.department().toUpperCase(),
+        title: "Low-level Software Developer",
         companyName: _faker.company.companyName(),
         salaryType: Random().nextBool() ? "Monthly" : "Yearly",
         salary: "${Random().nextInt(580)}K",
         tags: tags,
-        location: "${_faker.address.cityName()}, ${_faker.address.country()}",
+        location: "${address.cityName()}, ${address.country()}",
         companyLogoUrl: _faker.image.unsplash.image(),
       );
       jobs.add(job);

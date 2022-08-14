@@ -37,7 +37,7 @@ class JobPreview {
       isSaved: isSaved ?? this.isSaved,
       salary: monthlySalary ?? salary,
       location: location ?? this.location,
-      tags: tags ?? List.empty(),
+      tags: tags ?? this.tags,
       salaryType: salaryType ?? SalaryType.monthly,
     );
   }

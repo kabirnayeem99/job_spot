@@ -62,6 +62,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
       backgroundColor: const Color(0xfff5f5f7),
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: ClampingScrollPhysics(),
           child: Container(
             padding: const EdgeInsets.only(left: 22.0, right: 22.0, top: 22.0),
             child: Column(
@@ -265,7 +266,10 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
 
   void _pickPdfFiles() async {
     try {
-      var result = await FilePicker.platform.pickFiles(allowMultiple: false);
+      var result = await FilePicker.platform.pickFiles(
+          allowMultiple: true,
+          type: FileType.custom,
+          allowedExtensions: ['pdf']);
       bloc.selectedFilePickerResult(result);
     } on Exception catch (e) {
       logger.e(e);
@@ -273,10 +277,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
   }
 
   Widget _buildTabButtons() {
-    final shouldShowCompanyTab =
-        bloc.state.pageState.name == JobDescriptionPageState.company.name;
+    final currentlySelectedTabName = bloc.state.pageState.name;
 
-    return bloc.state.pageState.name == JobDescriptionPageState.apply.name
+    final shouldShowCompanyTab =
+        currentlySelectedTabName == JobDescriptionPageState.company.name;
+
+    return currentlySelectedTabName == JobDescriptionPageState.apply.name
         ? Container()
         : Row(
             children: [

@@ -66,8 +66,7 @@ class JobDescriptionCubit extends Cubit<JobDescriptionState> {
         List<UserMessage>.from(currentMessages ?? [], growable: true);
     messages.add(UserMessage(DateTime.now().second, message));
 
-    final _state = state.copyWith(userMessages: messages);
-    emit(_state);
+    emit(state.copyWith(userMessages: messages));
   }
 
   void userMessageShown(int id) {
@@ -76,7 +75,6 @@ class JobDescriptionCubit extends Cubit<JobDescriptionState> {
         List<UserMessage>.from(currentMessages ?? [], growable: true);
     messages.removeWhere((element) => element.id == id);
 
-    final _state = state.copyWith(userMessages: messages);
-    emit(_state);
+    emit(state.copyWith(userMessages: messages));
   }
 }
