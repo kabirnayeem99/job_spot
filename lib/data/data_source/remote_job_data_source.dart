@@ -38,7 +38,8 @@ class RemoteJobDataSource {
         salary: "${Random().nextInt(580)}K",
         tags: tags,
         location: "${address.cityName()}, ${address.country()}",
-        companyLogoUrl: _faker.image.unsplash.image(),
+        companyLogoUrl:
+            Random().nextBool() ? "" : _faker.image.unsplash.image(),
       );
       jobs.add(job);
     }

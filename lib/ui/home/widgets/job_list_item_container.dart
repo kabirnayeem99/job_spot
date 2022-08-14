@@ -51,6 +51,10 @@ class JobListItemContainer extends StatelessWidget {
                         height: 40.0,
                         width: 40.0,
                         color: nightBlue,
+                        child: const Icon(
+                          UniconsLine.bag,
+                          color: Colors.white,
+                        ),
                       ),
               ),
               const SizedBox(width: 10.0),

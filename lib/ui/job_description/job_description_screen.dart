@@ -44,11 +44,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
   Widget build(BuildContext context) {
     return BlocProvider<JobDescriptionCubit>(
       create: (_) => bloc,
-      child: BlocConsumer<JobDescriptionCubit, JobDescriptionState>(
+      child: BlocBuilder<JobDescriptionCubit, JobDescriptionState>(
         bloc: bloc,
-        listener: (context, state) {
-          logger.d(state);
-        },
         builder: (context, state) {
           return _buildPage(context);
         },

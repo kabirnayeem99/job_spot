@@ -17,20 +17,27 @@ class JobDescriptionCubit extends Cubit<JobDescriptionState> {
   JobDescriptionCubit() : super(JobDescriptionState.init());
 
   void loadJobDescription(String id) async {
-    FetchCompanyInformationByIdUseCase.invoke(id).then(
-      (either) => either.fold(
-        (error) => _addUserMessage(error),
-        (companyInfo) {
-          emit(state.copyWith(companyDescription: companyInfo));
-        },
-      ),
-    );
+    _loadJob(id);
+    _loadCompany(id);
+  }
 
+  Future<void> _loadCompany(String id) async {
     FetchJobDescriptionByIdUseCase.invoke(id).then(
       (either) => either.fold(
         (error) => _addUserMessage(error),
         (jobDescription) {
           emit(state.copyWith(jobDescription: jobDescription));
+        },
+      ),
+    );
+  }
+
+  Future<void> _loadJob(String id) async {
+    FetchCompanyInformationByIdUseCase.invoke(id).then(
+      (either) => either.fold(
+        (error) => _addUserMessage(error),
+        (companyInfo) {
+          emit(state.copyWith(companyDescription: companyInfo));
         },
       ),
     );
