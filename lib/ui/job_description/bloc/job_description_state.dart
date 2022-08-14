@@ -5,12 +5,14 @@ class JobDescriptionState extends Equatable {
   final CompanyDescription? companyDescription;
   final JobDescriptionPageState pageState;
   final File? file;
+  final List<UserMessage>? userMessages;
 
   const JobDescriptionState({
     required this.jobDescription,
     required this.companyDescription,
     required this.pageState,
     required this.file,
+    required this.userMessages,
   });
 
   static JobDescriptionState init() {
@@ -19,6 +21,7 @@ class JobDescriptionState extends Equatable {
       companyDescription: null,
       file: null,
       pageState: JobDescriptionPageState.description,
+      userMessages: [],
     );
   }
 
@@ -30,12 +33,14 @@ class JobDescriptionState extends Equatable {
     CompanyDescription? companyDescription,
     JobDescriptionPageState? pageState,
     File? file,
+    List<UserMessage>? userMessages,
   }) {
     return JobDescriptionState(
       jobDescription: jobDescription ?? this.jobDescription,
       companyDescription: companyDescription ?? this.companyDescription,
       pageState: pageState ?? this.pageState,
       file: file ?? this.file,
+      userMessages: userMessages ?? this.userMessages,
     );
   }
 

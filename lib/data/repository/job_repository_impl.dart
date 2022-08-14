@@ -1,4 +1,6 @@
 import 'package:either_dart/src/either.dart';
+import 'package:job_spot/domain/entity/company_description.dart';
+import 'package:job_spot/domain/entity/job_description.dart';
 
 import '../../common/utility/utility.dart';
 import '../../domain/entity/job_preview.dart';
@@ -49,6 +51,32 @@ class JobRepositoryImpl extends JobRepository {
           await _remoteJobDataSource.getRecentJobList();
       final recentJobList = dto.toJobPreviewList();
       return Right(recentJobList);
+    } on Exception catch (e) {
+      logger.e(e);
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either<String, CompanyDescription>> getCompanyInformationById(
+      String id) async {
+    try {
+      final companyInfo = CompanyDescription.generateMockCompanyDescription();
+      logger.d(companyInfo);
+      return Right(companyInfo);
+    } on Exception catch (e) {
+      logger.e(e);
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  Future<Either<String, JobDescription>> getJobDescriptionById(
+      String id) async {
+    try {
+      final jobDescription = JobDescription.generateMockJobDescription();
+      logger.d(jobDescription);
+      return Right(jobDescription);
     } on Exception catch (e) {
       logger.e(e);
       return Left(e.toString());

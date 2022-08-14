@@ -3,17 +3,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:job_spot/common/utility/utility.dart';
-import 'package:job_spot/domain/entity/company_description.dart';
 import 'package:job_spot/domain/entity/job_type.dart';
 import 'package:job_spot/ui/job_description/bloc/job_description_cubit.dart';
 import 'package:job_spot/ui/widgets/image.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../common/theme/colors.dart';
-import '../../domain/entity/job_description.dart';
 import '../../domain/entity/job_description_page_state.dart';
 import '../widgets/primary_action_button.dart';
 
@@ -29,11 +26,6 @@ class JobDescriptionScreen extends StatefulWidget {
 class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
   late JobDescriptionCubit bloc;
 
-  JobDescriptionPageState _pageState = JobDescriptionPageState.description;
-  final jobDescription = JobDescription.generateMockJobDescription();
-  final companyDescription =
-      CompanyDescription.generateMockCompanyDescription();
-
   late GoogleMapController mapController;
 
   void _onMapCreated(GoogleMapController controller) {
@@ -43,7 +35,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
   @override
   void initState() {
     super.initState();
-    bloc = JobDescriptionCubit()..loadJobDescription("");
+    bloc = JobDescriptionCubit()..loadJobDescription("afasdf");
   }
 
   void _navigateBack(BuildContext context) => Navigator.pop(context);
@@ -54,8 +46,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
       create: (_) => bloc,
       child: BlocConsumer<JobDescriptionCubit, JobDescriptionState>(
         bloc: bloc,
-        listener: (context, state) {},
-        builder: (context, state) => _buildPage(context),
+        listener: (context, state) {
+          logger.d(state);
+        },
+        builder: (context, state) {
+          return _buildPage(context);
+        },
       ),
     );
     //
@@ -89,9 +85,10 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
 
   Widget _showFragmentBasedOnState() {
     late Widget fragment;
-    if (_pageState.name == JobDescriptionPageState.description.name) {
+    if (bloc.state.pageState.name == JobDescriptionPageState.description.name) {
       fragment = _buildJobDescriptionFragment();
-    } else if (_pageState.name == JobDescriptionPageState.company.name) {
+    } else if (bloc.state.pageState.name ==
+        JobDescriptionPageState.company.name) {
       fragment = _buildCompanyDescriptionFragment();
     } else {
       fragment = _buildJobApplyFragment();
@@ -176,7 +173,9 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           child: Container(
             color: bluePurpleAmethystSmoke.withOpacity(0.3),
             width: double.infinity,
-            child: _buildAfterUploadBox(),
+            child: bloc.state.file == null
+                ? _buildBeforeUploadBox()
+                : _buildAfterUploadBox(),
           ),
         ),
       ),
@@ -220,19 +219,22 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           ],
         ),
         const SizedBox(height: 27.0),
-        Row(
-          children: const [
-            SizedBox(width: 21.0),
-            Icon(UniconsLine.trash_alt, color: lightRed),
-            SizedBox(width: 10.0),
-            Text(
-              "Remove file",
-              style: TextStyle(
-                color: lightRed,
-                fontSize: 12.0,
+        GestureDetector(
+          onTap: () => {bloc.removeFile()},
+          child: Row(
+            children: const [
+              SizedBox(width: 21.0),
+              Icon(UniconsLine.trash_alt, color: lightRed),
+              SizedBox(width: 10.0),
+              Text(
+                "Remove file",
+                style: TextStyle(
+                  color: lightRed,
+                  fontSize: 12.0,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         const SizedBox(height: 15.0),
       ],
@@ -240,24 +242,24 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
   }
 
   Widget _buildBeforeUploadBox() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SvgPicture.asset(
-          "assets/images/svgs/ic_upload.svg",
-          height: 24.0,
-          width: 24.0,
-        ),
-        const SizedBox(width: 17.0),
-        const Text(
-          "Upload CV/Resume",
-          style: TextStyle(
+    return SizedBox(
+      height: 80.0,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: const [
+          Icon(
+            UniconsLine.upload_alt,
+            size: 24.0,
             color: mulledWine,
-            fontSize: 12.0,
           ),
-        ),
-      ],
+          SizedBox(width: 17.0),
+          Text(
+            "Upload CV/Resume",
+            style: TextStyle(color: mulledWine, fontSize: 12.0),
+          ),
+        ],
+      ),
     );
   }
 
@@ -272,15 +274,15 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
 
   Widget _buildTabButtons() {
     final shouldShowCompanyTab =
-        _pageState.name == JobDescriptionPageState.company.name;
+        bloc.state.pageState.name == JobDescriptionPageState.company.name;
 
-    return _pageState.name == JobDescriptionPageState.apply.name
+    return bloc.state.pageState.name == JobDescriptionPageState.apply.name
         ? Container()
         : Row(
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: _onDescriptionButtonClicked,
+                  onTap: () async => bloc.loadDescriptionData(),
                   child: PrimaryActionButton(
                     buttonText: "Description",
                     buttonTextColor:
@@ -293,7 +295,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
               const SizedBox(width: 9),
               Expanded(
                 child: GestureDetector(
-                  onTap: _onCompanyButtonClicked,
+                  onTap: () async => bloc.loadCompanyData(),
                   child: PrimaryActionButton(
                     buttonText: "Company",
                     buttonTextColor:
@@ -305,24 +307,6 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
               ),
             ],
           );
-  }
-
-  void _onCompanyButtonClicked() {
-    setState(() {
-      _pageState = JobDescriptionPageState.company;
-    });
-  }
-
-  void _onDescriptionButtonClicked() {
-    setState(() {
-      _pageState = JobDescriptionPageState.description;
-    });
-  }
-
-  void _onProceedToApplyClick() {
-    setState(() {
-      _pageState = JobDescriptionPageState.apply;
-    });
   }
 
   Widget _buildCompanyDescriptionFragment() {
@@ -344,7 +328,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            companyDescription.about,
+            bloc.state.companyDescription?.about ?? "",
             textAlign: TextAlign.left,
             style: const TextStyle(
               color: mulledWine,
@@ -370,7 +354,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            companyDescription.website,
+            bloc.state.companyDescription?.website ?? "N/A",
             textAlign: TextAlign.left,
             style: const TextStyle(
               decoration: TextDecoration.underline,
@@ -423,7 +407,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "${companyDescription.employees} Employees",
+            "${bloc.state.companyDescription?.employees ?? "N/A"} Employees",
             textAlign: TextAlign.left,
             style: const TextStyle(
               color: mulledWine,
@@ -449,7 +433,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            companyDescription.headOfficeAddress,
+            bloc.state.companyDescription?.headOfficeAddress ?? "N/A",
             textAlign: TextAlign.left,
             style: const TextStyle(
               color: mulledWine,
@@ -475,7 +459,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            companyDescription.type,
+            bloc.state.companyDescription?.type ?? "N/A",
             textAlign: TextAlign.left,
             style: const TextStyle(
               color: mulledWine,
@@ -501,7 +485,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "${companyDescription.foundationDate}",
+            "${bloc.state.companyDescription?.foundationDate ?? "N/A"}",
             textAlign: TextAlign.left,
             style: const TextStyle(
               color: mulledWine,
@@ -527,7 +511,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            companyDescription.specialisation,
+            bloc.state.companyDescription?.specialisation ?? "N/A",
             textAlign: TextAlign.left,
             style: const TextStyle(
               color: mulledWine,
@@ -558,7 +542,9 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6.0),
                   child: RemoteImage(
-                    imageUrl: companyDescription.companyGalleryImages[0],
+                    imageUrl: bloc.state.companyDescription
+                            ?.companyGalleryImages[0] ??
+                        "",
                     height: 158.0,
                     width: 115.0,
                   ),
@@ -569,7 +555,9 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6.0),
                   child: RemoteImage(
-                    imageUrl: companyDescription.companyGalleryImages[1],
+                    imageUrl: bloc.state.companyDescription
+                            ?.companyGalleryImages[1] ??
+                        "",
                     height: 158.0,
                   ),
                 ),
@@ -588,11 +576,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
       child: Container(
         margin: const EdgeInsets.only(left: 22.0),
         child: GestureDetector(
-          onTap: _onProceedToApplyClick,
+          onTap: () async => bloc.loadApplicationData(),
           child: PrimaryActionButton(
-            buttonText: _pageState.name == JobDescriptionPageState.apply.name
-                ? "apply now"
-                : "proceed to apply",
+            buttonText:
+                bloc.state.pageState.name == JobDescriptionPageState.apply.name
+                    ? "apply now"
+                    : "proceed to apply",
             width: 270.0,
           ),
         ),
@@ -605,20 +594,22 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(100.0),
-          child: (jobDescription.companyLogoImageUrl ?? "").isNotEmpty
-              ? RemoteImage(
-                  imageUrl: jobDescription.companyLogoImageUrl ?? "",
-                  height: 84,
-                  width: 84,
-                )
-              : const SizedBox(
-                  height: 84,
-                  width: 84,
-                ),
+          child:
+              (bloc.state.jobDescription?.companyLogoImageUrl ?? "").isNotEmpty
+                  ? RemoteImage(
+                      imageUrl:
+                          bloc.state.jobDescription?.companyLogoImageUrl ?? "",
+                      height: 84,
+                      width: 84,
+                    )
+                  : const SizedBox(
+                      height: 84,
+                      width: 84,
+                    ),
         ),
         const SizedBox(height: 14),
         Text(
-          jobDescription.title ?? "",
+          bloc.state.jobDescription?.title ?? "",
           style: const TextStyle(
             color: nightBlue,
             fontWeight: FontWeight.w700,
@@ -630,7 +621,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              jobDescription.companyName ?? "",
+              bloc.state.jobDescription?.companyName ?? "",
               style: const TextStyle(
                 color: nightBlue,
                 fontWeight: FontWeight.w400,
@@ -646,7 +637,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
               ),
             ),
             Text(
-              jobDescription.city ?? "",
+              bloc.state.jobDescription?.city ?? "",
               style: const TextStyle(
                 color: nightBlue,
                 fontWeight: FontWeight.w400,
@@ -662,7 +653,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
               ),
             ),
             Text(
-              jobDescription.timePassed ?? "Just now",
+              bloc.state.jobDescription?.timePassed ?? "Just now",
               style: const TextStyle(
                 color: nightBlue,
                 fontWeight: FontWeight.w400,
@@ -713,7 +704,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            jobDescription.shortDescription ?? "",
+            bloc.state.jobDescription?.shortDescription ?? "N/A",
             textAlign: TextAlign.left,
             style: const TextStyle(
               color: mulledWine,
@@ -751,7 +742,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            jobDescription.requirements ?? "",
+            bloc.state.jobDescription?.requirements ?? "N/A",
             textAlign: TextAlign.left,
             style: const TextStyle(
               color: mulledWine,
@@ -777,7 +768,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            jobDescription.location?.fullAddress ?? "",
+            bloc.state.jobDescription?.location?.fullAddress ?? "N/A",
             textAlign: TextAlign.left,
             style: const TextStyle(
               color: mulledWine,
@@ -818,7 +809,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            jobDescription.title ?? "",
+            bloc.state.jobDescription?.title ?? "N/A",
             textAlign: TextAlign.left,
             style: const TextStyle(
               color: blackHaiti,
@@ -849,7 +840,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            jobDescription.qualification ?? "",
+            bloc.state.jobDescription?.qualification ?? "N/A",
             textAlign: TextAlign.left,
             style: const TextStyle(
               color: blackHaiti,
@@ -881,7 +872,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           alignment: Alignment.topLeft,
           child: Text(
             getJobTypeDisplayNameByEnum(
-                jobDescription.jobType ?? JobType.fullTime),
+              bloc.state.jobDescription?.jobType ?? JobType.fullTime,
+            ),
             textAlign: TextAlign.left,
             style: const TextStyle(
               color: blackHaiti,
@@ -912,7 +904,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            jobDescription.specialisation ?? "",
+            bloc.state.jobDescription?.specialisation ?? "N/A",
             textAlign: TextAlign.left,
             style: const TextStyle(
               color: blackHaiti,
@@ -943,7 +935,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            jobDescription.facilities ?? "",
+            bloc.state.jobDescription?.facilities ?? "N/A",
             textAlign: TextAlign.left,
             style: const TextStyle(
               color: blackHaiti,
@@ -983,17 +975,18 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         markers: {
           Marker(
             markerId: const MarkerId("bugicugi"),
-            position: LatLng(jobDescription.location?.latitude ?? 0.0,
-                jobDescription.location?.longitude ?? 0.0),
+            position: LatLng(
+                bloc.state.jobDescription?.location?.latitude ?? 0.0,
+                bloc.state.jobDescription?.location?.longitude ?? 0.0),
             infoWindow: InfoWindow(
-              title: jobDescription.companyName ?? "",
-              snippet: jobDescription.location?.fullAddress ?? "",
+              title: bloc.state.jobDescription?.companyName ?? "",
+              snippet: bloc.state.jobDescription?.location?.fullAddress ?? "",
             ),
           )
         },
         initialCameraPosition: CameraPosition(
-          target: LatLng(jobDescription.location?.latitude ?? 0.0,
-              jobDescription.location?.longitude ?? 0.0),
+          target: LatLng(bloc.state.jobDescription?.location?.latitude ?? 0.0,
+              bloc.state.jobDescription?.location?.longitude ?? 0.0),
           zoom: 15.0,
         ),
       ),
