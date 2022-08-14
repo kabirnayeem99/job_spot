@@ -6,9 +6,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../common/theme/colors.dart';
-import '../../domain/entity/job_description_page_state.dart';
+import 'package:job_spot/domain/entity/company_description.dart';
+import 'package:job_spot/domain/entity/job_type.dart';
 
+import '../../common/theme/colors.dart';
+import '../../domain/entity/job_description.dart';
+import '../../domain/entity/job_description_page_state.dart';
 import '../widgets/primary_action_button.dart';
 
 const jobDescScreenNavRouteName = "job_description_screen/";
@@ -22,10 +25,11 @@ class JobDescriptionScreen extends StatefulWidget {
 
 class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
   JobDescriptionPageState _pageState = JobDescriptionPageState.description;
+  final jobDescription = JobDescription.generateMockJobDescription();
+  final companyDescription =
+      CompanyDescription.generateMockCompanyDescription();
 
   late GoogleMapController mapController;
-
-  final LatLng _center = const LatLng(22.313999275669637, 91.80758944137361);
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -342,12 +346,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        const Align(
+        Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem ...",
+            companyDescription.about,
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: const TextStyle(
               color: mulledWine,
               fontWeight: FontWeight.w400,
               fontSize: 12,
@@ -368,12 +372,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        const Align(
+        Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "www.ubuntu.org",
+            companyDescription.website,
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: const TextStyle(
               decoration: TextDecoration.underline,
               color: Colors.blueAccent,
               fontWeight: FontWeight.w400,
@@ -421,12 +425,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        const Align(
+        Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "121,145 Employees",
+            "${companyDescription.employees} Employees",
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: const TextStyle(
               color: mulledWine,
               fontWeight: FontWeight.w400,
               fontSize: 12,
@@ -447,12 +451,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             ),
           ),
         ),
-        const Align(
+        Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "Naya Bazar, Chittagong",
+            companyDescription.headOfficeAddress,
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: const TextStyle(
               color: mulledWine,
               fontWeight: FontWeight.w400,
               fontSize: 12,
@@ -473,12 +477,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        const Align(
+        Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "Multinational Company",
+            companyDescription.type,
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: const TextStyle(
               color: mulledWine,
               fontWeight: FontWeight.w400,
               fontSize: 12,
@@ -499,12 +503,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        const Align(
+        Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "1998",
+            "${companyDescription.foundationDate}",
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: const TextStyle(
               color: mulledWine,
               fontWeight: FontWeight.w400,
               fontSize: 12,
@@ -525,12 +529,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        const Align(
+        Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "Operating system, Open Source, FOSS Movement, IOT",
+            companyDescription.specialisation,
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: const TextStyle(
               color: mulledWine,
               fontWeight: FontWeight.w400,
               fontSize: 12,
@@ -559,7 +563,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6.0),
                   child: Image.network(
-                    "https://i.dailymail.co.uk/i/pix/2015/05/19/17/28DDC0C500000578-3088186-image-m-4_1432053736097.jpg",
+                    companyDescription.companyGalleryImages[0],
                     fit: BoxFit.cover,
                     height: 158.0,
                     width: 115.0,
@@ -571,7 +575,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6.0),
                   child: Image.network(
-                    "https://i.dailymail.co.uk/i/pix/2015/05/19/17/28DDC0C500000578-3088186-image-m-4_1432053736097.jpg",
+                    companyDescription.companyGalleryImages[1],
                     fit: BoxFit.cover,
                     height: 158.0,
                   ),
@@ -608,16 +612,22 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(100.0),
-          child: Image.network(
-            "https://cdn1.iconfinder.com/data/icons/metro-ui-dock-icon-set--icons-by-dakirby/512/Ubuntu_alt.png",
-            height: 84,
-            width: 84,
-          ),
+          child: (jobDescription.companyLogoImageUrl ?? "").isNotEmpty
+              ? Image.network(
+                  jobDescription.companyLogoImageUrl ?? "",
+                  height: 84,
+                  fit: BoxFit.cover,
+                  width: 84,
+                )
+              : const SizedBox(
+                  height: 84,
+                  width: 84,
+                ),
         ),
         const SizedBox(height: 14),
-        const Text(
-          "UI/UX Designer",
-          style: TextStyle(
+        Text(
+          jobDescription.title ?? "",
+          style: const TextStyle(
             color: nightBlue,
             fontWeight: FontWeight.w700,
             fontSize: 16,
@@ -626,16 +636,16 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         const SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: const [
+          children: [
             Text(
-              "Ubuntu",
-              style: TextStyle(
+              jobDescription.companyName ?? "",
+              style: const TextStyle(
                 color: nightBlue,
                 fontWeight: FontWeight.w400,
                 fontSize: 16,
               ),
             ),
-            Text(
+            const Text(
               "•",
               style: TextStyle(
                 color: nightBlue,
@@ -644,14 +654,14 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
               ),
             ),
             Text(
-              "California",
-              style: TextStyle(
+              jobDescription.city ?? "",
+              style: const TextStyle(
                 color: nightBlue,
                 fontWeight: FontWeight.w400,
                 fontSize: 16,
               ),
             ),
-            Text(
+            const Text(
               "•",
               style: TextStyle(
                 color: nightBlue,
@@ -660,8 +670,8 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
               ),
             ),
             Text(
-              "1 day ago",
-              style: TextStyle(
+              jobDescription.timePassed ?? "Just now",
+              style: const TextStyle(
                 color: nightBlue,
                 fontWeight: FontWeight.w400,
                 fontSize: 16,
@@ -710,12 +720,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        const Align(
+        Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem ...",
+            jobDescription.shortDescription ?? "",
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: const TextStyle(
               color: mulledWine,
               fontWeight: FontWeight.w400,
               fontSize: 12,
@@ -748,13 +758,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        const Align(
+        Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "• Lorem Ispum Lorem\n• Lorem Ispum Loremdadf fdskfasdkj \n• Lorem Ispum Lorem\n• Lorem Ispum Lorem"
-            "\n• Lorem Ispum Lorem",
+            jobDescription.requirements ?? "",
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: const TextStyle(
               color: mulledWine,
               fontWeight: FontWeight.w400,
               fontSize: 12,
@@ -775,12 +784,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           ),
         ),
         const SizedBox(height: 15),
-        const Align(
+        Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "Shapla Abashik Jame Mosjid Rd, Chattogram",
+            jobDescription.location?.fullAddress ?? "",
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: const TextStyle(
               color: mulledWine,
               fontWeight: FontWeight.w400,
               fontSize: 12,
@@ -816,12 +825,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           ),
         ),
         const SizedBox(height: 5),
-        const Align(
+        Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "UI/UX Designer",
+            jobDescription.title ?? "",
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: const TextStyle(
               color: blackHaiti,
               fontWeight: FontWeight.w400,
               fontSize: 12,
@@ -847,12 +856,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           ),
         ),
         const SizedBox(height: 5),
-        const Align(
+        Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "Bachelor's Degree",
+            jobDescription.qualification ?? "",
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: const TextStyle(
               color: blackHaiti,
               fontWeight: FontWeight.w400,
               fontSize: 12,
@@ -878,12 +887,13 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           ),
         ),
         const SizedBox(height: 5),
-        const Align(
+        Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "Full-time",
+            getJobTypeDisplayNameByEnum(
+                jobDescription.jobType ?? JobType.fullTime),
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: const TextStyle(
               color: blackHaiti,
               fontWeight: FontWeight.w400,
               fontSize: 12,
@@ -909,12 +919,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           ),
         ),
         const SizedBox(height: 5),
-        const Align(
+        Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "Design",
+            jobDescription.specialisation ?? "",
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: const TextStyle(
               color: blackHaiti,
               fontWeight: FontWeight.w400,
               fontSize: 12,
@@ -940,12 +950,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
           ),
         ),
         const SizedBox(height: 5),
-        const Align(
+        Align(
           alignment: Alignment.topLeft,
           child: Text(
-            "• The main job is to run & monitor sales & marketing department.\n• Execute physical & digital marketing plan as per market feedback.\n• Generate innovative marketing ideas for promoting software products like ERP, Retail POS, Accounting applications etc.",
+            jobDescription.facilities ?? "",
             textAlign: TextAlign.left,
-            style: TextStyle(
+            style: const TextStyle(
               color: blackHaiti,
               fontWeight: FontWeight.w400,
               fontSize: 12,
@@ -983,15 +993,17 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         markers: {
           Marker(
             markerId: const MarkerId("bugicugi"),
-            position: _center,
-            infoWindow: const InfoWindow(
-              title: "Ubuntu",
-              snippet: "Shapla Abashik Jame Mosjid Rd, Chattogram",
+            position: LatLng(jobDescription.location?.latitude ?? 0.0,
+                jobDescription.location?.longitude ?? 0.0),
+            infoWindow: InfoWindow(
+              title: jobDescription.companyName ?? "",
+              snippet: jobDescription.location?.fullAddress ?? "",
             ),
           )
         },
         initialCameraPosition: CameraPosition(
-          target: _center,
+          target: LatLng(jobDescription.location?.latitude ?? 0.0,
+              jobDescription.location?.longitude ?? 0.0),
           zoom: 15.0,
         ),
       ),
