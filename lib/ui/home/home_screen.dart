@@ -1,9 +1,9 @@
 import 'package:floading/floading.dart';
 import 'package:fluro/fluro.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:job_spot/ui/home/bloc/home_cubit.dart';
+import 'package:unicons/unicons.dart';
 
 import '../../common/theme/colors.dart';
 import '../../domain/entity/job_preview.dart';
@@ -82,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Container(
           margin: const EdgeInsets.only(left: 22.0, right: 22.0, top: 18),
           child: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -151,7 +152,7 @@ class _JobOverViewGrid extends StatelessWidget {
     return Row(
       children: [
         _RemoteJobsCounterGridItem(remoteJobsCount: remoteJobsCount),
-        const SizedBox(width: 20.0),
+        const SizedBox(width: 12.0),
         Expanded(
           child: SizedBox(
             height: 170.0,
@@ -182,10 +183,10 @@ class _PartTimeJobsCounterGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 75.0,
+      height: 78.0,
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6.0),
+        borderRadius: BorderRadius.circular(12.0),
         color: orangeLightApricot,
       ),
       child: Column(
@@ -225,9 +226,9 @@ class _FullTimeJobsCounterGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 75.0,
+      height: 78.0,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6.0),
+        borderRadius: BorderRadius.circular(12.0),
         color: violetPale,
       ),
       child: Column(
@@ -269,7 +270,7 @@ class _RemoteJobsCounterGridItem extends StatelessWidget {
       child: Container(
         height: 170.0,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6.0),
+          borderRadius: BorderRadius.circular(12.0),
           color: bluishCyanFrenchPass,
         ),
         child: Column(
@@ -277,7 +278,7 @@ class _RemoteJobsCounterGridItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Icon(
-              CupertinoIcons.compass,
+              UniconsLine.compass,
               size: 34.0,
               color: darkIndigo,
             ),
@@ -436,7 +437,7 @@ class _OfferSlider extends StatelessWidget {
       width: double.infinity,
       height: 140,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6.0),
+        borderRadius: BorderRadius.circular(12.0),
         color: darkIndigo,
       ),
       child: offers.isNotEmpty

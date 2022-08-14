@@ -2,8 +2,8 @@ import 'package:floading/floading.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:job_spot/ui/auth/log_in/bloc/log_in_cubit.dart';
+import 'package:unicons/unicons.dart';
 
 import '../../../common/theme/colors.dart';
 import '../../home/home_screen.dart';
@@ -241,7 +241,7 @@ class _PasswordTextInput extends StatelessWidget {
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontWeight: FontWeight.w700,
-                fontSize: 12.0,
+                fontSize: 14.0,
                 color: nightBlue,
               ),
             ),
@@ -265,18 +265,14 @@ class _PasswordTextInput extends StatelessWidget {
                   child: TextField(
                     obscureText: true,
                     onChanged: (pass) => bloc.passwordChanged(pass),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: InputBorder.none,
                       suffixIcon: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12.0),
-                        child: SvgPicture.asset(
-                          "assets/images/svgs/ic_hidden_eye.svg",
-                          height: 24.0,
-                          width: 24.0,
-                        ),
+                        padding: EdgeInsets.symmetric(vertical: 12.0),
+                        child: Icon(UniconsLine.eye_slash),
                       ),
                       hintText: "•••••••",
-                      hintStyle: const TextStyle(
+                      hintStyle: TextStyle(
                         color: transCongressBlue,
                       ),
                     ),
@@ -352,7 +348,7 @@ class _EmailTextInput extends StatelessWidget {
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.w700,
-              fontSize: 12.0,
+              fontSize: 14.0,
               color: nightBlue,
             ),
           ),

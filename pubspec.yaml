@@ -27,6 +27,7 @@ dependencies:
   faker_dart: ^0.1.6
   equatable: ^2.0.3
   cached_network_image: ^3.2.1
+  unicons: ^2.1.0
 
 dev_dependencies:
   flutter_test:

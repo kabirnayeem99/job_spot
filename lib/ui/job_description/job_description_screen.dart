@@ -10,6 +10,7 @@ import 'package:job_spot/common/utility/utility.dart';
 import 'package:job_spot/domain/entity/company_description.dart';
 import 'package:job_spot/domain/entity/job_type.dart';
 import 'package:job_spot/ui/widgets/image.dart';
+import 'package:unicons/unicons.dart';
 
 import '../../common/theme/colors.dart';
 import '../../domain/entity/job_description.dart';
@@ -172,10 +173,10 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         Row(
           children: [
             const SizedBox(width: 15.0),
-            SvgPicture.asset(
-              "assets/images/svgs/ic_pdf_file.svg",
-              height: 44.0,
-              width: 44.0,
+            const Icon(
+              UniconsLine.document_info,
+              color: lightRed,
+              size: 44.0,
             ),
             const SizedBox(width: 20.0),
             Column(
@@ -202,15 +203,11 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
         ),
         const SizedBox(height: 27.0),
         Row(
-          children: [
-            const SizedBox(width: 21.0),
-            SvgPicture.asset(
-              "assets/images/svgs/ic_delete.svg",
-              height: 24.0,
-              width: 24.0,
-            ),
-            const SizedBox(width: 10.0),
-            const Text(
+          children: const [
+            SizedBox(width: 21.0),
+            Icon(UniconsLine.trash_alt, color: lightRed),
+            SizedBox(width: 10.0),
+            Text(
               "Remove file",
               style: TextStyle(
                 color: lightRed,
@@ -684,16 +681,14 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
       children: [
         GestureDetector(
           onTap: () => _navigateBack(context),
-          child: SvgPicture.asset(
-            "assets/images/svgs/ic_back_arrow.svg",
-            height: 24,
-            width: 24,
+          child: const Icon(
+            UniconsLine.angle_left_b,
+            size: 32.0,
           ),
         ),
-        SvgPicture.asset(
-          "assets/images/svgs/ic_more_vert.svg",
-          height: 24,
-          width: 24,
+        const Icon(
+          UniconsLine.ellipsis_v,
+          size: 28.0,
         ),
       ],
     );

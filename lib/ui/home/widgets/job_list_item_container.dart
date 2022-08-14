@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:job_spot/ui/widgets/image.dart';
+import 'package:unicons/unicons.dart';
 
 import '../../../common/theme/colors.dart';
 import '../../../domain/entity/job_preview.dart';
@@ -95,9 +96,7 @@ class JobListItemContainer extends StatelessWidget {
               ),
               Expanded(child: Container()),
               Icon(
-                job.isSaved
-                    ? CupertinoIcons.bookmark_fill
-                    : CupertinoIcons.bookmark,
+                job.isSaved ? UniconsLine.bookmark : UniconsSolid.bookmark,
                 color: darkIndigo,
                 size: 20.0,
               )
