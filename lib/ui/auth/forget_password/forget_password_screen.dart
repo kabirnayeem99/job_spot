@@ -2,6 +2,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:job_spot/ui/auth/forget_password/bloc/forget_password_cubit.dart';
 
 import '../../../common/theme/colors.dart';
@@ -21,16 +22,8 @@ class ForgetPasswordScreen extends StatefulWidget {
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
     with SingleTickerProviderStateMixin {
-  late FluroRouter router;
-  late ForgetPasswordCubit bloc;
-
-  @override
-  void initState() {
-    super.initState();
-    dismissKeyboard();
-    router = FluroRouter.appRouter;
-    bloc = ForgetPasswordCubit();
-  }
+  late FluroRouter router = FluroRouter.appRouter;
+  late ForgetPasswordCubit bloc = GetIt.I.get();
 
   @override
   void dispose() {

@@ -2,6 +2,7 @@ import 'package:floading/floading.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:job_spot/ui/auth/log_in/bloc/log_in_cubit.dart';
 import 'package:unicons/unicons.dart';
 
@@ -22,15 +23,8 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInScreenState extends State<LogInScreen> {
-  late FluroRouter _router;
-  late LogInCubit bloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _router = FluroRouter.appRouter;
-    bloc = LogInCubit();
-  }
+  late final FluroRouter _router = FluroRouter.appRouter;
+  late LogInCubit bloc = GetIt.I.get();
 
   @override
   Widget build(BuildContext context) {

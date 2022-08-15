@@ -1,10 +1,12 @@
 import 'package:either_dart/either.dart';
-import 'package:job_spot/data/repository/job_repository_impl.dart';
+import 'package:get_it/get_it.dart';
 import 'package:job_spot/domain/entity/job_description.dart';
+
+import '../../repository/job_repository.dart';
 
 class FetchJobDescriptionByIdUseCase {
   final String _id;
-  final _repo = JobRepositoryImpl();
+  final _repo = GetIt.I.get<JobRepository>();
 
   FetchJobDescriptionByIdUseCase(this._id);
 

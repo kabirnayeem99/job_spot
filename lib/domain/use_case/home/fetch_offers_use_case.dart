@@ -1,12 +1,12 @@
 import 'package:either_dart/either.dart';
+import 'package:get_it/get_it.dart';
 
-import '../../../data/repository/offer_repository_impl.dart';
 import '../../entity/offer.dart';
 import '../../repository/offer_repository.dart';
 
 class FetchOffersUseCase {
   static Future<Either<String, List<Offer>>> fetchOffers() {
-    final OfferRepository offerRepository = OfferRepositoryImpl();
-    return offerRepository.getOffers();
+    final repository = GetIt.I.get<OfferRepository>();
+    return repository.getOffers();
   }
 }

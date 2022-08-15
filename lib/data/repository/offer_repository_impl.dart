@@ -6,7 +6,9 @@ import '../../domain/repository/offer_repository.dart';
 import '../data_source/remote_offer_data_source.dart';
 
 class OfferRepositoryImpl extends OfferRepository {
-  final _offerRemoteDataSource = RemoteOfferDataSource();
+  final RemoteOfferDataSource _offerRemoteDataSource;
+
+  OfferRepositoryImpl(this._offerRemoteDataSource);
 
   @override
   Future<Either<String, List<Offer>>> getOffers() async {

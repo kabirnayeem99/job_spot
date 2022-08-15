@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:either_dart/src/either.dart';
+import 'package:either_dart/either.dart';
 import 'package:job_spot/domain/entity/company_description.dart';
 import 'package:job_spot/domain/entity/job_description.dart';
 
@@ -11,7 +11,9 @@ import '../data_source/remote_job_data_source.dart';
 import '../dto/recent_job_list_dto.dart';
 
 class JobRepositoryImpl extends JobRepository {
-  final _remoteJobDataSource = RemoteJobDataSource();
+  final RemoteJobDataSource _remoteJobDataSource;
+
+  JobRepositoryImpl(this._remoteJobDataSource);
 
   @override
   Future<Either<String, int>> getFullTimeJobCount() async {

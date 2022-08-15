@@ -2,12 +2,13 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_it/get_it.dart';
+
 import '../../common/theme/colors.dart';
 import '../../common/utility/utility.dart';
+import '../auth/intro/intro_screen.dart';
 import '../home/home_screen.dart';
 import 'bloc/splash_bloc.dart';
-
-import '../auth/intro/intro_screen.dart';
 
 const splashScreenNavigationRouteName = "/";
 
@@ -19,16 +20,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  FluroRouter? router;
-  late SplashBloc bloc;
-
-  @override
-  void initState() {
-    router ??= FluroRouter.appRouter;
-    bloc = SplashBloc();
-    dismissKeyboard();
-    super.initState();
-  }
+  late FluroRouter router = FluroRouter.appRouter;
+  late SplashBloc bloc = GetIt.I.get<SplashBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -59,20 +52,20 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _navigateToIntroScreen(BuildContext context) {
-    router?.navigateTo(
+    router.navigateTo(
       context,
       introScreenNavigationRouteName,
-      transition: TransitionType.cupertino,
-      replace: true,
+      transition: TransitionType.fadeIn,
+      clearStack: true,
     );
   }
 
   void _navigateToHomeScreen(BuildContext context) {
-    router?.navigateTo(
+    router.navigateTo(
       context,
       homeScreenNavRouteName,
-      transition: TransitionType.cupertino,
-      replace: true,
+      transition: TransitionType.fadeIn,
+      clearStack: true,
     );
   }
 

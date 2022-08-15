@@ -2,6 +2,7 @@ import 'package:floading/floading.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:job_spot/ui/home/bloc/home_cubit.dart';
 import 'package:unicons/unicons.dart';
 
@@ -24,27 +25,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  FluroRouter? router;
-  HomeCubit? bloc = HomeCubit();
-
-  @override
-  void initState() {
-    bloc ??= HomeCubit();
-    super.initState();
-    router ??= FluroRouter.appRouter;
-  }
-
-  @override
-  void dispose() {
-    bloc = null;
-    router = null;
-    super.dispose();
-  }
+  FluroRouter router = FluroRouter.appRouter;
+  late HomeCubit bloc = GetIt.I.get<HomeCubit>();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<HomeCubit>(
-      create: (_) => bloc ?? HomeCubit(),
+      create: (_) => bloc,
       child: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
           _showUserMessage(state);
@@ -65,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final snackBar = SnackBar(content: Text(userMessage.message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-    bloc?.userMessageShown(userMessage.id);
+    bloc.userMessageShown(userMessage.id);
   }
 
   void _showLoadingIndicatorWhileNeeded(HomeState state) {
@@ -87,12 +74,11 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 _HomeAppBar(
-                  fullUserName: bloc?.state.fullUserName ?? "",
-                  userProfilePictureUrl:
-                      bloc?.state.userProfilePictureUrl ?? "",
+                  fullUserName: bloc.state.fullUserName ?? "",
+                  userProfilePictureUrl: bloc.state.userProfilePictureUrl ?? "",
                 ),
                 const SizedBox(height: 38.0),
-                _OfferSlider(offers: bloc?.state.offers ?? []),
+                _OfferSlider(offers: bloc.state.offers ?? []),
                 const SizedBox(height: 24.0),
                 const _FindYourJobTitle(),
                 const SizedBox(height: 24.0),
@@ -104,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 19.0),
                 const _RecentJobTitle(),
                 const SizedBox(height: 16.0),
-                _RecentJobList(recentJobs: bloc?.state.recentJobs ?? []),
+                _RecentJobList(recentJobs: bloc.state.recentJobs ?? []),
               ],
             ),
           ),

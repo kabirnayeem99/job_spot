@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../../../common/utility/validator.dart';
-import '../../../../data/repository/auth_repository_impl.dart';
 import '../../../repository/auth_repository.dart';
 
 class LogInWithEmailAndPasswordUseCase {
@@ -9,7 +9,7 @@ class LogInWithEmailAndPasswordUseCase {
     String? email,
     String? password,
   ) async {
-    final AuthRepository repository = AuthRepositoryImpl();
+    final repository = GetIt.I.get<AuthRepository>();
 
     final emailValidator = isEmailValid(email);
     final emailValid = emailValidator.isRight;

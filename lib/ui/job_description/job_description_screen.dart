@@ -1,8 +1,10 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:job_spot/common/utility/utility.dart';
 import 'package:job_spot/domain/entity/job_type.dart';
@@ -24,21 +26,16 @@ class JobDescriptionScreen extends StatefulWidget {
 }
 
 class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
-  late JobDescriptionCubit bloc;
+  late JobDescriptionCubit bloc = GetIt.I.get<JobDescriptionCubit>();
+  late FluroRouter router = FluroRouter.appRouter;
 
   late GoogleMapController mapController;
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
 
   @override
   void initState() {
     super.initState();
     bloc = JobDescriptionCubit()..loadJobDescription("afasdf");
   }
-
-  void _navigateBack(BuildContext context) => Navigator.pop(context);
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +50,12 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
     );
     //
   }
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  void _navigateBack(BuildContext context) => router.pop(context);
 
   Scaffold _buildPage(BuildContext context) {
     return Scaffold(

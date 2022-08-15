@@ -1,11 +1,14 @@
 import 'package:either_dart/either.dart';
+
 import '../../common/utility/utility.dart';
-import '../data_source/remote_profile_data_Source.dart';
 import '../../domain/entity/profile.dart';
 import '../../domain/repository/profile_repository.dart';
+import '../data_source/remote_profile_data_Source.dart';
 
 class ProfileRepositoryImpl extends ProfileRepository {
-  final _profileRemoteDataSource = RemoteProfileDataSource();
+  final RemoteProfileDataSource _profileRemoteDataSource;
+
+  ProfileRepositoryImpl(this._profileRemoteDataSource);
 
   @override
   Future<Either<String, Profile>> getProfileData() async {

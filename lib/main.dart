@@ -5,8 +5,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'common/config/app.dart';
 import 'common/config/routes.dart';
+import 'common/service_locator/service_locator.dart';
 
-void main() async => runApp(const JobSpotApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initialiseServices();
+  runApp(const JobSpotApp());
+}
 
 class JobSpotApp extends StatefulWidget {
   const JobSpotApp({Key? key}) : super(key: key);

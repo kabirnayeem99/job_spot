@@ -1,20 +1,23 @@
 import 'package:either_dart/either.dart';
+
 import '../../common/utility/utility.dart';
-import '../data_source/remote_auth_data_source.dart';
 import '../../domain/repository/auth_repository.dart';
+import '../data_source/remote_auth_data_source.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
-  final authRemoteDataSource = RemoteAuthDataSource();
+  final RemoteAuthDataSource _authRemoteDataSource;
+
+  AuthRepositoryImpl(this._authRemoteDataSource);
 
   @override
   Future<bool> isUserAuthenticated() async {
-    return authRemoteDataSource.isUserAuthenticated();
+    return _authRemoteDataSource.isUserAuthenticated();
   }
 
   @override
   Future<Either<String, bool>> logInWithGoogle() async {
     try {
-      authRemoteDataSource.logInWithGoogle();
+      _authRemoteDataSource.logInWithGoogle();
       return const Right(true);
     } catch (e) {
       logger.e(e);
@@ -28,7 +31,7 @@ class AuthRepositoryImpl extends AuthRepository {
     String password,
   ) async {
     try {
-      authRemoteDataSource.logInWithEmailAndPassword(email, password);
+      _authRemoteDataSource.logInWithEmailAndPassword(email, password);
       return const Right(true);
     } catch (e) {
       logger.e(e);
@@ -39,7 +42,7 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either<String, bool>> sendRecoveryEmail(String email) async {
     try {
-      authRemoteDataSource.sendRecoveryEmail(email);
+      _authRemoteDataSource.sendRecoveryEmail(email);
       return const Right(true);
     } on Exception catch (e) {
       logger.e(e);
