@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:job_spot/common/utility/utility.dart';
+import '../../common/utility/utility.dart';
 
 class RemoteImage extends StatelessWidget {
   final String imageUrl;

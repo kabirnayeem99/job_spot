@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:either_dart/either.dart';
-import 'package:job_spot/domain/entity/company_description.dart';
-import 'package:job_spot/domain/entity/job_description.dart';
+import '../../domain/entity/company_description.dart';
+import '../../domain/entity/job_description.dart';
 
 import '../../common/utility/utility.dart';
 import '../../domain/entity/job_preview.dart';

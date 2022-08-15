@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:job_spot/ui/auth/forget_password/bloc/forget_password_cubit.dart';
+import 'bloc/forget_password_cubit.dart';
 
 import '../../../common/theme/colors.dart';
 import '../../../common/utility/utility.dart';

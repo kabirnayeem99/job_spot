@@ -2,8 +2,8 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:job_spot/ui/auth/forget_password/bloc/forget_password_cubit.dart';
-import 'package:job_spot/ui/auth/log_in/log_in_screen.dart';
+import 'bloc/forget_password_cubit.dart';
+import '../log_in/log_in_screen.dart';
 
 import '../../../common/theme/colors.dart';
 import '../../../common/utility/utility.dart';

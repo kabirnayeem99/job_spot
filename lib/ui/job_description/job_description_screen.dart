@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:job_spot/common/utility/utility.dart';
-import 'package:job_spot/domain/entity/job_type.dart';
-import 'package:job_spot/ui/job_description/bloc/job_description_cubit.dart';
-import 'package:job_spot/ui/widgets/image.dart';
+import '../../common/utility/utility.dart';
+import '../../domain/entity/job_type.dart';
+import 'bloc/job_description_cubit.dart';
+import '../widgets/image.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../common/theme/colors.dart';

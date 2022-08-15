@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:faker_dart/faker_dart.dart';
-import 'package:job_spot/common/utility/utility.dart';
+import '../../common/utility/utility.dart';
 
 import '../dto/recent_job_list_dto.dart';
 

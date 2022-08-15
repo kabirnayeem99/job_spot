@@ -1,15 +1,15 @@
 import 'package:get_it/get_it.dart';
-import 'package:job_spot/data/data_source/remote_auth_data_source.dart';
-import 'package:job_spot/data/data_source/remote_job_data_source.dart';
-import 'package:job_spot/data/data_source/remote_offer_data_source.dart';
-import 'package:job_spot/data/data_source/remote_profile_data_Source.dart';
-import 'package:job_spot/data/repository/auth_repository_impl.dart';
-import 'package:job_spot/data/repository/job_repository_impl.dart';
-import 'package:job_spot/data/repository/profile_repository_impl.dart';
-import 'package:job_spot/domain/repository/auth_repository.dart';
-import 'package:job_spot/domain/repository/job_repository.dart';
-import 'package:job_spot/domain/repository/offer_repository.dart';
-import 'package:job_spot/domain/repository/profile_repository.dart';
+import '../../data/data_source/remote_auth_data_source.dart';
+import '../../data/data_source/remote_job_data_source.dart';
+import '../../data/data_source/remote_offer_data_source.dart';
+import '../../data/data_source/remote_profile_data_Source.dart';
+import '../../data/repository/auth_repository_impl.dart';
+import '../../data/repository/job_repository_impl.dart';
+import '../../data/repository/profile_repository_impl.dart';
+import '../../domain/repository/auth_repository.dart';
+import '../../domain/repository/job_repository.dart';
+import '../../domain/repository/offer_repository.dart';
+import '../../domain/repository/profile_repository.dart';
 
 import '../../data/repository/offer_repository_impl.dart';
 

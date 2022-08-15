@@ -3,7 +3,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:job_spot/ui/auth/log_in/bloc/log_in_cubit.dart';
+import 'bloc/log_in_cubit.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../../common/theme/colors.dart';

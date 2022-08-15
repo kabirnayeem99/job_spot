@@ -3,14 +3,13 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:job_spot/domain/entity/company_description.dart';
-import 'package:job_spot/domain/entity/job_description.dart';
-import 'package:job_spot/domain/entity/job_description_page_state.dart';
-import 'package:job_spot/domain/use_case/job_description/fetch_company_information_by_id_use_case.dart';
-import 'package:job_spot/domain/use_case/job_description/fetch_job_description_by_id_use_case.dart';
 
-import '../../../common/utility/utility.dart';
+import '../../../domain/entity/company_description.dart';
+import '../../../domain/entity/job_description.dart';
+import '../../../domain/entity/job_description_page_state.dart';
 import '../../../domain/entity/user_message.dart';
+import '../../../domain/use_case/job_description/fetch_company_information_by_id_use_case.dart';
+import '../../../domain/use_case/job_description/fetch_job_description_by_id_use_case.dart';
 
 part 'job_description_state.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:job_spot/ui/widgets/image.dart';
+import '../../widgets/image.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../../common/theme/colors.dart';

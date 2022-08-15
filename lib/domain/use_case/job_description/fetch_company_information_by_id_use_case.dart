@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
 import 'package:get_it/get_it.dart';
-import 'package:job_spot/domain/entity/company_description.dart';
-import 'package:job_spot/domain/repository/job_repository.dart';
+import '../../entity/company_description.dart';
+import '../../repository/job_repository.dart';
 
 class FetchCompanyInformationByIdUseCase {
   final _repo = GetIt.I.get<JobRepository>();

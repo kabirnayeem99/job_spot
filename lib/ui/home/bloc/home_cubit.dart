@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:job_spot/domain/use_case/home/fetch_recent_job_list_use_case.dart';
+import '../../../domain/use_case/home/fetch_recent_job_list_use_case.dart';
 
 import '../../../domain/entity/user_message.dart';
 import '../../../domain/use_case/home/fetch_offers_use_case.dart';

@@ -1,6 +1,6 @@
 import 'package:either_dart/either.dart';
-import 'package:job_spot/domain/entity/company_description.dart';
-import 'package:job_spot/domain/entity/job_description.dart';
+import '../entity/company_description.dart';
+import '../entity/job_description.dart';
 
 import '../entity/job_preview.dart';
 

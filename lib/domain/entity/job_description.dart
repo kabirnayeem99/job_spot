@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:job_spot/domain/entity/job_type.dart';
+import 'job_type.dart';
 
 import 'location.dart';
 
