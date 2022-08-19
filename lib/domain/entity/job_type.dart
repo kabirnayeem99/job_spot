@@ -4,6 +4,15 @@ enum JobType {
   remote,
 }
 
+/// Takes in a JobType enum and returns a String that is the display name of the
+/// enum
+///
+/// Args:
+///   jobType (JobType): This is the enum value that we want to get the display name
+/// for.
+///
+/// Returns:
+///   A string
 String getJobTypeDisplayNameByEnum(JobType jobType) {
   String displayName = "";
 

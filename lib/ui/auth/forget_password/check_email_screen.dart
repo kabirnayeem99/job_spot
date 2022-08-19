@@ -2,12 +2,12 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'bloc/forget_password_cubit.dart';
-import '../log_in/log_in_screen.dart';
 
 import '../../../common/theme/colors.dart';
 import '../../../common/utility/utility.dart';
 import '../../widgets/primary_action_button.dart';
+import '../log_in/log_in_screen.dart';
+import 'bloc/forget_password_cubit.dart';
 import 'bloc/forget_password_state.dart';
 
 const checkEmailScreenNavigationRouteName = "check_email_screen/";
@@ -47,7 +47,9 @@ class _CheckEmailScreenState extends State<CheckEmailScreen> {
 
     final message = state.userMessages.first.message;
     final snackBar = SnackBar(content: Text(message));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
 
     bloc.userMessageShown(state.userMessages.first.id);
   }

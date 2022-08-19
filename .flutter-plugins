@@ -1,7 +1,9 @@
 # This is a generated file; do not edit or check into version control.
 file_picker=/Users/kabir/.local/development/flutter/.pub-cache/hosted/pub.dartlang.org/file_picker-4.6.1/
 flutter_plugin_android_lifecycle=/Users/kabir/.local/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.7/
-google_maps_flutter=/Users/kabir/.local/development/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-2.1.10/
+google_maps_flutter=/Users/kabir/.local/development/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-2.1.12/
+google_maps_flutter_android=/Users/kabir/.local/development/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter_android-2.1.10/
+google_maps_flutter_ios=/Users/kabir/.local/development/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter_ios-2.1.11/
 path_provider=/Users/kabir/.local/development/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.11/
 path_provider_android=/Users/kabir/.local/development/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_android-2.0.19/
 path_provider_ios=/Users/kabir/.local/development/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_ios-2.0.11/

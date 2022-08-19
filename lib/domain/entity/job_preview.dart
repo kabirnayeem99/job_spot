@@ -1,4 +1,6 @@
-class JobPreview {
+import 'package:equatable/equatable.dart';
+
+class JobPreview extends Equatable {
   final String companyLogo;
   final String jobPostName;
   final String companyName;
@@ -43,12 +45,18 @@ class JobPreview {
   }
 
   @override
-  String toString() {
-    return 'JobPreview{companyLogo: $companyLogo, jobPostName: $jobPostName, '
-        'companyName: $companyName'
-        ' isSaved: $isSaved, salary: $salary, location: $location, tags: $tags,'
-        ' salaryType: $salaryType}';
-  }
+  bool get stringify => true;
+
+  @override
+  List<Object?> get props => [
+        companyLogo,
+        companyName,
+        isSaved,
+        salaryType,
+        salary,
+        location,
+        tags,
+      ];
 }
 
 enum SalaryType {

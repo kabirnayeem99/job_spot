@@ -1,4 +1,6 @@
-class CompanyDescription {
+import 'package:equatable/equatable.dart';
+
+class CompanyDescription extends Equatable {
   final String name;
   final String about;
   final String website;
@@ -10,7 +12,7 @@ class CompanyDescription {
   final String specialisation;
   final List<String> companyGalleryImages;
 
-  CompanyDescription({
+  const CompanyDescription({
     required this.name,
     required this.about,
     required this.website,
@@ -24,7 +26,7 @@ class CompanyDescription {
   });
 
   static CompanyDescription generateMockCompanyDescription() {
-    return CompanyDescription(
+    return const CompanyDescription(
       name: "Red Hat Linux",
       about:
           "Red Hat, Inc. is an American IBM subsidiary software company that provides open source software products to enterprises. ",
@@ -45,7 +47,19 @@ class CompanyDescription {
   }
 
   @override
-  String toString() {
-    return 'CompanyDescription{name: $name, about: $about, website: $website, industry: $industry, employees: $employees, headOfficeAddress: $headOfficeAddress, type: $type, foundationDate: $foundationDate, specialisation: $specialisation, companyGalleryImages: $companyGalleryImages}';
-  }
+  bool get stringify => true;
+
+  @override
+  List<Object?> get props => [
+        name,
+        about,
+        website,
+        industry,
+        employees,
+        headOfficeAddress,
+        type,
+        foundationDate,
+        specialisation,
+        companyGalleryImages,
+      ];
 }

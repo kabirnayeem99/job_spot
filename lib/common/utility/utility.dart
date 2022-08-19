@@ -28,3 +28,18 @@ void dismissKeyboard() {
 String getFileNameFromFile(File? file) {
   return file?.path.split('/').last ?? "No file selected";
 }
+
+/// Returns the file size in MB
+///
+/// Args:
+///   file (File): The file whose size we want to get.
+///
+/// Returns:
+///   File size in string.
+String getFileSize(File? file) {
+  logger.d(file);
+  if (file == null) return "0.0";
+  int sizeInBytes = file.lengthSync();
+  double sizeInMb = sizeInBytes / (1024 * 1024);
+  return sizeInMb.toStringAsFixed(3);
+}

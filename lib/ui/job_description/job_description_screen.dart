@@ -6,15 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../common/utility/utility.dart';
-import '../../domain/entity/job_type.dart';
-import 'bloc/job_description_cubit.dart';
-import '../widgets/image.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../common/theme/colors.dart';
+import '../../common/utility/utility.dart';
 import '../../domain/entity/job_description_page_state.dart';
+import '../../domain/entity/job_type.dart';
+import '../widgets/image.dart';
 import '../widgets/primary_action_button.dart';
+import 'bloc/job_description_cubit.dart';
 
 const jobDescScreenNavRouteName = "job_description_screen/";
 
@@ -43,9 +43,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
       create: (_) => bloc,
       child: BlocBuilder<JobDescriptionCubit, JobDescriptionState>(
         bloc: bloc,
-        builder: (context, state) {
-          return _buildPage(context);
-        },
+        builder: (context, state) => _buildPage(context),
       ),
     );
     //
@@ -54,8 +52,6 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
-
-  void _navigateBack(BuildContext context) => router.pop(context);
 
   Scaffold _buildPage(BuildContext context) {
     return Scaffold(
@@ -67,7 +63,7 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
             padding: const EdgeInsets.only(left: 22.0, right: 22.0, top: 22.0),
             child: Column(
               children: [
-                _buildActionBar(context),
+                const _JobDescriptionActionBar(),
                 const SizedBox(height: 20),
                 _buildJobShortDesc(),
                 const SizedBox(height: 20),
@@ -208,9 +204,9 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
                   ),
                 ),
                 const SizedBox(height: 5.0),
-                const Text(
-                  "867 Kb * 14 Feb 2022 at 11:30 am",
-                  style: TextStyle(
+                Text(
+                  "${getFileSize(bloc.state.file)} MB * 14 Feb 2022 at 11:30 am",
+                  style: const TextStyle(
                     fontSize: 12.0,
                     color: spanPearl,
                   ),
@@ -596,26 +592,363 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
   }
 
   Widget _buildJobShortDesc() {
+    final companyLogoImageUrl =
+        bloc.state.jobDescription?.companyLogoImageUrl ?? "";
+    final jobDescription = bloc.state.jobDescription?.title ?? "";
+    return _JobShortDescription(
+      companyLogoImageUrl: companyLogoImageUrl,
+      jobDescription: jobDescription,
+    );
+  }
+
+  Widget _buildJobDescriptionFragment() {
+    final facilities = bloc.state.jobDescription?.facilities ?? "N/A";
+    final shortDescription =
+        bloc.state.jobDescription?.shortDescription ?? "N/A";
+    final requirements = bloc.state.jobDescription?.requirements ?? "N/A";
+    final location = bloc.state.jobDescription?.location?.fullAddress ?? "N/A";
+    final title = bloc.state.jobDescription?.title ?? "N/A";
+    final qualification = bloc.state.jobDescription?.qualification ?? "N/A";
+    final specialisation = bloc.state.jobDescription?.specialisation ?? "N/A";
+    final jobType = getJobTypeDisplayNameByEnum(
+      bloc.state.jobDescription?.jobType ?? JobType.fullTime,
+    );
+
+    return Column(
+      children: [
+        const Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Job Description",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: blackHaiti,
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            shortDescription,
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+              color: mulledWine,
+              fontWeight: FontWeight.w400,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Align(
+          alignment: Alignment.topLeft,
+          child: PrimaryActionButton(
+            buttonText: "Read more",
+            width: 91,
+            height: 30.0,
+            buttonTextFontSize: 12.0,
+            buttonTextColor: darkIndigo,
+            buttonColor: blueLotus.withOpacity(0.3),
+          ),
+        ),
+        const SizedBox(height: 25),
+        const Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Requirements",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: blackHaiti,
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            requirements,
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+              color: mulledWine,
+              fontWeight: FontWeight.w400,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        const Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Location",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: blackHaiti,
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        const SizedBox(height: 15),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            location,
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+              color: mulledWine,
+              fontWeight: FontWeight.w400,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        const SizedBox(height: 15),
+        _buildGoogleMapPreview(),
+        const SizedBox(height: 25),
+        const Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Information",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: blackHaiti,
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        const SizedBox(height: 15),
+        const Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Position",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: blackHaiti,
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        const SizedBox(height: 5),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            title,
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+              color: blackHaiti,
+              fontWeight: FontWeight.w400,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        const SizedBox(height: 15),
+        const Divider(
+          thickness: 0.8,
+          color: tealishBlue,
+        ),
+        const SizedBox(height: 15),
+        const Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Qualification",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: blackHaiti,
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        const SizedBox(height: 5),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            qualification,
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+              color: blackHaiti,
+              fontWeight: FontWeight.w400,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        const SizedBox(height: 15),
+        const Divider(
+          thickness: 0.8,
+          color: tealishBlue,
+        ),
+        const SizedBox(height: 15),
+        const Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Job Type",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: blackHaiti,
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        const SizedBox(height: 5),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            jobType,
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+              color: blackHaiti,
+              fontWeight: FontWeight.w400,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        const SizedBox(height: 15),
+        const Divider(
+          thickness: 0.8,
+          color: tealishBlue,
+        ),
+        const SizedBox(height: 15),
+        const Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Specialisation",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: blackHaiti,
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        const SizedBox(height: 5),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            specialisation,
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+              color: blackHaiti,
+              fontWeight: FontWeight.w400,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        const SizedBox(height: 15),
+        const Divider(
+          thickness: 0.8,
+          color: tealishBlue,
+        ),
+        const SizedBox(height: 15),
+        const Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "Facilities and others",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: blackHaiti,
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        const SizedBox(height: 5),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            facilities,
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+              color: blackHaiti,
+              fontWeight: FontWeight.w400,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        const SizedBox(height: 15),
+        const Divider(
+          thickness: 0.8,
+          color: tealishBlue,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGoogleMapPreview() {
+    final lat = bloc.state.jobDescription?.location?.latitude ?? 0.0;
+    final lng = bloc.state.jobDescription?.location?.longitude ?? 0.0;
+    final companyName = bloc.state.jobDescription?.companyName ?? "";
+    final fullAddress = bloc.state.jobDescription?.location?.fullAddress ?? "";
+
+    return SizedBox(
+      height: 150,
+      width: double.infinity,
+      child: GoogleMap(
+        compassEnabled: false,
+        trafficEnabled: false,
+        scrollGesturesEnabled: false,
+        zoomControlsEnabled: false,
+        buildingsEnabled: false,
+        myLocationEnabled: false,
+        rotateGesturesEnabled: false,
+        tiltGesturesEnabled: false,
+        myLocationButtonEnabled: false,
+        mapToolbarEnabled: false,
+        indoorViewEnabled: false,
+        zoomGesturesEnabled: false,
+        liteModeEnabled: false,
+        onMapCreated: _onMapCreated,
+        markers: {
+          Marker(
+            markerId: const MarkerId("bugicugi"),
+            position: LatLng(lat, lng),
+            infoWindow: InfoWindow(title: companyName, snippet: fullAddress),
+          )
+        },
+        initialCameraPosition: CameraPosition(
+          target: LatLng(lat, lng),
+          zoom: 15.0,
+        ),
+      ),
+    );
+  }
+}
+
+class _JobShortDescription extends StatelessWidget {
+  const _JobShortDescription({
+    Key? key,
+    required this.companyLogoImageUrl,
+    required this.title,
+  }) : super(key: key);
+
+  final String companyLogoImageUrl;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(100.0),
-          child:
-              (bloc.state.jobDescription?.companyLogoImageUrl ?? "").isNotEmpty
-                  ? RemoteImage(
-                      imageUrl:
-                          bloc.state.jobDescription?.companyLogoImageUrl ?? "",
-                      height: 84,
-                      width: 84,
-                    )
-                  : const SizedBox(
-                      height: 84,
-                      width: 84,
-                    ),
+          child: companyLogoImageUrl.isNotEmpty
+              ? RemoteImage(
+                  imageUrl: companyLogoImageUrl,
+                  height: 84,
+                  width: 84,
+                )
+              : const SizedBox(
+                  height: 84,
+                  width: 84,
+                ),
         ),
         const SizedBox(height: 14),
         Text(
-          bloc.state.jobDescription?.title ?? "",
+          title,
           style: const TextStyle(
             color: nightBlue,
             fontWeight: FontWeight.w700,
@@ -671,13 +1004,20 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
       ],
     );
   }
+}
 
-  Widget _buildActionBar(BuildContext context) {
+class _JobDescriptionActionBar extends StatelessWidget {
+  const _JobDescriptionActionBar({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         GestureDetector(
-          onTap: () => _navigateBack(context),
+          onTap: () async => _navigateBack(context),
           child: const Icon(
             UniconsLine.angle_left_b,
             size: 32.0,
@@ -691,311 +1031,6 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
     );
   }
 
-  Widget _buildJobDescriptionFragment() {
-    return Column(
-      children: [
-        const Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Job Description",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: blackHaiti,
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            bloc.state.jobDescription?.shortDescription ?? "N/A",
-            textAlign: TextAlign.left,
-            style: const TextStyle(
-              color: mulledWine,
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Align(
-          alignment: Alignment.topLeft,
-          child: PrimaryActionButton(
-            buttonText: "Read more",
-            width: 91,
-            height: 30.0,
-            buttonTextFontSize: 12.0,
-            buttonTextColor: darkIndigo,
-            buttonColor: blueLotus.withOpacity(0.3),
-          ),
-        ),
-        const SizedBox(height: 25),
-        const Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Requirements",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: blackHaiti,
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            bloc.state.jobDescription?.requirements ?? "N/A",
-            textAlign: TextAlign.left,
-            style: const TextStyle(
-              color: mulledWine,
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        const Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Location",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: blackHaiti,
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 15),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            bloc.state.jobDescription?.location?.fullAddress ?? "N/A",
-            textAlign: TextAlign.left,
-            style: const TextStyle(
-              color: mulledWine,
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-            ),
-          ),
-        ),
-        const SizedBox(height: 15),
-        _buildGoogleMapPreview(),
-        const SizedBox(height: 25),
-        const Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Information",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: blackHaiti,
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 15),
-        const Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Position",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: blackHaiti,
-              fontWeight: FontWeight.w600,
-              fontSize: 12,
-            ),
-          ),
-        ),
-        const SizedBox(height: 5),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            bloc.state.jobDescription?.title ?? "N/A",
-            textAlign: TextAlign.left,
-            style: const TextStyle(
-              color: blackHaiti,
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-            ),
-          ),
-        ),
-        const SizedBox(height: 15),
-        const Divider(
-          thickness: 0.8,
-          color: tealishBlue,
-        ),
-        const SizedBox(height: 15),
-        const Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Qualification",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: blackHaiti,
-              fontWeight: FontWeight.w600,
-              fontSize: 12,
-            ),
-          ),
-        ),
-        const SizedBox(height: 5),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            bloc.state.jobDescription?.qualification ?? "N/A",
-            textAlign: TextAlign.left,
-            style: const TextStyle(
-              color: blackHaiti,
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-            ),
-          ),
-        ),
-        const SizedBox(height: 15),
-        const Divider(
-          thickness: 0.8,
-          color: tealishBlue,
-        ),
-        const SizedBox(height: 15),
-        const Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Job Type",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: blackHaiti,
-              fontWeight: FontWeight.w600,
-              fontSize: 12,
-            ),
-          ),
-        ),
-        const SizedBox(height: 5),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            getJobTypeDisplayNameByEnum(
-              bloc.state.jobDescription?.jobType ?? JobType.fullTime,
-            ),
-            textAlign: TextAlign.left,
-            style: const TextStyle(
-              color: blackHaiti,
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-            ),
-          ),
-        ),
-        const SizedBox(height: 15),
-        const Divider(
-          thickness: 0.8,
-          color: tealishBlue,
-        ),
-        const SizedBox(height: 15),
-        const Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Specialisation",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: blackHaiti,
-              fontWeight: FontWeight.w600,
-              fontSize: 12,
-            ),
-          ),
-        ),
-        const SizedBox(height: 5),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            bloc.state.jobDescription?.specialisation ?? "N/A",
-            textAlign: TextAlign.left,
-            style: const TextStyle(
-              color: blackHaiti,
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-            ),
-          ),
-        ),
-        const SizedBox(height: 15),
-        const Divider(
-          thickness: 0.8,
-          color: tealishBlue,
-        ),
-        const SizedBox(height: 15),
-        const Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Facilities and others",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: blackHaiti,
-              fontWeight: FontWeight.w600,
-              fontSize: 12,
-            ),
-          ),
-        ),
-        const SizedBox(height: 5),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            bloc.state.jobDescription?.facilities ?? "N/A",
-            textAlign: TextAlign.left,
-            style: const TextStyle(
-              color: blackHaiti,
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-            ),
-          ),
-        ),
-        const SizedBox(height: 15),
-        const Divider(
-          thickness: 0.8,
-          color: tealishBlue,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildGoogleMapPreview() {
-    return SizedBox(
-      height: 150,
-      width: double.infinity,
-      child: GoogleMap(
-        compassEnabled: false,
-        trafficEnabled: false,
-        scrollGesturesEnabled: false,
-        zoomControlsEnabled: false,
-        buildingsEnabled: false,
-        myLocationEnabled: false,
-        rotateGesturesEnabled: false,
-        tiltGesturesEnabled: false,
-        myLocationButtonEnabled: false,
-        mapToolbarEnabled: false,
-        indoorViewEnabled: false,
-        zoomGesturesEnabled: false,
-        liteModeEnabled: false,
-        onMapCreated: _onMapCreated,
-        markers: {
-          Marker(
-            markerId: const MarkerId("bugicugi"),
-            position: LatLng(
-                bloc.state.jobDescription?.location?.latitude ?? 0.0,
-                bloc.state.jobDescription?.location?.longitude ?? 0.0),
-            infoWindow: InfoWindow(
-              title: bloc.state.jobDescription?.companyName ?? "",
-              snippet: bloc.state.jobDescription?.location?.fullAddress ?? "",
-            ),
-          )
-        },
-        initialCameraPosition: CameraPosition(
-          target: LatLng(bloc.state.jobDescription?.location?.latitude ?? 0.0,
-              bloc.state.jobDescription?.location?.longitude ?? 0.0),
-          zoom: 15.0,
-        ),
-      ),
-    );
-  }
+  Future<void> _navigateBack(BuildContext context) async =>
+      FluroRouter.appRouter.pop(context);
 }

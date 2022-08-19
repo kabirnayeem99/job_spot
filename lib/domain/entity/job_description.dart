@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'job_type.dart';
 
+import 'job_type.dart';
 import 'location.dart';
 
 class JobDescription extends Equatable {
@@ -35,13 +35,7 @@ class JobDescription extends Equatable {
   });
 
   @override
-  String toString() {
-    return 'JobDescription{title: $title, timePassed: $timePassed, '
-        'companyName: $companyName, companyLogoImageUrl: $companyLogoImageUrl, '
-        'shortDescription: $shortDescription, longDescription: $longDescription,'
-        ' requirements: $requirements, location: $location, jobType: $jobType,'
-        ' facilities: $facilities, qualification: $qualification}';
-  }
+  bool get stringify => true;
 
   JobDescription copyWith({
     String? title,
