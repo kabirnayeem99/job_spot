@@ -55,6 +55,10 @@ class JobDescriptionCubit extends Cubit<JobDescriptionState> {
     emit(state.copyWith(pageState: JobDescriptionPageState.apply));
   }
 
+  Future<void> loadAppliedData() async {
+    emit(state.copyWith(pageState: JobDescriptionPageState.applied));
+  }
+
   Future<void> selectedFilePickerResult(FilePickerResult? result) async {
     if (result == null) return;
     List<File?> files =

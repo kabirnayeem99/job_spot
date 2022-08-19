@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -26,6 +27,9 @@ void dismissKeyboard() {
 }
 
 String getFileNameFromFile(File? file) {
+  if (Platform.isIOS && kDebugMode) {
+    return "Naimul Kabir's CV - Android Developer";
+  }
   return file?.path.split('/').last ?? "No file selected";
 }
 
@@ -37,9 +41,10 @@ String getFileNameFromFile(File? file) {
 /// Returns:
 ///   File size in string.
 String getFileSize(File? file) {
+  if (Platform.isIOS && kDebugMode) return "2.1 Mb";
   logger.d(file);
-  if (file == null) return "0.0";
+  if (file == null) return "0.0 Mb";
   int sizeInBytes = file.lengthSync();
   double sizeInMb = sizeInBytes / (1024 * 1024);
-  return sizeInMb.toStringAsFixed(3);
+  return "${sizeInMb.toStringAsFixed(3)} Mb";
 }

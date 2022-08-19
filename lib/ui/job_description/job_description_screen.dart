@@ -3,6 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:unicons/unicons.dart';
@@ -48,28 +49,26 @@ class _JobDescriptionScreenState extends State<JobDescriptionScreen> {
 
   Scaffold _buildPage(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfff5f5f7),
+      backgroundColor: const Color(0xffF2F2F2),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const ClampingScrollPhysics(),
-          child: Container(
-            padding: const EdgeInsets.only(left: 22.0, right: 22.0, top: 22.0),
-            child: Column(
-              children: [
-                _JobDescriptionActionBar(),
-                const SizedBox(height: 20),
-                _JobShortDescription(),
-                const SizedBox(height: 20),
-                const _TabButtons(),
-                const SizedBox(height: 25),
-                const _TabFragmentsContainer(),
-                const SizedBox(height: 100),
-              ],
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _JobDescriptionActionBar(),
+              const SizedBox(height: 20),
+              _JobShortDescription(),
+              const SizedBox(height: 20),
+              const _TabButtons(),
+              SizedBox(height: 25, child: Container(color: whiteSnowDrift)),
+              const _TabFragmentsContainer(),
+              SizedBox(height: 1000, child: Container(color: whiteSnowDrift)),
+            ],
           ),
         ),
       ),
-      floatingActionButton: _FloatingActionButton(),
+      floatingActionButton: const _FloatingActionButton(),
     );
   }
 }
@@ -83,23 +82,7 @@ class _TabFragmentsContainer extends StatefulWidget {
   State<_TabFragmentsContainer> createState() => _TabFragmentsContainerState();
 }
 
-class _TabFragmentsContainerState extends State<_TabFragmentsContainer>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    duration: const Duration(seconds: 2),
-    vsync: this,
-  );
-
-  late final Animation<Offset> _offsetAnimation = Tween<Offset>(
-          begin: Offset.zero, end: const Offset(1.5, 0.0))
-      .animate(CurvedAnimation(parent: _controller, curve: Curves.elasticIn));
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
+class _TabFragmentsContainerState extends State<_TabFragmentsContainer> {
   @override
   Widget build(BuildContext context) {
     final JobDescriptionCubit bloc = BlocProvider.of(context);
@@ -114,18 +97,119 @@ class _TabFragmentsContainerState extends State<_TabFragmentsContainer>
             JobDescriptionPageState.description.name;
         final isCompanyDescriptionPageShowing =
             bloc.state.pageState.name == JobDescriptionPageState.company.name;
+        final isApplicationPageShowing =
+            bloc.state.pageState.name == JobDescriptionPageState.apply.name;
 
         if (isDescriptionPageShowing) {
           fragment = const _JobDescriptionFragment();
         } else if (isCompanyDescriptionPageShowing) {
           fragment = const _CompanyDescriptionFragment();
-        } else {
+        } else if (isApplicationPageShowing) {
           fragment = const _JobApplyFragment();
+        } else {
+          fragment = const _AppliedFragment();
         }
 
-        return AnimatedSwitcher(
-            duration: const Duration(milliseconds: 160), child: fragment);
+        return Flexible(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: AnimatedContainer(
+              color: whiteSnowDrift,
+              padding: const EdgeInsets.only(left: 22.0, right: 22.0),
+              duration: const Duration(milliseconds: 160),
+              child: fragment,
+            ),
+          ),
+        );
       },
+    );
+  }
+}
+
+class _AppliedFragment extends StatelessWidget {
+  const _AppliedFragment({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final JobDescriptionCubit bloc = BlocProvider.of(context);
+    return Column(
+      children: [
+        const SizedBox(height: 12.0),
+        ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(14)),
+          child: Container(
+            padding:
+                const EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
+            color: antiFlashWhite,
+            width: double.infinity,
+            child: Row(
+              children: [
+                const Icon(
+                  UniconsLine.document_info,
+                  size: 54.0,
+                  color: lightRed,
+                ),
+                const SizedBox(width: 15.0),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 1.9,
+                      child: Text(
+                        getFileNameFromFile(bloc.state.file),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                    const SizedBox(height: 6.0),
+                    Text(
+                      "${getFileSize(bloc.state.file)}  • 12 Feb 2022 on 11:00 PM",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          const TextStyle(fontSize: 12.0, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 12.0),
+        SvgPicture.asset(
+          "assets/images/svgs/banner_success.svg",
+          height: 120.0,
+          width: 120.0,
+        ),
+        const SizedBox(height: 22.0),
+        const Text(
+          "Successfull",
+          style: TextStyle(
+            fontSize: 18.0,
+            color: Colors.black,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 12.0),
+        const Text("Congratulations, your application has been sent"),
+        const SizedBox(height: 30.0),
+        const PrimaryActionButton(
+          buttonText: "find a similiar job",
+          buttonColor: purpleBlueMoonraker,
+          buttonTextColor: deepViolet,
+        ),
+        const SizedBox(height: 20.0),
+        const PrimaryActionButton(
+          buttonText: "back to home",
+          buttonColor: deepViolet,
+          buttonTextColor: Colors.white,
+        ),
+      ],
     );
   }
 }
@@ -433,19 +517,24 @@ class _TabButtons extends StatelessWidget {
       buildWhen: (pre, cur) => pre.pageState != cur.pageState,
       builder: (context, state) {
         final currentlySelectedTabName = state.pageState.name;
-        final shouldNotShowAnyTab =
-            currentlySelectedTabName == JobDescriptionPageState.apply.name;
+        final shouldNotShowAnyTab = currentlySelectedTabName ==
+                JobDescriptionPageState.apply.name ||
+            currentlySelectedTabName == JobDescriptionPageState.applied.name;
         final isCompanySelected =
             currentlySelectedTabName == JobDescriptionPageState.company.name;
         if (shouldNotShowAnyTab) {
           return Container();
         } else {
-          return Row(
-            children: [
-              _DescriptionTabIndicatorButton(isCompanySelected),
-              const SizedBox(width: 9),
-              _CompanyTabIndicatorButton(isCompanySelected),
-            ],
+          return Container(
+            color: whiteSnowDrift,
+            padding: const EdgeInsets.only(left: 22.0, right: 22.0, top: 12.0),
+            child: Row(
+              children: [
+                _DescriptionTabIndicatorButton(isCompanySelected),
+                const SizedBox(width: 9),
+                _CompanyTabIndicatorButton(isCompanySelected),
+              ],
+            ),
           );
         }
       },
@@ -725,59 +814,59 @@ class _JobApplyFragment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const [
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Upload CV",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: blackHaiti,
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
+    return Expanded(
+      child: Column(
+        children: const [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              "Upload CV",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: blackHaiti,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
             ),
           ),
-        ),
-        SizedBox(height: 10),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Add your CV/Resume to apply for a job",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: mulledWine,
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
+          SizedBox(height: 10),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              "Add your CV/Resume to apply for a job",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: mulledWine,
+                fontWeight: FontWeight.w400,
+                fontSize: 12,
+              ),
             ),
           ),
-        ),
-        SizedBox(height: 20),
-        _UploadCvButtonBox(),
-        SizedBox(height: 30),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Information",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              color: blackHaiti,
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
+          SizedBox(height: 20),
+          _UploadCvButtonBox(),
+          SizedBox(height: 30),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              "Information",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: blackHaiti,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
             ),
           ),
-        ),
-        SizedBox(height: 15),
-        _ResumeTextBox()
-      ],
+          SizedBox(height: 15),
+          _ResumeTextBox(),
+        ],
+      ),
     );
   }
 }
 
 class _ResumeTextBox extends StatelessWidget {
-  const _ResumeTextBox({
-    Key? key,
-  }) : super(key: key);
+  const _ResumeTextBox({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -864,7 +953,7 @@ class _CompanyTabIndicatorButton extends StatelessWidget {
         onTap: () async => bloc.loadCompanyData(),
         child: PrimaryActionButton(
           buttonText: "Company",
-          buttonTextColor: isCompanySelected ? darkIndigo : Colors.white,
+          buttonTextColor: isCompanySelected ? darkIndigo : mercuryBlue,
           buttonColor: isCompanySelected ? purpleBlueMoonraker : darkIndigo,
         ),
       ),
@@ -885,7 +974,7 @@ class _DescriptionTabIndicatorButton extends StatelessWidget {
             BlocProvider.of<JobDescriptionCubit>(context).loadDescriptionData(),
         child: PrimaryActionButton(
           buttonText: "Description",
-          buttonTextColor: isCompanyTabSelected ? Colors.white : darkIndigo,
+          buttonTextColor: isCompanyTabSelected ? mercuryBlue : darkIndigo,
           buttonColor: isCompanyTabSelected ? darkIndigo : purpleBlueMoonraker,
         ),
       ),
@@ -903,14 +992,14 @@ class _UploadCvButtonBox extends StatelessWidget {
     return GestureDetector(
       onTap: () async => _pickPdfFiles(context),
       child: DottedBorder(
-        color: mulledWine.withOpacity(0.8),
+        color: mulledWine.withOpacity(0.5),
         strokeWidth: 1.2,
         radius: const Radius.circular(14.0),
         borderType: BorderType.RRect,
         child: ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(14)),
           child: Container(
-            color: bluePurpleAmethystSmoke.withOpacity(0.3),
+            color: bluePurpleAmethystSmoke.withOpacity(0.0),
             width: double.infinity,
             child: bloc.state.file == null
                 ? const _BeforeUploadBox()
@@ -1029,26 +1118,42 @@ class _BeforeUploadBox extends StatelessWidget {
 }
 
 class _FloatingActionButton extends StatelessWidget {
+  const _FloatingActionButton();
+
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<JobDescriptionCubit>(context);
-    final actionButtonText =
-        bloc.state.pageState.name == JobDescriptionPageState.apply.name
-            ? "apply now"
-            : "proceed to apply";
 
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        margin: const EdgeInsets.only(left: 22.0),
-        child: GestureDetector(
-          onTap: () async => bloc.loadApplicationData(),
-          child: PrimaryActionButton(
-            buttonText: actionButtonText,
-            width: 270.0,
+    return BlocBuilder<JobDescriptionCubit, JobDescriptionState>(
+      bloc: bloc,
+      builder: (context, state) {
+        final actionButtonText =
+            state.pageState.name == JobDescriptionPageState.apply.name
+                ? "apply now"
+                : "proceed to apply";
+
+        return AnimatedOpacity(
+          duration: const Duration(milliseconds: 400),
+          opacity: state.pageState.name == JobDescriptionPageState.applied.name
+              ? 0.0
+              : 1.0,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              margin: const EdgeInsets.only(left: 22.0),
+              child: GestureDetector(
+                onTap: () async => actionButtonText == "apply now"
+                    ? bloc.loadAppliedData()
+                    : bloc.loadApplicationData(),
+                child: PrimaryActionButton(
+                  buttonText: actionButtonText,
+                  width: 270.0,
+                ),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -1063,77 +1168,80 @@ class _JobShortDescription extends StatelessWidget {
     final city = state.jobDescription?.city ?? "N/A";
     final timePassed = state.jobDescription?.timePassed ?? "Just now";
 
-    return Column(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(100.0),
-          child: companyLogoImageUrl.isNotEmpty
-              ? RemoteImage(
-                  imageUrl: companyLogoImageUrl,
-                  height: 84,
-                  width: 84,
-                )
-              : const SizedBox(
-                  height: 84,
-                  width: 84,
-                ),
-        ),
-        const SizedBox(height: 14),
-        Text(
-          title,
-          style: const TextStyle(
-            color: nightBlue,
-            fontWeight: FontWeight.w700,
-            fontSize: 16,
+    return Container(
+      padding: const EdgeInsets.only(left: 22.0, right: 22.0),
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(100.0),
+            child: companyLogoImageUrl.isNotEmpty
+                ? RemoteImage(
+                    imageUrl: companyLogoImageUrl,
+                    height: 84,
+                    width: 84,
+                  )
+                : const SizedBox(
+                    height: 84,
+                    width: 84,
+                  ),
           ),
-        ),
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              companyName,
-              style: const TextStyle(
-                color: nightBlue,
-                fontWeight: FontWeight.w400,
-                fontSize: 16,
-              ),
+          const SizedBox(height: 14),
+          Text(
+            title,
+            style: const TextStyle(
+              color: nightBlue,
+              fontWeight: FontWeight.w700,
+              fontSize: 16,
             ),
-            const Text(
-              "•",
-              style: TextStyle(
-                color: nightBlue,
-                fontWeight: FontWeight.w400,
-                fontSize: 22,
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                companyName,
+                style: const TextStyle(
+                  color: nightBlue,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,
+                ),
               ),
-            ),
-            Text(
-              city,
-              style: const TextStyle(
-                color: nightBlue,
-                fontWeight: FontWeight.w400,
-                fontSize: 16,
+              const Text(
+                "•",
+                style: TextStyle(
+                  color: nightBlue,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 22,
+                ),
               ),
-            ),
-            const Text(
-              "•",
-              style: TextStyle(
-                color: nightBlue,
-                fontWeight: FontWeight.w400,
-                fontSize: 22,
+              Text(
+                city,
+                style: const TextStyle(
+                  color: nightBlue,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,
+                ),
               ),
-            ),
-            Text(
-              timePassed,
-              style: const TextStyle(
-                color: nightBlue,
-                fontWeight: FontWeight.w400,
-                fontSize: 16,
+              const Text(
+                "•",
+                style: TextStyle(
+                  color: nightBlue,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 22,
+                ),
               ),
-            ),
-          ],
-        ),
-      ],
+              Text(
+                timePassed,
+                style: const TextStyle(
+                  color: nightBlue,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -1141,21 +1249,24 @@ class _JobShortDescription extends StatelessWidget {
 class _JobDescriptionActionBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        GestureDetector(
-          onTap: () async => _navigateBack(context),
-          child: const Icon(
-            UniconsLine.angle_left_b,
-            size: 32.0,
+    return Container(
+      padding: const EdgeInsets.only(left: 22.0, right: 22.0, top: 22.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: () async => _navigateBack(context),
+            child: const Icon(
+              UniconsLine.angle_left_b,
+              size: 32.0,
+            ),
           ),
-        ),
-        const Icon(
-          UniconsLine.ellipsis_v,
-          size: 28.0,
-        ),
-      ],
+          const Icon(
+            UniconsLine.ellipsis_v,
+            size: 28.0,
+          ),
+        ],
+      ),
     );
   }
 
