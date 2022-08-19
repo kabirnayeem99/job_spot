@@ -25,7 +25,7 @@ dependencies:
   logger: ^1.1.0
   floading: ^2.0.0
   faker_dart: ^0.1.6
-  equatable: ^2.0.3
+  equatable: ^2.0.5
   cached_network_image: ^3.2.1
   unicons: ^2.1.0
   get_it: ^7.2.0
